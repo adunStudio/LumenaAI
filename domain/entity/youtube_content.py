@@ -1,5 +1,5 @@
-from value_object import YouTubeVideoLink
-from typing import List
+from domain.value_object import YouTubeVideoLink
+from typing import List, Dict
 
 
 class YouTubeContent:
@@ -37,5 +37,26 @@ class YouTubeContent:
 
     def set_category(self, category: str):
         self._category = category
+
+    def to_dict(self) -> Dict:
+        return {
+            "title": self.title,
+            "thumbnail": self.thumbnail,
+            "url": self.url.url,
+            "description": self.description,
+            "tags": self.tags,
+            "category": self.category,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict) -> 'YouTubeContent':
+        return cls(
+            title=data["title"],
+            thumbnail=data["thumbnail"],
+            url=YouTubeVideoLink(data["url"]),  # 문자열을 YouTubeVideoLink 객체로 변환
+            description=data["description"],
+            tags=data["tags"],
+            category=data.get("category", ""),
+        )
 
 
