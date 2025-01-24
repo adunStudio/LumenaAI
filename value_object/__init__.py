@@ -1,1 +1,1 @@
-from .youtube_link import YouTubeLink
+from .youtube_video_link import YouTubeVideoLink

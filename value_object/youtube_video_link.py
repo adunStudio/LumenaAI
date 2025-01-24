@@ -2,18 +2,14 @@ from dataclasses import dataclass, field
 from urllib.parse import urlparse, parse_qs
 
 
-class InvalidYouTubeLinkException(Exception):
-    pass
-
-
 @dataclass(frozen=True)
-class YouTubeLink:
+class YouTubeVideoLink:
     raw_url: str
     _url: str = field(init=False, repr=False)
 
     def __post_init__(self):
         if not self.is_valid_youtube_link(self.raw_url):
-            raise InvalidYouTubeLinkException(f"유효하지 않은 유튜브 링크입니다: {self.raw_url}")
+            raise Exception(f"유효하지 않은 유튜브 링크입니다: {self.raw_url}")
         object.__setattr__(self, "_url", self.extract_video_link(self.raw_url))
 
     @property
@@ -46,14 +42,14 @@ class YouTubeLink:
         # www.youtube.com 링크 처리
         video_id = query_params.get("v", [None])[0]
         if not video_id:
-            raise InvalidYouTubeLinkException(f"유튜브 영상 ID를 찾을 수 없습니다: {url}")
+            raise Exception(f"유튜브 영상 ID를 찾을 수 없습니다: {url}")
         return f"https://www.youtube.com/watch?v={video_id}"
 
     def __str__(self) -> str:
         return self.url
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, YouTubeLink):
+        if not isinstance(other, YouTubeVideoLink):
             return False
         return self.url == other.url
 
