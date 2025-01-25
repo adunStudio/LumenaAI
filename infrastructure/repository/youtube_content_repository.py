@@ -6,10 +6,10 @@ from domain.value_object.youtube_video_link import YouTubeVideoLink
 
 
 class YouTubeContentRepository:
-    def __init__(self, client: MongoDBClient):
+    def __init__(self, client: MongoDBClient, collection_name: str = "youtube_content"):
         self._client = client
         self._db = self._client.get_database()
-        self._collection = self._db["youtube_content"]
+        self._collection = self._db[collection_name]
 
     def save(self, content: YouTubeContent) -> bool:
         result: UpdateResult = self._collection.replace_one(
@@ -25,6 +25,10 @@ class YouTubeContentRepository:
 
     def find_all(self) -> [YouTubeContent]:
         documents = self._collection.find()
+        return [YouTubeContent.from_dict(doc) for doc in documents]
+
+    def find_without_script(self) -> list[YouTubeContent]:
+        documents = self._collection.find({"script": {"$exists": False}})
         return [YouTubeContent.from_dict(doc) for doc in documents]
 
     def delete_by_url(self, url: YouTubeVideoLink) -> bool:
