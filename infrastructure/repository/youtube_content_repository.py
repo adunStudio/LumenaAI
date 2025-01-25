@@ -28,7 +28,9 @@ class YouTubeContentRepository:
         return [YouTubeContent.from_dict(doc) for doc in documents]
 
     def find_without_script(self) -> list[YouTubeContent]:
-        documents = self._collection.find({"script": {"$exists": False}})
+        documents = self._collection.find(
+            {"$or": [{"script": {"$exists": False}}, {"script": None}]}
+        )
         return [YouTubeContent.from_dict(doc) for doc in documents]
 
     def delete_by_url(self, url: YouTubeVideoLink) -> bool:
