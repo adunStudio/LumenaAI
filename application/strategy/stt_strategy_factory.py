@@ -1,7 +1,7 @@
 from application.strategy import STTStrategy
+from application.strategy import OpenAIWhisperStrategy
 from application.strategy import LocalWhisperStrategy
 from application.strategy import LocalWhisperXStrategy
-from application.strategy import OpenAIWhisperStrategy
 
 from enum import Enum
 
@@ -34,8 +34,9 @@ class STTStrategyFactory:
             strategy = LocalWhisperStrategy(model_name=model_name)
 
         elif strategy_type == STTStrategyType.LOCAL_WHISPERX:
-            model_name = kwargs.get("model_name", "base")
-            strategy = LocalWhisperXStrategy(model_name=model_name)
+            model_name = kwargs.get("model_name", "large-v2")
+            batch_size = kwargs.get("batch_size", 16)
+            strategy = LocalWhisperXStrategy(model_name=model_name, batch_size=batch_size)
 
         else:
             raise ValueError(f"잘못된 STT 전략 유형: {strategy_type}")
