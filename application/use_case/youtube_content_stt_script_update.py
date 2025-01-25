@@ -6,6 +6,8 @@ from domain.entity import YouTubeContent
 from infrastructure.repository import YouTubeContentRepository
 from application.strategy import STTStrategy
 
+import time
+
 
 # 유튜브 콘텐츠의 스크립트를 최신화한다.
 class YouTubeContentSTTScriptUpdate:
@@ -16,6 +18,8 @@ class YouTubeContentSTTScriptUpdate:
         self._stt_strategy = stt_strategy
 
     def execute(self, youtube_content: YouTubeContent, custom_folder: str = None) -> bool:
+
+        start_time = time.time()
 
         if custom_folder is not None:
             download_folder = os.path.join(custom_folder, youtube_content.category)
@@ -49,7 +53,8 @@ class YouTubeContentSTTScriptUpdate:
         result = self._repository.save(youtube_content)
 
         if result:
-            print(f'스크립트 저장 성공({youtube_content.title})')
+            end_time = time.time()
+            print(f'스크립트 저장 성공({youtube_content.title}) 수행 시간: {end_time - start_time:.4f}초')
         else:
             print(f'스크립트 저장 실패({youtube_content.title})')
 
