@@ -18,6 +18,7 @@ class YouTubeContentSTTScriptUpdate:
         self._stt_strategy = stt_strategy
 
     def execute(self, youtube_content: YouTubeContent, custom_folder: str = None) -> bool:
+        print(f"STT 시도: {youtube_content.category}/{youtube_content.title}")
 
         start_time = time.time()
 
