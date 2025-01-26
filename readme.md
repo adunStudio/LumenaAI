@@ -1,5 +1,7 @@
 # LumenaAI
 
+![0126](./data/test_0126.png)
+
 ```
 LemanaAI/
 │
