@@ -27,7 +27,7 @@ class LocalWhisperStrategy(STTStrategy):
 
     def transcribe(self, audio_path: str) -> str:
         result = self._pipe(audio_path, return_timestamps=True)
-        self._cleanup()
+        #self._cleanup()
 
         return result
 
