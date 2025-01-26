@@ -34,8 +34,8 @@ class STTStrategyFactory:
             strategy = LocalWhisperStrategy(model_name=model_name)
 
         elif strategy_type == STTStrategyType.LOCAL_WHISPERX:
-            model_name = kwargs.get("model_name", "large-v2")
-            batch_size = kwargs.get("batch_size", 16)
+            model_name = kwargs.get("model_name", "large-v3")
+            batch_size = kwargs.get("batch_size", 32)
             strategy = LocalWhisperXStrategy(model_name=model_name, batch_size=batch_size)
 
         else:

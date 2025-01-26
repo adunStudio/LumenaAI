@@ -17,7 +17,7 @@ class LocalWhisperXStrategy(STTStrategy):
         audio = whisperx.load_audio(audio_path)
 
         result = self._model.transcribe(audio, batch_size=self._batch_size)
-        self._cleanup()
+        #self._cleanup()
 
         return result
 

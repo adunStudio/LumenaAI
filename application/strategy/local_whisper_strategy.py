@@ -23,12 +23,12 @@ class LocalWhisperStrategy(STTStrategy):
             feature_extractor=processor.feature_extractor,
             torch_dtype=torch_dtype,
             device=device,
+            chunk_length_s=25,
+            batch_size=128
         )
 
     def transcribe(self, audio_path: str) -> str:
         result = self._pipe(audio_path, return_timestamps=True)
-        #self._cleanup()
-
         return result
 
     def _cleanup(self):

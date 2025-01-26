@@ -12,7 +12,7 @@ class OpenAIWhisperStrategy(STTStrategy):
     def transcribe(self, audio_path: str) -> str:
         with open(audio_path, "rb") as audio_file:
             response = self._client.audio.transcriptions.create(
-                model="whisper-1",  # Whisper 모델 이름
+                model="whisper-1",
                 file=audio_file,
                 response_format="verbose_json"
             )

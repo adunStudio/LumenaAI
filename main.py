@@ -32,7 +32,7 @@ for category, group in grouped_contents:
     with st.sidebar.expander(f'{category}({count}개)' if category else "기타"):
         for content in group:
             # 클릭 가능한 콘텐츠 제목 링크
-            if st.button(content.title, key=f"content_{content.url.url}"):
+            if st.button(content.title):
                 app.select_youtube_content(content)
 
 with st.sidebar:
@@ -45,7 +45,6 @@ with st.sidebar:
 
 
 col1, col2 = st.columns([2 if app.view_mode == 'small' else 3, 2])
-
 
 selected_content = app.selected_youtube_content
 
@@ -84,7 +83,7 @@ if selected_content is not None:
     # 대본 내용을 HTML로 변환
     formatted_script = "\n".join(
         f'<div>'
-        f'<span class="timestamp">{chunk.timestamp[0]}</span>'
+        f'<span class="timestamp">{chunk.timestamp}</span>'
         f'<span class="text">{escape(chunk.text)}</span>'
         f'</div>'
         for chunk in selected_content.script.chunks  # if chunk.text != ''
