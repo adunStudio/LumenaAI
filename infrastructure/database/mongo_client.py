@@ -13,6 +13,8 @@ class MongoDBClient:
             self._client = MongoClient(self._uri)
             print(f"Connected to MongoDB")
 
+        return self
+
     def get_database(self):
         if self._client is None:
             raise ConnectionError("MongoDB client is not connected. Call `connect()` first.")
