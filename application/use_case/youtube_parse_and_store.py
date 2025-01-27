@@ -11,7 +11,7 @@ class YouTubeParseAndStore(YoutubeUseCase):
     def __init__(self, repository: YouTubeContentRepository):
         self._repository = repository
 
-    def execute(self, youtube_url: str, category: str = '기타') -> ExecuteResult:
+    def execute(self, youtube_url: str, **kwargs) -> ExecuteResult:
         # 1. 유튜브 링크 검증
         try:
             youtube_video_link = YouTubeVideoLink(youtube_url)
@@ -39,7 +39,7 @@ class YouTubeParseAndStore(YoutubeUseCase):
             url=youtube_video_link,
             description=metadata.get('description', ''),
             tags=metadata.get('tags', []),
-            category=category
+            category=kwargs.get("category", '기타')
         )
 
 

@@ -1,8 +1,6 @@
 import yt_dlp
 import os
 
-from application.use_case import YoutubeUseCase
-
 from domain.value_object.youtube_video_link import YouTubeVideoLink
 from domain.entity.youtube_content import YouTubeContent
 from infrastructure.repository import YouTubeContentRepository

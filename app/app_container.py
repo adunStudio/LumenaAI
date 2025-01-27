@@ -1,7 +1,8 @@
 from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository.youtube_content_repository import YouTubeContentRepository
 from application.service.youtube_content_service import YouTubeContentService
-from application.use_case import YouTubeParseAndStore, YouTubeAutoScriptParse
+
+from application.use_case import YouTubeParseAndStore, YouTubeAutoScriptParse, YouTubeAudioDownload
 
 
 import os
@@ -39,6 +40,8 @@ class AppContainer(containers.DeclarativeContainer):
         repository=youtube_repository,
     )
 
+    # 새로운 지식 추가 하기
+
     # 1. YoutubeContentsParseAndStore
     youtube_parse_and_store = providers.Singleton(
         YouTubeParseAndStore,
@@ -48,5 +51,11 @@ class AppContainer(containers.DeclarativeContainer):
     # 2. YouTubeContentAutoScriptParse
     youtube_auto_script_parse = providers.Singleton(
         YouTubeAutoScriptParse,
+        repository=youtube_repository
+    )
+
+    # 3
+    youtube_audio_download = providers.Singleton(
+        YouTubeAudioDownload,
         repository=youtube_repository
     )

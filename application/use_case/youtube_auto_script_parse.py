@@ -10,7 +10,7 @@ class YouTubeAutoScriptParse(YoutubeUseCase):
     def __init__(self, repository: YouTubeContentRepository):
         self._repository = repository
 
-    def execute(self, youtube_url: str) -> ExecuteResult:
+    def execute(self, youtube_url: str, **kwargs) -> ExecuteResult:
 
         # 1. 유튜브 링크 검증
         try:

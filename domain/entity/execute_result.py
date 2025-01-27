@@ -8,6 +8,8 @@ class ExecuteResultType(Enum):
     STORE_FAIL = "데이터 저장에 실패했습니다."
     DATA_NOT_FOUND = "데이터가 존재하지 않습니다."
     AUTO_SCRIPT_PARSE_FAIL = "스크립트 판별에 실패했습니다."
+    AUDIO_DOWNLOAD_SUCCESS = "오디오 파일 다운로드가 완료됐습니다."
+    AUDIO_DOWNLOAD_FAIL = "오디오 파일 다운로드가 실패했습니다."
 
 
 class ExecuteResult:

@@ -2,6 +2,7 @@ from app import AppContainer
 from application.service import YouTubeContentService
 from application.use_case import YouTubeParseAndStore
 from application.use_case import YouTubeAutoScriptParse
+from application.use_case import YouTubeAudioDownload
 
 class LumenaAIApp:
     def __init__(self):
@@ -10,6 +11,7 @@ class LumenaAIApp:
         self._youtube_service: YouTubeContentService = self._container.youtube_service()
         self._youtube_parse_and_store: YouTubeParseAndStore = self._container.youtube_parse_and_store()
         self._youtube_auto_script_parse: YouTubeAutoScriptParse = self._container.youtube_auto_script_parse()
+        self._youtube_audio_download: YouTubeAudioDownload = self._container.youtube_audio_download()
 
         self._cached_youtube_contents = None
         self._selected_youtube_content = None
@@ -87,3 +89,6 @@ class LumenaAIApp:
 
     def second_auto_script_parse(self, url):
         return self._youtube_auto_script_parse.execute(url)
+
+    def third_audio_download(self, url):
+        return self._youtube_audio_download.execute(url)

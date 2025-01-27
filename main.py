@@ -212,12 +212,22 @@ def add_page_render():
                         st.error(result.message.value)
 
                 if result.result is True:
+                    with st.spinner("오디오 파일을 다운로드 중입니다..."):
+                        result: ExecuteResult = app.third_audio_download(youtube_link)
+                        if result.result is True:
+                            st.success("오디오 파일 다운로드를 완료했습니다.")
+                        else:
+                            st.error(result.message.value)
+
+                if result.result is True:
                     with st.spinner("스크립트를 검색 중입니다..."):
                         result: ExecuteResult = app.second_auto_script_parse(youtube_link)
                         if result.result is True:
                             st.success("스크립트 수집을 완료했습니다.")
                         else:
                             st.error(result.message.value)
+
+
 
                 if result.result is True:
                     st.balloons()
