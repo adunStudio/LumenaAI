@@ -1,4 +1,5 @@
 from application.strategy.stt_strategy import STTStrategy
+from domain.value_object import YouTubeScript, YouTubeScriptChunk
 
 import gc
 import torch
@@ -6,7 +7,7 @@ from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 
 
 class LocalWhisperStrategy(STTStrategy):
-    def __init__(self, model_name: str):
+    def __init__(self, model_name: str, batch_size: int):
         device = "cuda" if torch.cuda.is_available() else \
                  "mps" if torch.backends.mps.is_available() else \
                  "cpu"
@@ -24,24 +25,20 @@ class LocalWhisperStrategy(STTStrategy):
             torch_dtype=torch_dtype,
             device=device,
             chunk_length_s=25,
-            batch_size=128
+            batch_size=batch_size
         )
 
     def transcribe(self, audio_path: str) -> str:
-        result = self._pipe(audio_path, return_timestamps=True)
-        return result
+        return self._pipe(audio_path, return_timestamps=True)
 
-    def _cleanup(self):
-        # GPU 캐시 비우기
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            torch.cuda.ipc_collect()
+    def transcribe_to_script(self, audio_path: str) -> YouTubeScript:
+        result = self.transcribe(audio_path)
+        youtube_script = YouTubeScript(
 
-        # Python 가비지 컬렉션 실행
-        gc.collect()
-
-        # MPS 사용 시 캐시 비우기
-        if torch.backends.mps.is_available():
-            torch.mps.empty_cache()
-
-        print("캐시가 성공적으로 비워졌습니다.")
+            script=result["text"],
+            chunks=[
+                YouTubeScriptChunk.from_dict(chunk)
+                for chunk in result["chunks"]
+            ],
+        )
+        return youtube_script

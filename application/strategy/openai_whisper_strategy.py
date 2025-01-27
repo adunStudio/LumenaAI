@@ -1,4 +1,5 @@
 from application.strategy.stt_strategy import STTStrategy
+from domain.value_object import YouTubeScript
 from openai import OpenAI
 
 
@@ -17,3 +18,6 @@ class OpenAIWhisperStrategy(STTStrategy):
                 response_format="verbose_json"
             )
         return response
+
+    def transcribe_to_script(self, audio_path: str) -> YouTubeScript:
+        pass

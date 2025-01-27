@@ -4,14 +4,13 @@ from typing import List, Dict, Optional
 
 
 class YouTubeContent:
-    def __init__(self, title: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = '', script: Optional[YouTubeScript] = None):
+    def __init__(self, title: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''):
         self._title = title
         self._thumbnail = thumbnail
         self._url = url
         self._description = description
         self._tags = tags
         self._category = category
-        self._script = script
 
     @property
     def title(self) -> str:
@@ -41,11 +40,18 @@ class YouTubeContent:
     def script(self) -> Optional[YouTubeScript]:
         return self._script
 
+    @property
+    def script_x(self) -> Optional[YouTubeScript]:
+        return self._script_x
+
     def set_category(self, category: str):
         self._category = category
 
     def set_script(self, script: YouTubeScript):
         self._script = script
+
+    def set_script_x(self, script: YouTubeScript):
+        self._script_x = script
 
     def to_dict(self) -> Dict:
         return {
@@ -56,6 +62,7 @@ class YouTubeContent:
             "tags": self.tags,
             "category": self.category,
             "script": self.script.to_dict() if self.script else None,  # YouTubeScript를 dict로 변환
+            "script_x": self.script_x.to_dict() if self.script_x else None,  # YouTubeScript를 dict로 변환
         }
 
     @classmethod
@@ -68,6 +75,7 @@ class YouTubeContent:
             tags=data["tags"],
             category=data.get("category", ""),
             script=YouTubeScript.from_dict(data["script"]) if data.get("script") else None,
+            script_x=YouTubeScript.from_dict(data["script_x"]) if data.get("script_x") else None,
         )
 
     def __repr__(self) -> str:

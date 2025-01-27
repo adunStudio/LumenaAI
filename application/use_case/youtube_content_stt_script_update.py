@@ -35,21 +35,14 @@ class YouTubeContentSTTScriptUpdate:
             return False
 
         try:
-            stt_result = self._stt_strategy.transcribe(file_path)
+            youtube_script = self._stt_strategy.transcribe_to_script(file_path)
 
         except:
             print(f"STT 실패: {file_path}")
             return False
 
-        youtube_script = YouTubeScript(
-            script=stt_result["text"],
-            chunks=[
-                YouTubeScriptChunk.from_dict(chunk)
-                for chunk in stt_result["chunks"]
-            ],
-        )
 
-        youtube_content.set_script(youtube_script)
+        youtube_content.set_script_x(youtube_script)
 
         result = self._repository.save(youtube_content)
 
