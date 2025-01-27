@@ -4,13 +4,16 @@ from typing import List, Dict, Optional
 
 
 class YouTubeContent:
-    def __init__(self, title: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''):
+    def __init__(self, title: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''
+                 , script: Optional[YouTubeScript] = None, script_x: Optional[YouTubeScript] = None):
         self._title = title
         self._thumbnail = thumbnail
         self._url = url
         self._description = description
         self._tags = tags
         self._category = category
+        self._script = script
+        self._script_x = script_x
 
     @property
     def title(self) -> str:
