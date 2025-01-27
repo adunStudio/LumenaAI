@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from whisperx.types import TranscriptionResult
 
-from application.strategy.stt_strategy import STTStrategy
+from application.strategy import STTStrategy
 from domain.value_object import YouTubeScript, YouTubeScriptChunk
 import gc
 import torch
