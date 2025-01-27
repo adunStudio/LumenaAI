@@ -1,7 +1,6 @@
 import yt_dlp
 import os
 
-from domain.value_object import YouTubeVideoLink, YouTubeScript, YouTubeScriptChunk
 from domain.entity import YouTubeContent
 from infrastructure.repository import YouTubeContentRepository
 from application.strategy import STTStrategy
