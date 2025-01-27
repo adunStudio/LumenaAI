@@ -83,10 +83,10 @@ if selected_content is not None:
     # 대본 내용을 HTML로 변환
     formatted_script = "\n".join(
         f'<div>'
-        f'<span class="timestamp">{chunk.timestamp}</span>'
-        f'<span class="text">{escape(chunk.text)}</span>'
+        f'<span class="timestamp">{chunk.formatted_start_time}</span>'
+        f' <span class="text">{escape(chunk.text)}</span>'
         f'</div>'
-        for chunk in selected_content.script.chunks  # if chunk.text != ''
+        for chunk in selected_content.script_auto.chunks  # if chunk.text != ''
     )
 
 with col1:

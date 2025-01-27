@@ -1,4 +1,4 @@
-from application.strategy.stt_strategy import STTStrategy
+from application.strategy import STTStrategy
 from domain.value_object import YouTubeScript
 from openai import OpenAI
 

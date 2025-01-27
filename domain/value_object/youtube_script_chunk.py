@@ -12,6 +12,11 @@ class YouTubeScriptChunk:
         return self._timestamp[0]
 
     @property
+    def formatted_start_time(self) -> str:
+        minutes, seconds = divmod(int(self.start_time), 60)  # 초를 분과 초로 변환
+        return f"{minutes}:{seconds:02}"  # 두 자리 초로 포맷
+
+    @property
     def end_time(self) -> float:
         return self._timestamp[1]
 

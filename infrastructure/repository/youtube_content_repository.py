@@ -27,6 +27,12 @@ class YouTubeContentRepository:
         documents = self._collection.find()
         return [YouTubeContent.from_dict(doc) for doc in documents]
 
+    def find_without_script_auto(self) -> list[YouTubeContent]:
+        documents = self._collection.find(
+            {"$or": [{"script_auto": {"$exists": False}}, {"script_auto": None}]}
+        )
+        return [YouTubeContent.from_dict(doc) for doc in documents]
+
     def find_without_script(self) -> list[YouTubeContent]:
         documents = self._collection.find(
             {"$or": [{"script": {"$exists": False}}, {"script": None}]}

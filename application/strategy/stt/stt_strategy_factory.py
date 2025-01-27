@@ -2,6 +2,7 @@ from application.strategy import STTStrategy
 from application.strategy import OpenAIWhisperStrategy
 from application.strategy import LocalWhisperStrategy
 from application.strategy import LocalWhisperXStrategy
+from application.strategy import AutoYoutubeStrategy
 
 from enum import Enum
 
@@ -10,6 +11,7 @@ class STTStrategyType(Enum):
     OPENAI_WHISPER = "openai-whisper"
     LOCAL_WHISPER = "local-whisper"
     LOCAL_WHISPERX = "local-whisperx"
+    AUTO_YOUTUBE = 'auto-youtube'
 
 
 class STTStrategyFactory:
@@ -38,6 +40,9 @@ class STTStrategyFactory:
             model_name = kwargs.get("model_name", "large-v2")
             batch_size = kwargs.get("batch_size", 128)
             strategy = LocalWhisperXStrategy(model_name=model_name, batch_size=batch_size)
+
+        elif strategy_type == STTStrategyType.AUTO_YOUTUBE:
+            strategy = AutoYoutubeStrategy()
 
         else:
             raise ValueError(f"잘못된 STT 전략 유형: {strategy_type}")

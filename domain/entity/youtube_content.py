@@ -1,11 +1,11 @@
 from domain.value_object import YouTubeVideoLink
 from domain.value_object import YouTubeScript
 from typing import List, Dict, Optional
-
+import re
 
 class YouTubeContent:
     def __init__(self, title: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''
-                 , script: Optional[YouTubeScript] = None, script_x: Optional[YouTubeScript] = None):
+                 , script: Optional[YouTubeScript] = None, script_x: Optional[YouTubeScript] = None, script_auto: Optional[YouTubeScript] = None):
         self._title = title
         self._thumbnail = thumbnail
         self._url = url
@@ -14,6 +14,7 @@ class YouTubeContent:
         self._category = category
         self._script = script
         self._script_x = script_x
+        self._script_auto = script_auto
 
     @property
     def title(self) -> str:
@@ -26,6 +27,11 @@ class YouTubeContent:
     @property
     def url(self) -> YouTubeVideoLink:
         return self._url
+
+    @property
+    def video_id(self) -> str:
+        match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11})", self.url.url)
+        return match.group(1) if match else None
 
     @property
     def description(self) -> str:
@@ -47,6 +53,10 @@ class YouTubeContent:
     def script_x(self) -> Optional[YouTubeScript]:
         return self._script_x
 
+    @property
+    def script_auto(self) -> Optional[YouTubeScript]:
+        return self._script_auto
+
     def set_category(self, category: str):
         self._category = category
 
@@ -55,6 +65,9 @@ class YouTubeContent:
 
     def set_script_x(self, script: YouTubeScript):
         self._script_x = script
+
+    def set_script_auto(self, script: YouTubeScript):
+        self._script_auto = script
 
     def to_dict(self) -> Dict:
         return {
@@ -66,6 +79,7 @@ class YouTubeContent:
             "category": self.category,
             "script": self.script.to_dict() if self.script else None,  # YouTubeScript를 dict로 변환
             "script_x": self.script_x.to_dict() if self.script_x else None,  # YouTubeScript를 dict로 변환
+            "script_auto": self.script_auto.to_dict() if self.script_auto else None,  # YouTubeScript를 dict로 변환
         }
 
     @classmethod
@@ -79,6 +93,7 @@ class YouTubeContent:
             category=data.get("category", ""),
             script=YouTubeScript.from_dict(data["script"]) if data.get("script") else None,
             script_x=YouTubeScript.from_dict(data["script_x"]) if data.get("script_x") else None,
+            script_auto=YouTubeScript.from_dict(data["script_auto"]) if data.get("script_auto") else None,
         )
 
     def __repr__(self) -> str:
