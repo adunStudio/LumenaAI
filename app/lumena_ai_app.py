@@ -40,6 +40,7 @@ class LumenaAIApp:
             for content in all_list
             if self._search_query in content.title.lower()
                or self._search_query in content.description.lower()
+               or self._search_query in content.channel.lower()
                or any(self._search_query in tag.lower() for tag in content.tags)
         ]
 
