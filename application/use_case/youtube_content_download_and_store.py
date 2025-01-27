@@ -29,6 +29,7 @@ class YouTubeContentDownloadAndStore:
             # 3. YouTubeContent 엔티티 생성
             content = YouTubeContent(
                 title=metadata['title'],
+                channel=metadata['channel'],
                 thumbnail=metadata['thumbnail'],
                 url=youtube_video_link,
                 description=metadata.get('description', ''),
@@ -61,6 +62,7 @@ class YouTubeContentDownloadAndStore:
 
             return {
                 'title': info.get('title', 'Unknown Title'),
+                'channel': info.get('channel', 'Unknown Channel'),
                 'thumbnail': info.get('thumbnail', 'Unknown Thumbnail'),
                 'url': info.get('original_url', 'Unknown Url'),
                 'description': info.get('description', 'Unknown Description'),

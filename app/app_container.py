@@ -1,6 +1,7 @@
 from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository.youtube_content_repository import YouTubeContentRepository
 from application.service.youtube_content_service import YouTubeContentService
+from application.use_case import YouTubeContentParseAndStore, YouTubeContentAutoScriptParse
 
 
 import os
@@ -36,4 +37,16 @@ class AppContainer(containers.DeclarativeContainer):
     youtube_service = providers.Singleton(
         YouTubeContentService,
         repository=youtube_repository,
+    )
+
+    # 1. YoutubeContentsParseAndStore
+    youtube_parse_and_store = providers.Singleton(
+        YouTubeContentParseAndStore,
+        repository=youtube_repository
+    )
+
+    # 2. YouTubeContentAutoScriptParse
+    youtube_auto_script_parse = providers.Singleton(
+        YouTubeContentAutoScriptParse,
+        repository=youtube_repository
     )

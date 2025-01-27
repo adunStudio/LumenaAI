@@ -1,2 +1,4 @@
 from .youtube_content_download_and_store import YouTubeContentDownloadAndStore
 from .youtube_content_stt_script_update import YouTubeContentSTTScriptUpdate
+from .youtube_content_parse_and_store import YouTubeContentParseAndStore
+from .youtube_content_auto_script_parse import YouTubeContentAutoScriptParse

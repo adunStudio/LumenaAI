@@ -6,9 +6,10 @@ from html import escape
 
 
 class YouTubeContent:
-    def __init__(self, title: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''
+    def __init__(self, title: str, channel: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''
                  , script: Optional[YouTubeScript] = None, script_x: Optional[YouTubeScript] = None, script_auto: Optional[YouTubeScript] = None):
         self._title = title
+        self._channel = channel
         self._thumbnail = thumbnail
         self._url = url
         self._description = description
@@ -24,6 +25,13 @@ class YouTubeContent:
     @property
     def title(self) -> str:
         return self._title
+
+    @property
+    def channel(self) -> str:
+        return self._channel
+
+    def set_channel(self, channel) -> str:
+        self._channel = channel
 
     @property
     def thumbnail(self) -> str:
@@ -109,6 +117,7 @@ class YouTubeContent:
     def to_dict(self) -> Dict:
         return {
             "title": self.title,
+            "channel": self.channel,
             "thumbnail": self.thumbnail,
             "url": self.url.url,
             "description": self.description,
@@ -123,6 +132,7 @@ class YouTubeContent:
     def from_dict(cls, data: Dict) -> 'YouTubeContent':
         return cls(
             title=data["title"],
+            channel=data['channel'],
             thumbnail=data["thumbnail"],
             url=YouTubeVideoLink(data["url"]),  # 문자열을 YouTubeVideoLink 객체로 변환
             description=data["description"],

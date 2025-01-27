@@ -14,8 +14,8 @@ class AutoYoutubeStrategy(STTStrategy):
             print(e)
             return None
 
-    def transcribe_to_script(self, audio_link: str) -> YouTubeScript:
-        result = self.transcribe(audio_link)
+    def transcribe_to_script(self, audio_id: str) -> YouTubeScript:
+        result = self.transcribe(audio_id)
         if result is None:
             return None
 
