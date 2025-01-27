@@ -3,12 +3,15 @@ from domain.value_object import YouTubeScript, YouTubeScriptChunk
 
 from youtube_transcript_api import YouTubeTranscriptApi
 
+
 class AutoYoutubeStrategy(STTStrategy):
     def transcribe(self, video_id: str) -> str:
         try:
             result = YouTubeTranscriptApi.get_transcript(video_id, languages=['ko', 'en', 'en-GB'])
             return result
-        except:
+
+        except Exception as e:
+            print(e)
             return None
 
     def transcribe_to_script(self, audio_link: str) -> YouTubeScript:
@@ -24,3 +27,4 @@ class AutoYoutubeStrategy(STTStrategy):
             ],
         )
         return youtube_script
+    

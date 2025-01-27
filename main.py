@@ -81,12 +81,21 @@ if selected_content is not None:
     )
 
     # 대본 내용을 HTML로 변환
-    formatted_script = "\n".join(
+    formatted_script_auto = "\n".join(
         f'<div>'
         f'<span class="timestamp">{chunk.formatted_start_time}</span>'
         f' <span class="text">{escape(chunk.text)}</span>'
         f'</div>'
-        for chunk in selected_content.script_auto.chunks  # if chunk.text != ''
+        for chunk in selected_content.script_auto.chunks
+    )
+
+    # 대본 내용을 HTML로 변환
+    formatted_script_whisper = "\n".join(
+        f'<div>'
+        f'<span class="timestamp">{chunk.formatted_start_time}</span>'
+        f' <span class="text">{escape(chunk.text)}</span>'
+        f'</div>'
+        for chunk in selected_content.script.chunks
     )
 
 with col1:
@@ -119,5 +128,11 @@ with col2:
             st.video(selected_content.url.url)
 
         # HTML로 스타일링된 대본 표시
-        with st.expander("📜 스크립트", expanded=False):
-            st.html(f"<div class='styled-box'> {formatted_script} </div>")
+        if content.script_auto is not None:
+            with st.expander("📜 스크립트(Youtube)", expanded=False):
+                st.html(f"<div class='styled-box'> {formatted_script_auto} </div>")
+
+        # HTML로 스타일링된 대본 표시
+        if content.script is not None:
+            with st.expander("📜 스크립트(Whisper V3)", expanded=False):
+                st.html(f"<div class='styled-box'> {formatted_script_whisper} </div>")
