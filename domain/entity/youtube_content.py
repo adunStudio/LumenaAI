@@ -2,6 +2,8 @@ from domain.value_object import YouTubeVideoLink
 from domain.value_object import YouTubeScript
 from typing import List, Dict, Optional
 import re
+from html import escape
+
 
 class YouTubeContent:
     def __init__(self, title: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''
@@ -15,6 +17,9 @@ class YouTubeContent:
         self._script = script
         self._script_x = script_x
         self._script_auto = script_auto
+
+        self._cached_formatted_script = None
+        self._cached_formatted_script_auto = None
 
     @property
     def title(self) -> str:
@@ -50,12 +55,44 @@ class YouTubeContent:
         return self._script
 
     @property
+    def formatted_script(self) -> str:
+        if self._cached_formatted_script is not None:
+            return self._cached_formatted_script
+
+        # 대본 내용을 HTML로 변환
+        self._cached_formatted_script = "\n".join(
+            f'<div>'
+            f'<span class="timestamp">{chunk.formatted_start_time}</span>'
+            f' <span class="text">{escape(chunk.text)}</span>'
+            f'</div>'
+            for chunk in self.script.chunks
+        )
+
+        return self._cached_formatted_script
+
+    @property
     def script_x(self) -> Optional[YouTubeScript]:
         return self._script_x
 
     @property
     def script_auto(self) -> Optional[YouTubeScript]:
         return self._script_auto
+
+    @property
+    def formatted_script_auto(self) -> str:
+        if self._cached_formatted_script_auto is not None:
+            return self._cached_formatted_script_auto
+
+        # 대본 내용을 HTML로 변환
+        self._cached_formatted_script_auto = "\n".join(
+            f'<div>'
+            f'<span class="timestamp">{chunk.formatted_start_time}</span>'
+            f' <span class="text">{escape(chunk.text)}</span>'
+            f'</div>'
+            for chunk in self.script_auto.chunks
+        )
+
+        return self._cached_formatted_script_auto
 
     def set_category(self, category: str):
         self._category = category

@@ -27,4 +27,3 @@ class AutoYoutubeStrategy(STTStrategy):
             ],
         )
         return youtube_script
-    
