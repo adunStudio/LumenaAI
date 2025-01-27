@@ -6,7 +6,7 @@ import whisperx
 
 
 class LocalWhisperXStrategy(STTStrategy):
-    def __init__(self,  model_name: str = "large-v2", batch_size: int = 16):
+    def __init__(self,  model_name: str = "large-v2", batch_size: int = 128):
         device = "cuda" if torch.cuda.is_available() else "cpu"
         compute_type = "float16" if torch.cuda.is_available() else "int8"
 
@@ -17,8 +17,6 @@ class LocalWhisperXStrategy(STTStrategy):
         audio = whisperx.load_audio(audio_path)
 
         result = self._model.transcribe(audio, batch_size=self._batch_size)
-        #self._cleanup()
-
         return result
 
     def _cleanup(self):
