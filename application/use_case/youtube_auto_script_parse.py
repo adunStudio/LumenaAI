@@ -6,7 +6,7 @@ from application.use_case import YoutubeUseCase
 
 
 # 2. 유튜브 링크로부터 DB에서 데이터를 가져와 유튜브 자동 생성된 스크립트로 최신화한다.
-class YouTubeContentAutoScriptParse(YoutubeUseCase):
+class YouTubeAutoScriptParse(YoutubeUseCase):
     def __init__(self, repository: YouTubeContentRepository):
         self._repository = repository
 

@@ -1,15 +1,15 @@
 from app import AppContainer
 from application.service import YouTubeContentService
-from application.use_case import YouTubeContentParseAndStore
-from application.use_case import YouTubeContentAutoScriptParse
+from application.use_case import YouTubeParseAndStore
+from application.use_case import YouTubeAutoScriptParse
 
 class LumenaAIApp:
     def __init__(self):
         print("LumenaAIApp")
         self._container = AppContainer()
         self._youtube_service: YouTubeContentService = self._container.youtube_service()
-        self._youtube_parse_and_store: YouTubeContentParseAndStore = self._container.youtube_parse_and_store()
-        self._youtube_auto_script_parse: YouTubeContentAutoScriptParse = self._container.youtube_auto_script_parse()
+        self._youtube_parse_and_store: YouTubeParseAndStore = self._container.youtube_parse_and_store()
+        self._youtube_auto_script_parse: YouTubeAutoScriptParse = self._container.youtube_auto_script_parse()
 
         self._cached_youtube_contents = None
         self._selected_youtube_content = None
