@@ -1,10 +1,12 @@
 from app import LumenaAIApp
 
 import streamlit as st
-from html import escape
+
 
 # 앱 초기화
-st.session_state.setdefault("app", LumenaAIApp())
+if "app" not in st.session_state:
+    st.session_state["app"] = LumenaAIApp()
+
 app = st.session_state["app"]
 
 st.set_page_config(layout="wide")
@@ -14,17 +16,76 @@ st.logo(
     size='large'
 )
 
-all_youtube_contents = app.get_all_youtube_contents()
-
 
 # 왼쪽 사이드바: YouTube 콘텐츠 리스트
-st.sidebar.header(f"📚 **내 YouTube 지식 ({len(all_youtube_contents)}개)**")
+st.sidebar.header("📚 **내 YouTube 지식**")
+
+
+with st.sidebar:
+    if "show_add_knowledge" not in st.session_state:
+        st.session_state["show_add_knowledge"] = False
+
+    # "새로운 지식 추가하기" 버튼
+    if st.button("➕ 새로운 지식", use_container_width=True, type='primary'):
+        st.session_state["show_add_knowledge"] = not st.session_state["show_add_knowledge"]
+
+
+    # 유튜브 링크 입력 창 (버튼 클릭 시 표시)
+    if st.session_state["show_add_knowledge"]:
+        st.text_input("유튜브 링크를 입력하세요:", key="new_youtube_link")
+        if st.button("추가"):
+            new_link = st.session_state.get("new_youtube_link", "")
+            if new_link:
+                # 유튜브 링크 추가 로직 호출
+                app.add_youtube_content(new_link)
+                st.success("새로운 지식이 추가되었습니다!")
+                st.session_state["show_add_knowledge"] = False  # 창 닫기
+            else:
+                st.error("유효한 유튜브 링크를 입력하세요.")
+
+
+    search_query = st.text_input(" 🔍 검색어를 입력하세요:")
+    if search_query:
+        app.set_search_query(search_query)
+    else:
+        app.set_search_query('')
+
+
+
+all_youtube_contents = app.get_search_youtube_contents()
+
+
+
 
 # 카테고리별로 콘텐츠 그룹화
 from itertools import groupby
+all_youtube_contents = app.get_search_youtube_contents()
 all_youtube_contents.sort(key=lambda x: x.category)  # 카테고리별 정렬
 grouped_contents = groupby(all_youtube_contents, key=lambda x: x.category)
 
+
+if app.search_query != '':
+    st.sidebar.markdown(
+        f"""
+        <div style="font-family: 'Arial, sans-serif'; font-size: 16px; color: #FF4081; text-align: center; line-height: 1.6;">
+            <b>🔍 검색 결과:</b>  
+            <span style="font-size: 20px; color: #333;">{len(all_youtube_contents)}개</span>
+            <br>✨ 찾으시는 지식이 여기에 있어요! ✨
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+else:
+    st.sidebar.markdown(
+        f"""
+        <div style="font-family: 'Arial, sans-serif'; font-size: 16px; color: #007BFF; text-align: center; line-height: 1.6;">
+            <b>📚 총 {len(all_youtube_contents)}개의 지식이 쌓여있어요!</b>  
+            <br>🌟 <i>새로운 인사이트를 발견해보세요!</i> 🌟
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+st.sidebar.write('')
 
 # 카테고리별로 콘텐츠를 나누어 표시
 for category, group in grouped_contents:
@@ -35,7 +96,11 @@ for category, group in grouped_contents:
             if st.button(content.title):
                 app.select_youtube_content(content)
 
+
 with st.sidebar:
+    if len(all_youtube_contents) == 0:
+        st.warning("🔍 검색된 결과가 없습니다.")
+
     view_mode = st.radio(
         "요약 화면 비율을 선택하세요:",
         options=["large", "small"],
@@ -110,11 +175,11 @@ with col2:
             st.video(selected_content.url.url)
 
         # HTML로 스타일링된 대본 표시
-        if content.script_auto is not None:
+        if selected_content.script_auto is not None:
             with st.expander("📜 스크립트(Youtube)", expanded=False):
                 st.html(f"<div class='styled-box'> {selected_content.formatted_script_auto} </div>")
 
         # HTML로 스타일링된 대본 표시
-        if content.script is not None:
+        if selected_content.script is not None:
             with st.expander("📜 스크립트(Whisper V3)", expanded=False):
                 st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
