@@ -1,5 +1,5 @@
-from application.strategy import STTStrategy
-from domain.value_object import YouTubeScript
+from strategy import STTStrategy
+from domain import YouTubeScript
 from openai import OpenAI
 
 

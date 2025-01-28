@@ -1,9 +1,9 @@
 from app import AppContainer
-from application.service import YouTubeContentService
-from application.use_case import YouTubeParseAndStore
-from application.use_case import YouTubeAutoScriptParse
-from application.use_case import YouTubeAudioDownload
-from application.use_case import YouTubeAudioSTT
+from service import YouTubeContentService
+from use_case import YouTubeParseAndStore
+from use_case import YouTubeAutoScriptParse
+from use_case import YouTubeAudioDownload
+from use_case import YouTubeAudioSTT
 
 class LumenaAIApp:
     def __init__(self):

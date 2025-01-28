@@ -1,9 +1,9 @@
 import yt_dlp
 import os
 
-from domain.entity import YouTubeContent
+from domain import YouTubeContent
 from infrastructure.repository import YouTubeContentRepository
-from application.strategy import STTStrategy
+from strategy import STTStrategy
 
 import time
 

@@ -1,7 +1,7 @@
-from domain.value_object.youtube_video_link import YouTubeVideoLink
-from domain.entity import YouTubeContent, ExecuteResult, ExecuteResultType
+from domain.youtube_video_link import YouTubeVideoLink
+from domain import YouTubeContent, ExecuteResult, ExecuteResultType
 from infrastructure.repository import YouTubeContentRepository
-from application.use_case import YoutubeUseCase
+from use_case import YoutubeUseCase
 
 import os
 import yt_dlp

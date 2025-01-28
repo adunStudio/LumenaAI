@@ -15,6 +15,7 @@ class ExecuteResultType(Enum):
     STT_SUCCESS = "STT를 성공했습니다."
     STT_FAIL = "STT를 실패했습니다."
 
+
 class ExecuteResult:
     def __init__(self, result: bool, message: ExecuteResultType):
         self._result = result

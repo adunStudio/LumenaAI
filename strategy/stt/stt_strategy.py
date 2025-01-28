@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from domain.value_object import YouTubeScript
+from domain import YouTubeScript
 
 class STTStrategy(ABC):
     @abstractmethod

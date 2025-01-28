@@ -1,8 +1,8 @@
-from domain.value_object import YouTubeVideoLink
-from domain.entity import YouTubeContent, ExecuteResult, ExecuteResultType
+from domain import YouTubeVideoLink
+from domain import YouTubeContent, ExecuteResult, ExecuteResultType
 from infrastructure.repository import YouTubeContentRepository
-from application.strategy import STTStrategy
-from application.use_case import YoutubeUseCase
+from strategy import STTStrategy
+from use_case import YoutubeUseCase
 
 import os
 

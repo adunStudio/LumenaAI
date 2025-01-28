@@ -2,8 +2,8 @@ from typing import Dict, List
 
 from whisperx.types import TranscriptionResult
 
-from application.strategy import STTStrategy
-from domain.value_object import YouTubeScript, YouTubeScriptChunk
+from strategy import STTStrategy
+from domain import YouTubeScript, YouTubeScriptChunk
 import gc
 import torch
 import whisperx

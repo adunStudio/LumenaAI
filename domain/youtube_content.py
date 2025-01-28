@@ -1,5 +1,5 @@
-from domain.value_object import YouTubeVideoLink
-from domain.value_object import YouTubeScript
+from .youtube_script import YouTubeScript
+from .youtube_video_link import YouTubeVideoLink
 from typing import List, Dict, Optional
 import re
 from html import escape

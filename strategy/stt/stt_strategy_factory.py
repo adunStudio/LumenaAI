@@ -1,8 +1,8 @@
-from application.strategy import STTStrategy
-from application.strategy import OpenAIWhisperStrategy
-from application.strategy import LocalWhisperStrategy
-from application.strategy import LocalWhisperXStrategy
-from application.strategy import AutoYoutubeStrategy
+from strategy import STTStrategy
+from strategy import OpenAIWhisperStrategy
+from strategy import LocalWhisperStrategy
+from strategy import LocalWhisperXStrategy
+from strategy import AutoYoutubeStrategy
 
 from enum import Enum
 

@@ -1,8 +1,8 @@
 from pymongo.results import UpdateResult, DeleteResult
 
 from infrastructure.database.mongo_client import MongoDBClient
-from domain.entity.youtube_content import YouTubeContent
-from domain.value_object.youtube_video_link import YouTubeVideoLink
+from domain.youtube_content import YouTubeContent
+from domain.youtube_video_link import YouTubeVideoLink
 
 
 class YouTubeContentRepository:

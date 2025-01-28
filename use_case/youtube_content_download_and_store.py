@@ -1,8 +1,8 @@
 import yt_dlp
 import os
 
-from domain.value_object.youtube_video_link import YouTubeVideoLink
-from domain.entity.youtube_content import YouTubeContent
+from domain.youtube_video_link import YouTubeVideoLink
+from domain.youtube_content import YouTubeContent
 from infrastructure.repository import YouTubeContentRepository
 
 

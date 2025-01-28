@@ -2,8 +2,8 @@ from app import LumenaAIApp
 
 import streamlit as st
 
-from domain.value_object.youtube_video_link import YouTubeVideoLink
-from domain.entity.execute_result import ExecuteResult, ExecuteResultType
+from domain.youtube_video_link import YouTubeVideoLink
+from domain.execute_result import ExecuteResult, ExecuteResultType
 from itertools import groupby
 
 # 앱 초기화

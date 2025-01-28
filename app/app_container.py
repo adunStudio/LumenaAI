@@ -1,9 +1,9 @@
 from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository.youtube_content_repository import YouTubeContentRepository
-from application.service.youtube_content_service import YouTubeContentService
-from application.strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType
+from service.youtube_content_service import YouTubeContentService
+from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType
 
-from application.use_case import \
+from use_case import \
     YouTubeParseAndStore, \
     YouTubeAutoScriptParse, \
     YouTubeAudioDownload, \

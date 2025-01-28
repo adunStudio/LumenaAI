@@ -1,5 +1,5 @@
-from application.strategy import STTStrategy
-from domain.value_object import YouTubeScript, YouTubeScriptChunk
+from strategy import STTStrategy
+from domain import YouTubeScript, YouTubeScriptChunk
 
 from youtube_transcript_api import YouTubeTranscriptApi
 

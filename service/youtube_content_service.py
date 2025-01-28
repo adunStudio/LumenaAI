@@ -1,6 +1,6 @@
 from typing import List, Optional
-from domain.entity.youtube_content import YouTubeContent
-from domain.value_object.youtube_video_link import YouTubeVideoLink
+from domain.youtube_content import YouTubeContent
+from domain.youtube_video_link import YouTubeVideoLink
 from infrastructure.repository import YouTubeContentRepository
 
 

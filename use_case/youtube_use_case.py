@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from domain.value_object import YouTubeScript
-from domain.entity import YouTubeContent, ExecuteResult, ExecuteResultType
+from domain import YouTubeScript
+from domain import YouTubeContent, ExecuteResult, ExecuteResultType
 
 
 class YoutubeUseCase(ABC):
