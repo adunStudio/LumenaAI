@@ -47,7 +47,7 @@ class YouTubeAudioSTT(YoutubeUseCase):
 
 
         # 5. 저장소에 저장
-        content.set_script(script)
+        content.set_script_whisper(script)
         self._repository.save(content)
         success = self._repository.save(content)
         if success:

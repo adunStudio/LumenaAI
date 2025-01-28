@@ -161,12 +161,12 @@ def main_page_render():
                         st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
 
                 with cols[1]:
-                    if selected_content.script is not None:
+                    if selected_content.script_whisper is not None:
                         st.write("📜 Whisper V3", expanded=True)
                         st.html(f"<div class='styled-box'> {selected_content.formatted_script_whisper} </div>")
 
                 with cols[2]:
-                    if selected_content.script is not None:
+                    if selected_content.script_auto is not None:
                         st.write("📜 Youtube Auto", expanded=True)
                         st.html(f"<div class='styled-box'> {selected_content.formatted_script_auto} </div>")
 
