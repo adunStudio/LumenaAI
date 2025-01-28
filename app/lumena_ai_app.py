@@ -3,19 +3,26 @@ from application.service import YouTubeContentService
 from application.use_case import YouTubeParseAndStore
 from application.use_case import YouTubeAutoScriptParse
 from application.use_case import YouTubeAudioDownload
+from application.use_case import YouTubeAudioSTT
 
 class LumenaAIApp:
     def __init__(self):
         print("LumenaAIApp")
+
         self._container = AppContainer()
+
+        # 새로운 지식 유즈-케이스
         self._youtube_service: YouTubeContentService = self._container.youtube_service()
         self._youtube_parse_and_store: YouTubeParseAndStore = self._container.youtube_parse_and_store()
         self._youtube_auto_script_parse: YouTubeAutoScriptParse = self._container.youtube_auto_script_parse()
         self._youtube_audio_download: YouTubeAudioDownload = self._container.youtube_audio_download()
+        self._youtube_audio_stt: YouTubeAudioSTT = self._container.youtube_audio_stt()
 
+        # 캐싱
         self._cached_youtube_contents = None
-        self._selected_youtube_content = None
 
+        # 프로퍼티
+        self._selected_youtube_content = None
         self._view_mode = 'large'
         self._search_query = ''
         self._page = 'main' # or add
@@ -84,11 +91,14 @@ class LumenaAIApp:
 
 
     ### 유튜브 분석 & 요약 유즈케이스
-    def first_parse_and_store(self, url):
+    def first_parse_and_store(self, url: str):
         return self._youtube_parse_and_store.execute(url)
 
-    def second_auto_script_parse(self, url):
+    def second_auto_script_parse(self, url: str):
         return self._youtube_auto_script_parse.execute(url)
 
-    def third_audio_download(self, url):
+    def third_audio_download(self, url: str):
         return self._youtube_audio_download.execute(url)
+
+    def fourth_audio_stt(self, url: str):
+        return self._youtube_audio_stt.execute(url)

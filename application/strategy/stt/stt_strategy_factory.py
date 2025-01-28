@@ -32,14 +32,16 @@ class STTStrategyFactory:
             strategy = OpenAIWhisperStrategy(api_key=api_key)
 
         elif strategy_type == STTStrategyType.LOCAL_WHISPER:
-            model_name = kwargs.get("model_name", "openai/whisper-large-v3")
+            model_name = kwargs.get("model_name", "openai/whisper-large-v3-turbo")
             batch_size = kwargs.get("batch_size", 128)
-            strategy = LocalWhisperStrategy(model_name=model_name, batch_size=batch_size)
+            clean = kwargs.get("clean", True)
+            strategy = LocalWhisperStrategy(model_name=model_name, batch_size=batch_size, clean=clean)
 
         elif strategy_type == STTStrategyType.LOCAL_WHISPERX:
             model_name = kwargs.get("model_name", "large-v2")
             batch_size = kwargs.get("batch_size", 128)
-            strategy = LocalWhisperXStrategy(model_name=model_name, batch_size=batch_size)
+            clean = kwargs.get("clean", True)
+            strategy = LocalWhisperXStrategy(model_name=model_name, batch_size=batch_size, clean=clean)
 
         elif strategy_type == STTStrategyType.AUTO_YOUTUBE:
             strategy = AutoYoutubeStrategy()

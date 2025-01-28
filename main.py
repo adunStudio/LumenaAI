@@ -14,15 +14,11 @@ app: LumenaAIApp = st.session_state["app"]
 
 st.set_page_config(page_title="LumenaAI 유튜브 분석/요약 플랫폼", layout='wide')
 
-print('render')
-
 
 st.logo(
     "asset/logo_big.png",
     size='large'
 )
-
-print("페이지: " + app.page)
 
 
 ########################################################################################################################
@@ -34,10 +30,7 @@ def sidebar_top_render():
 
         # "새로운 지식 추가하기" 버튼
         if st.button("➕ 새로운 지식", use_container_width=True, type='primary'):
-            print('before')
             app.set_page('add')
-            print('after')
-            print("페이지: " + app.page)
 
         search_query = st.text_input(" 🔍 검색어를 입력하세요:")
         if search_query:
@@ -171,15 +164,17 @@ def main_page_render():
             with st.expander("🎬 영상", expanded=True):
                 st.video(selected_content.url.url)
 
-            # HTML로 스타일링된 대본 표시
+            # 위스퍼 대본 표시
+            if selected_content.script is not None:
+                with st.expander("📜 스크립트(Whisper V3)", expanded=True):
+                    st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
+
+            # 자동 생성된 대본 표시
             if selected_content.script_auto is not None:
                 with st.expander("📜 스크립트(Youtube Auto)", expanded=True):
                     st.html(f"<div class='styled-box'> {selected_content.formatted_script_auto} </div>")
 
-            # HTML로 스타일링된 대본 표시
-            if selected_content.script is not None:
-                with st.expander("📜 스크립트(Whisper V3)", expanded=True):
-                    st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
+
 
 ########################################################################################################################
 # 추가 페이지:
@@ -204,10 +199,10 @@ def add_page_render():
                 st.warning("페이지를 이동하면 작업이 취소됩니다.")
                 result = True
 
-                with st.spinner("영상을 검색 중입니다..."):
+                with st.spinner("유튜브 정보를 검색 중입니다..."):
                     result: ExecuteResult = app.first_parse_and_store(youtube_link)
                     if result.result is True:
-                        st.success("영상 수집을 완료했습니다.")
+                        st.success("유튜브 정보 수집을 완료했습니다.")
                     else:
                         st.error(result.message.value)
 
@@ -227,6 +222,14 @@ def add_page_render():
                         else:
                             st.error(result.message.value)
 
+                if result.result is True:
+                    with st.spinner("STT 중입니다..."):
+                        result: ExecuteResult = app.fourth_audio_stt(youtube_link)
+                        if result.result is True:
+                            st.success("STT를 완료했습니다.")
+                        else:
+                            st.error(result.message.value)
+
 
 
                 if result.result is True:
@@ -242,6 +245,9 @@ def add_page_render():
                     app.select_youtube_content_by_url(youtube_link)
                     app.set_page('main')
                     st.rerun()
+
+                youtube_link = None
+
 
 ########################################################################################################################
 

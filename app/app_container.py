@@ -1,8 +1,14 @@
 from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository.youtube_content_repository import YouTubeContentRepository
 from application.service.youtube_content_service import YouTubeContentService
+from application.strategy import STTStrategyFactory, STTStrategyType
 
-from application.use_case import YouTubeParseAndStore, YouTubeAutoScriptParse, YouTubeAudioDownload
+from application.use_case import \
+    YouTubeParseAndStore, \
+    YouTubeAutoScriptParse, \
+    YouTubeAudioDownload, \
+    YouTubeAudioSTT
+
 
 
 import os
@@ -40,7 +46,9 @@ class AppContainer(containers.DeclarativeContainer):
         repository=youtube_repository,
     )
 
-    # 새로운 지식 추가 하기
+    ###############################################
+    # 새로운 지식 추가 하기 유즈 케이스
+    ###############################################
 
     # 1. YoutubeContentsParseAndStore
     youtube_parse_and_store = providers.Singleton(
@@ -54,8 +62,16 @@ class AppContainer(containers.DeclarativeContainer):
         repository=youtube_repository
     )
 
-    # 3
+    # 3. YoutubeAudioDownload
     youtube_audio_download = providers.Singleton(
         YouTubeAudioDownload,
         repository=youtube_repository
+    )
+
+    # 4. YoutubeAudioSTT
+    youtube_audio_stt = providers.Singleton(
+        YouTubeAudioSTT,
+        repository=youtube_repository,
+        stt_strategy=STTStrategyFactory.create(STTStrategyType.LOCAL_WHISPER, batch_size=32,
+                                               model_name='openai/whisper-large-v3-turbo', clean=True)
     )

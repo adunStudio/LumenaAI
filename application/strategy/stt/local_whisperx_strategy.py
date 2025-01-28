@@ -10,12 +10,13 @@ import whisperx
 
 
 class LocalWhisperXStrategy(STTStrategy):
-    def __init__(self,  model_name: str, batch_size: int):
+    def __init__(self,  model_name: str, batch_size: int, clean: bool):
         device = "cuda" if torch.cuda.is_available() else "cpu"
         compute_type = "float16" if torch.cuda.is_available() else "int8"
 
         self._batch_size = batch_size
         self._model = whisperx.load_model(model_name, device, compute_type=compute_type)
+        self.clean = clean
 
     def transcribe(self, audio_path: str) -> TranscriptionResult:
         audio = whisperx.load_audio(audio_path)
