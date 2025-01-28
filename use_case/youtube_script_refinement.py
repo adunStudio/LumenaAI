@@ -28,3 +28,4 @@ class YouTubeScriptRefinement(YoutubeUseCase):
         if (content.script_auto is None) and (content.script is None):
             return ExecuteResult(False, ExecuteResultType.SCRIPT_NOT_FOUND)
 
+        

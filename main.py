@@ -144,10 +144,11 @@ def main_page_render():
 
             with tab1:
                 st.markdown("##### 🌐 **URL 정보**")
+                st.markdown(f"🏠 **채널 이름:** {selected_content.channel}")
                 st.markdown(f"[{selected_content.url.url}]({selected_content.url.url})", unsafe_allow_html=True)
 
                 st.markdown("##### 📝 **설명**")
-                st.write(selected_content.description)
+                st.write(selected_content.description, unsafe_allow_html=False)
                 st.divider()
 
                 st.markdown("##### 🔖 **태그**")
