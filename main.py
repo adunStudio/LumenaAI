@@ -140,7 +140,7 @@ def main_page_render():
 
             st.header(selected_content.title)
 
-            tab1, tab2, tab3, tab4 = st.tabs(["유튜브 정보", "타임라인 요약", "핵심 정보", "채팅"])
+            tab1, tab2, tab3, tab4, tab5 = st.tabs(["유튜브 정보", "타임라인 요약", "핵심 정보", "스크립트", "채팅"])
 
             with tab1:
                 st.markdown("##### 🌐 **URL 정보**")
@@ -153,6 +153,23 @@ def main_page_render():
                 st.markdown("##### 🔖 **태그**")
                 st.markdown(", ".join([f"`{tag}`" for tag in selected_content.tags]))
 
+            with tab4:
+                cols = st.columns(3)
+                with cols[0]:
+                    if selected_content.script is not None:
+                        st.write("📜 Refined by LLM", expanded=True)
+                        st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
+
+                with cols[1]:
+                    if selected_content.script is not None:
+                        st.write("📜 Whisper V3", expanded=True)
+                        st.html(f"<div class='styled-box'> {selected_content.formatted_script_whisper} </div>")
+
+                with cols[2]:
+                    if selected_content.script is not None:
+                        st.write("📜 Youtube Auto", expanded=True)
+                        st.html(f"<div class='styled-box'> {selected_content.formatted_script_auto} </div>")
+
         else:
             st.header("콘텐츠를 선택하세요")
             st.write("왼쪽에서 콘텐츠를 선택하면 여기에 상세 정보가 표시됩니다.")
@@ -164,10 +181,15 @@ def main_page_render():
             with st.expander("🎬 영상", expanded=True):
                 st.video(selected_content.url.url)
 
+            # 개선된 대본 표시
+            if selected_content.script is not None:
+                with st.expander("📜 스크립트(Refined by LLM)", expanded=True):
+                    st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
+
             # 위스퍼 대본 표시
             if selected_content.script_whisper is not None:
                 with st.expander("📜 스크립트(Whisper V3)", expanded=True):
-                    st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
+                    st.html(f"<div class='styled-box'> {selected_content.formatted_script_whisper} </div>")
 
             # 자동 생성된 대본 표시
             if selected_content.script_auto is not None:
