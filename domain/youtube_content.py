@@ -7,7 +7,10 @@ from html import escape
 
 class YouTubeContent:
     def __init__(self, title: str, channel: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''
-                 , script: Optional[YouTubeScript] = None, script_x: Optional[YouTubeScript] = None, script_auto: Optional[YouTubeScript] = None):
+                 , script: Optional[YouTubeScript] = None
+                 , script_whisper: Optional[YouTubeScript] = None
+                 , script_auto: Optional[YouTubeScript] = None):
+
         self._title = title
         self._channel = channel
         self._thumbnail = thumbnail
@@ -16,10 +19,11 @@ class YouTubeContent:
         self._tags = tags
         self._category = category
         self._script = script
-        self._script_x = script_x
+        self._script_whisper = script_whisper
         self._script_auto = script_auto
 
         self._cached_formatted_script = None
+        self._cached_formatted_script_whisper = None
         self._cached_formatted_script_auto = None
 
     @property
@@ -79,8 +83,24 @@ class YouTubeContent:
         return self._cached_formatted_script
 
     @property
-    def script_x(self) -> Optional[YouTubeScript]:
-        return self._script_x
+    def formatted_script_whisper(self) -> str:
+        if self._cached_formatted_script_whisper is not None:
+            return self._cached_formatted_script_whisper
+
+        # 대본 내용을 HTML로 변환
+        self._cached_formatted_script_whisper = "\n".join(
+            f'<div>'
+            f'<span class="timestamp">{chunk.formatted_start_time}</span>'
+            f' <span class="text">{escape(chunk.text)}</span>'
+            f'</div>'
+            for chunk in self.script_whisper.chunks
+        )
+
+        return self._cached_formatted_script_whisper
+
+    @property
+    def script_whisper(self) -> Optional[YouTubeScript]:
+        return self._script_whisper
 
     @property
     def script_auto(self) -> Optional[YouTubeScript]:
@@ -108,8 +128,8 @@ class YouTubeContent:
     def set_script(self, script: YouTubeScript):
         self._script = script
 
-    def set_script_x(self, script: YouTubeScript):
-        self._script_x = script
+    def set_script_whisper(self, script: YouTubeScript):
+        self._script_whisper = script
 
     def set_script_auto(self, script: YouTubeScript):
         self._script_auto = script
@@ -124,7 +144,7 @@ class YouTubeContent:
             "tags": self.tags,
             "category": self.category,
             "script": self.script.to_dict() if self.script else None,  # YouTubeScript를 dict로 변환
-            "script_x": self.script_x.to_dict() if self.script_x else None,  # YouTubeScript를 dict로 변환
+            "script_whisper": self.script_whisper.to_dict() if self.script_whisper else None,  # YouTubeScript를 dict로 변환
             "script_auto": self.script_auto.to_dict() if self.script_auto else None,  # YouTubeScript를 dict로 변환
         }
 
@@ -139,7 +159,7 @@ class YouTubeContent:
             tags=data["tags"],
             category=data.get("category", ""),
             script=YouTubeScript.from_dict(data["script"]) if data.get("script") else None,
-            script_x=YouTubeScript.from_dict(data["script_x"]) if data.get("script_x") else None,
+            script_whisper=YouTubeScript.from_dict(data["script_whisper"]) if data.get("script_whisper") else None,
             script_auto=YouTubeScript.from_dict(data["script_auto"]) if data.get("script_auto") else None,
         )
 

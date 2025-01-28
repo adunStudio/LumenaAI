@@ -165,7 +165,7 @@ def main_page_render():
                 st.video(selected_content.url.url)
 
             # 위스퍼 대본 표시
-            if selected_content.script is not None:
+            if selected_content.script_whisper is not None:
                 with st.expander("📜 스크립트(Whisper V3)", expanded=True):
                     st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
 

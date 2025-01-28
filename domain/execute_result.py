@@ -14,6 +14,7 @@ class ExecuteResultType(Enum):
     AUDIO_NOT_EXIST = "오디오 파일이 없습니다."
     STT_SUCCESS = "STT를 성공했습니다."
     STT_FAIL = "STT를 실패했습니다."
+    SCRIPT_NOT_FOUND = "스크립트가 없습니다."
 
 
 class ExecuteResult:
