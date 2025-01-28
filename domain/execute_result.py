@@ -15,6 +15,8 @@ class ExecuteResultType(Enum):
     STT_SUCCESS = "STT를 성공했습니다."
     STT_FAIL = "STT를 실패했습니다."
     SCRIPT_NOT_FOUND = "스크립트가 없습니다."
+    SCRIPT_REFINE_SUCCESS = "스크립트를 매끄럽게 만들었습니다."
+    SCRIPT_REFINE_FAIL = "스크립트를 매끄럽게 만들기에 실패했습니다.."
 
 
 class ExecuteResult:

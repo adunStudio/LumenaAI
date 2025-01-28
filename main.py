@@ -158,17 +158,17 @@ def main_page_render():
                 cols = st.columns(3)
                 with cols[0]:
                     if selected_content.script is not None:
-                        st.write("📜 Refined by LLM", expanded=True)
+                        st.write("📜 Refined by LLM")
                         st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
 
                 with cols[1]:
                     if selected_content.script_whisper is not None:
-                        st.write("📜 Whisper V3", expanded=True)
+                        st.write("📜 Whisper V3")
                         st.html(f"<div class='styled-box'> {selected_content.formatted_script_whisper} </div>")
 
                 with cols[2]:
                     if selected_content.script_auto is not None:
-                        st.write("📜 Youtube Auto", expanded=True)
+                        st.write("📜 Youtube Auto")
                         st.html(f"<div class='styled-box'> {selected_content.formatted_script_auto} </div>")
 
         else:
@@ -228,13 +228,13 @@ def add_page_render():
                     else:
                         st.error(process.message)
 
-                if process.result is True:
-                    with st.spinner("오디오 파일을 다운로드 중입니다..."):
-                        process: ExecuteResult = app.third_audio_download(youtube_link)
-                        if process.result is True:
-                            st.success("오디오 파일 다운로드를 완료했습니다.")
-                        else:
-                            st.error(process.message)
+                # if process.result is True:
+                #     with st.spinner("오디오 파일을 다운로드 중입니다..."):
+                #         process: ExecuteResult = app.third_audio_download(youtube_link)
+                #         if process.result is True:
+                #             st.success("오디오 파일 다운로드를 완료했습니다.")
+                #         else:
+                #             st.error(process.message)
 
                 if process.result is True:
                     with st.spinner("스크립트를 검색 중입니다..."):
@@ -244,14 +244,23 @@ def add_page_render():
                         else:
                             st.error(process.message)
 
+
+                # if process.result is True:
+                #     with st.spinner("STT 중입니다..."):
+                #         process: ExecuteResult = app.fourth_audio_stt(youtube_link)
+                #         if process.result is True:
+                #             st.success("STT를 완료했습니다.")
+                #         else:
+                #             st.error(process.message)
+
+
                 if process.result is True:
-                    with st.spinner("STT 중입니다..."):
-                        process: ExecuteResult = app.fourth_audio_stt(youtube_link)
+                    with st.spinner("스크립트를 매끄럽게 다듬는 중입니다..."):
+                        process: ExecuteResult = app.fifth_script_refinement(youtube_link)
                         if process.result is True:
-                            st.success("STT를 완료했습니다.")
+                            st.success("다듬었습니다.")
                         else:
                             st.error(process.message)
-
 
 
                 if process.result is True:

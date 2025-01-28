@@ -7,8 +7,10 @@ from use_case import \
     YouTubeParseAndStore, \
     YouTubeAutoScriptParse, \
     YouTubeAudioDownload, \
-    YouTubeAudioSTT
+    YouTubeAudioSTT, \
+    YouTubeScriptRefinement
 
+from langchain_openai import ChatOpenAI
 
 
 import os
@@ -56,6 +58,17 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     ###############################################
+    # LLM
+    ###############################################
+
+    llm_openai = providers.Singleton(
+        ChatOpenAI,
+        model="gpt-4o-mini",
+        api_key=config.openai_api_key
+    )
+
+
+    ###############################################
     # 새로운 지식 추가 하기 유즈 케이스
     ###############################################
 
@@ -82,4 +95,11 @@ class AppContainer(containers.DeclarativeContainer):
         YouTubeAudioSTT,
         repository=youtube_repository,
         stt_strategy=stt_strategy
+    )
+
+    # 5. YoutubeScriptRefinement
+    youtube_script_refinement = providers.Singleton(
+        YouTubeScriptRefinement,
+        repository=youtube_repository,
+        llm=llm_openai
     )

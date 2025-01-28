@@ -4,6 +4,7 @@ from use_case import YouTubeParseAndStore
 from use_case import YouTubeAutoScriptParse
 from use_case import YouTubeAudioDownload
 from use_case import YouTubeAudioSTT
+from use_case import YouTubeScriptRefinement
 
 class LumenaAIApp:
     def __init__(self):
@@ -17,6 +18,7 @@ class LumenaAIApp:
         self._youtube_auto_script_parse: YouTubeAutoScriptParse = self._container.youtube_auto_script_parse()
         self._youtube_audio_download: YouTubeAudioDownload = self._container.youtube_audio_download()
         self._youtube_audio_stt: YouTubeAudioSTT = self._container.youtube_audio_stt()
+        self._youtube_script_refinement: YouTubeScriptRefinement = self._container.youtube_script_refinement()
 
         # 캐싱
         self._cached_youtube_contents = None
@@ -102,3 +104,6 @@ class LumenaAIApp:
 
     def fourth_audio_stt(self, url: str):
         return self._youtube_audio_stt.execute(url)
+
+    def fifth_script_refinement(self, url: str):
+        return self._youtube_script_refinement.execute(url)
