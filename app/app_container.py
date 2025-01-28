@@ -25,6 +25,7 @@ class AppContainer(containers.DeclarativeContainer):
     config.database_name.override(os.getenv("MONGO_DATABASE_NAME", "LumenaAI"))
     config.collection_name.override("youtube_content")
     config.openai_api_key.override(os.getenv("OPENAI_API_KEY"))
+    config.whisper_model_name.override("openai/whisper-large-v3-turbo")
 
     # MongoDB 클라이언트
     mongo_client = providers.Singleton(
@@ -43,7 +44,7 @@ class AppContainer(containers.DeclarativeContainer):
     # STTStrategy
     stt_strategy = providers.Singleton(
         LocalWhisperStrategy,
-        model_name='openai/whisper-large-v3-turbo',
+        model_name=config.whisper_model_name,
         batch_size=32,
         clean=True
     )
