@@ -197,42 +197,41 @@ def add_page_render():
             else:
                 st.success("유튜브 링크가 입력됐습니다.")
                 st.warning("페이지를 이동하면 작업이 취소됩니다.")
-                result = True
 
                 with st.spinner("유튜브 정보를 검색 중입니다..."):
-                    result: ExecuteResult = app.first_parse_and_store(youtube_link)
-                    if result.result is True:
+                    process: ExecuteResult = app.first_parse_and_store(youtube_link)
+                    if process.result is True:
                         st.success("유튜브 정보 수집을 완료했습니다.")
                     else:
-                        st.error(result.message.value)
+                        st.error(process.message)
 
-                if result.result is True:
+                if process.result is True:
                     with st.spinner("오디오 파일을 다운로드 중입니다..."):
-                        result: ExecuteResult = app.third_audio_download(youtube_link)
-                        if result.result is True:
+                        process: ExecuteResult = app.third_audio_download(youtube_link)
+                        if process.result is True:
                             st.success("오디오 파일 다운로드를 완료했습니다.")
                         else:
-                            st.error(result.message.value)
+                            st.error(process.message)
 
-                if result.result is True:
+                if process.result is True:
                     with st.spinner("스크립트를 검색 중입니다..."):
-                        result: ExecuteResult = app.second_auto_script_parse(youtube_link)
-                        if result.result is True:
+                        process: ExecuteResult = app.second_auto_script_parse(youtube_link)
+                        if process.result is True:
                             st.success("스크립트 수집을 완료했습니다.")
                         else:
-                            st.error(result.message.value)
+                            st.error(process.message)
 
-                if result.result is True:
+                if process.result is True:
                     with st.spinner("STT 중입니다..."):
-                        result: ExecuteResult = app.fourth_audio_stt(youtube_link)
-                        if result.result is True:
+                        process: ExecuteResult = app.fourth_audio_stt(youtube_link)
+                        if process.result is True:
                             st.success("STT를 완료했습니다.")
                         else:
-                            st.error(result.message.value)
+                            st.error(process.message)
 
 
 
-                if result.result is True:
+                if process.result is True:
                     st.balloons()
                     with st.spinner("곧 페이지 이동이 시작됩니다. 잠시만 기다려주세요!"):
                         import time
@@ -241,7 +240,7 @@ def add_page_render():
                         app.select_youtube_content_by_url(youtube_link)
                         app.set_page('main')
                         st.rerun()
-                elif result.message == ExecuteResultType.DUPLICATE_CONTENT:
+                elif process.result_type == ExecuteResultType.DUPLICATE_CONTENT:
                     app.select_youtube_content_by_url(youtube_link)
                     app.set_page('main')
                     st.rerun()

@@ -17,14 +17,18 @@ class ExecuteResultType(Enum):
 
 
 class ExecuteResult:
-    def __init__(self, result: bool, message: ExecuteResultType):
+    def __init__(self, result: bool, result_type: ExecuteResultType):
         self._result = result
-        self._message = message
+        self._result_type = result_type
 
     @property
     def result(self):
         return self._result
 
     @property
+    def result_type(self):
+        return self._result_type
+
+    @property
     def message(self):
-        return self._message
+        return self._result_type.value
