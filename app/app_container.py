@@ -1,7 +1,7 @@
 from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository.youtube_content_repository import YouTubeContentRepository
 from application.service.youtube_content_service import YouTubeContentService
-from application.strategy import STTStrategyFactory, STTStrategyType
+from application.strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType
 
 from application.use_case import \
     YouTubeParseAndStore, \
@@ -40,6 +40,14 @@ class AppContainer(containers.DeclarativeContainer):
         collection_name=config.collection_name,
     )
 
+    # STTStrategy
+    stt_strategy = providers.Singleton(
+        LocalWhisperStrategy,
+        model_name='openai/whisper-large-v3-turbo',
+        batch_size=32,
+        clean=True
+    )
+
     # YouTubeContentService
     youtube_service = providers.Singleton(
         YouTubeContentService,
@@ -72,6 +80,5 @@ class AppContainer(containers.DeclarativeContainer):
     youtube_audio_stt = providers.Singleton(
         YouTubeAudioSTT,
         repository=youtube_repository,
-        stt_strategy=STTStrategyFactory.create(STTStrategyType.LOCAL_WHISPER, batch_size=32,
-                                               model_name='openai/whisper-large-v3-turbo', clean=True)
+        stt_strategy=stt_strategy
     )
