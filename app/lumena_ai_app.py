@@ -15,9 +15,9 @@ class LumenaAIApp:
         # 새로운 지식 유즈-케이스
         self._youtube_service: YouTubeContentService = self._container.youtube_service()
         self._youtube_parse_and_store: YouTubeParseAndStore = self._container.youtube_parse_and_store()
-        self._youtube_auto_script_parse: YouTubeAutoScriptParse = self._container.youtube_auto_script_parse()
-        self._youtube_audio_download: YouTubeAudioDownload = self._container.youtube_audio_download()
-        self._youtube_audio_stt: YouTubeAudioSTT = self._container.youtube_audio_stt()
+        self._youtube_auto_script_parse: YouTubeAutoScriptParse = None # self._container.youtube_auto_script_parse()
+        self._youtube_audio_download: YouTubeAudioDownload = None #self._container.youtube_audio_download()
+        self._youtube_audio_stt: YouTubeAudioSTT = None #self._container.youtube_audio_stt()
         self._youtube_script_refinement: YouTubeScriptRefinement = self._container.youtube_script_refinement()
 
         # 캐싱
@@ -97,12 +97,21 @@ class LumenaAIApp:
         return self._youtube_parse_and_store.execute(url)
 
     def second_auto_script_parse(self, url: str):
+        if self._youtube_auto_script_parse is None:
+            self._youtube_auto_script_parse = self._container.youtube_auto_script_parse()
+
         return self._youtube_auto_script_parse.execute(url)
 
     def third_audio_download(self, url: str):
+        if self._youtube_audio_download is None:
+            self._youtube_audio_download = self._container.youtube_audio_download()
+
         return self._youtube_audio_download.execute(url)
 
     def fourth_audio_stt(self, url: str):
+        if self._youtube_audio_stt is None:
+            self._youtube_audio_stt = self._container.youtube_audio_stt()
+
         return self._youtube_audio_stt.execute(url)
 
     def fifth_script_refinement(self, url: str):
