@@ -99,7 +99,7 @@ def sidebar_setting_render():
 # 메인 페이지:
 ########################################################################################################################
 def main_page_render():
-    col1, col2 = st.columns([2ㅡ if app.view_mode == 'small' else 3, 2])
+    col1, col2 = st.columns([2 if app.view_mode == 'small' else 3, 2])
 
     selected_content = app.selected_youtube_content
 
