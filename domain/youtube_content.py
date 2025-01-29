@@ -1,5 +1,6 @@
 from .youtube_script import YouTubeScript
 from .youtube_video_link import YouTubeVideoLink
+from .youtube_timeline_summary import YoutubeTimelineSummary
 from typing import List, Dict, Optional
 import re
 from html import escape
@@ -9,7 +10,8 @@ class YouTubeContent:
     def __init__(self, title: str, channel: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''
                  , script: Optional[YouTubeScript] = None
                  , script_whisper: Optional[YouTubeScript] = None
-                 , script_auto: Optional[YouTubeScript] = None):
+                 , script_auto: Optional[YouTubeScript] = None
+                 , timeline_summary: Optional[YoutubeTimelineSummary] = None):
 
         self._title = title
         self._channel = channel
@@ -21,6 +23,7 @@ class YouTubeContent:
         self._script = script
         self._script_whisper = script_whisper
         self._script_auto = script_auto
+        self._timeline_summary = timeline_summary
 
         self._cached_formatted_script = None
         self._cached_formatted_script_whisper = None
@@ -122,6 +125,13 @@ class YouTubeContent:
 
         return self._cached_formatted_script_auto
 
+    @property
+    def timeline_summary(self) -> Optional[YoutubeTimelineSummary]:
+        return self._timeline_summary
+
+    def set_timeline_summary(self, timeline_summary: YoutubeTimelineSummary):
+        self._timeline_summary = timeline_summary
+
     def set_category(self, category: str):
         self._category = category
 
@@ -146,6 +156,7 @@ class YouTubeContent:
             "script": self.script.to_dict() if self.script else None,  # YouTubeScript를 dict로 변환
             "script_whisper": self.script_whisper.to_dict() if self.script_whisper else None,  # YouTubeScript를 dict로 변환
             "script_auto": self.script_auto.to_dict() if self.script_auto else None,  # YouTubeScript를 dict로 변환
+            "timeline_summary": self.timeline_summary.to_dict() if self._timeline_summary else None,
         }
 
     @classmethod
@@ -161,6 +172,7 @@ class YouTubeContent:
             script=YouTubeScript.from_dict(data["script"]) if data.get("script") else None,
             script_whisper=YouTubeScript.from_dict(data["script_whisper"]) if data.get("script_whisper") else None,
             script_auto=YouTubeScript.from_dict(data["script_auto"]) if data.get("script_auto") else None,
+            timeline_summary=YoutubeTimelineSummary.from_dict(data["timeline_summary"]) if data.get('timeline_summary') else None,
         )
 
     def __repr__(self) -> str:
