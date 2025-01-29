@@ -47,17 +47,21 @@ class YouTubeScriptRefinement(YoutubeUseCase):
             self._make_chain()
 
 
+        for chunk in content.script_whisper.chunks:
+            print(f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text})")
+
+
         # 5. 입력 데이터 생성
         input_data = {
             "description": content.description,
             "script_auto": "\n".join(
                 [f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text}" for chunk in
-                 content.script_auto.chunks]
+                 content.script_auto.chunks if chunk.start_time is not None and chunk.end_time is not None]
             ),
             "script_whisper": "\n".join(
                 [f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text}" for chunk in
-                 content.script_whisper.chunks] if content.script_whisper is not None else 'None'
-            ),
+                 content.script_whisper.chunks if chunk.start_time is not None and chunk.end_time is not None]
+            ) if content.script_whisper is not None else 'None',
         }
 
 
