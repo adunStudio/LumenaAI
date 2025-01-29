@@ -47,10 +47,6 @@ class YouTubeScriptRefinement(YoutubeUseCase):
             self._make_chain()
 
 
-        for chunk in content.script_whisper.chunks:
-            print(f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text})")
-
-
         # 5. 입력 데이터 생성
         input_data = {
             "description": content.description,
