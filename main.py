@@ -3,6 +3,9 @@ from app import LumenaAIApp
 import streamlit as st
 
 from domain.youtube_video_link import YouTubeVideoLink
+from domain.youtube_timeline_summary import YoutubeTimelineSummary
+from domain.youtube_timeline_section import YoutubeTimelineSection
+from domain.youtube_content import YouTubeContent
 from domain.execute_result import ExecuteResult, ExecuteResultType
 from itertools import groupby
 
@@ -101,7 +104,7 @@ def sidebar_setting_render():
 def main_page_render():
     col1, col2 = st.columns([2 if app.view_mode == 'small' else 3, 2])
 
-    selected_content = app.selected_youtube_content
+    selected_content: YouTubeContent = app.selected_youtube_content
 
     if selected_content is not None:
         # 중단: 스크립트 (열고 닫기 가능)
@@ -153,6 +156,31 @@ def main_page_render():
 
                 st.markdown("##### 🔖 **태그**")
                 st.markdown(", ".join([f"`{tag}`" for tag in selected_content.tags]))
+
+            def header(text):
+                st.markdown(
+                    f'<h3 style="padding:4px;background-color:#E9F3F7;color:#373530;border-radius:2%;">{text}</h3>',
+                    unsafe_allow_html=True)
+
+
+            with tab2:
+                if selected_content.timeline_summary is not None:
+                    summary: YoutubeTimelineSummary = selected_content.timeline_summary
+
+                    st.write(summary.text)
+
+                    for i, section in enumerate(summary.sections):
+                        #st.markdown(f'## :blue[{i+1}. {section.title}]')
+                        header(f'{i+1}. {section.title}')
+                        st.markdown(f"⏱ **타임스탬프:** {section.sec:.0f}초")
+
+                        st.video(selected_content.url.url, start_time=section.sec)
+
+                        for text in section.texts:
+                            st.write(f"-  {text}")
+
+                        st.success(section.tip)
+                        st.divider()
 
             with tab4:
                 cols = st.columns(3)

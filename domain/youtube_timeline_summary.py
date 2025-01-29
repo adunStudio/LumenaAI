@@ -1,5 +1,6 @@
 from typing import List
-from .youtube_timeline_summary_section import YoutubeTimelineSection
+from .youtube_timeline_section import YoutubeTimelineSection
+
 
 class YoutubeTimelineSummary:
     def __init__(self, text: str, sections: List[YoutubeTimelineSection]):
