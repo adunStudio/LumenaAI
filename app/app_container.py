@@ -1,7 +1,7 @@
 from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository.youtube_content_repository import YouTubeContentRepository
 from service.youtube_content_service import YouTubeContentService
-from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType
+from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, OpenAIWhisperStrategy
 
 from use_case import \
     YouTubeParseAndStore, \
@@ -43,18 +43,26 @@ class AppContainer(containers.DeclarativeContainer):
         collection_name=config.collection_name,
     )
 
-    # STTStrategy
-    stt_strategy = providers.Singleton(
-        LocalWhisperStrategy,
-        model_name=config.whisper_model_name,
-        batch_size=32,
-        clean=True
-    )
-
     # YouTubeContentService
     youtube_service = providers.Singleton(
         YouTubeContentService,
         repository=youtube_repository,
+    )
+
+    ###############################################
+    # STT
+    ###############################################
+
+    # STTStrategy
+    # stt_strategy = providers.Singleton(
+    #     LocalWhisperStrategy,
+    #     model_name=config.whisper_model_name,
+    #     batch_size=32,
+    #     clean=True
+    # )
+    stt_strategy = providers.Singleton(
+        OpenAIWhisperStrategy,
+        api_key=config.openai_api_key
     )
 
     ###############################################

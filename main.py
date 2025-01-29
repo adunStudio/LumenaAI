@@ -99,7 +99,7 @@ def sidebar_setting_render():
 # 메인 페이지:
 ########################################################################################################################
 def main_page_render():
-    col1, col2 = st.columns([2 if app.view_mode == 'small' else 3, 2])
+    col1, col2 = st.columns([2ㅡ if app.view_mode == 'small' else 3, 2])
 
     selected_content = app.selected_youtube_content
 
@@ -237,19 +237,19 @@ def add_page_render():
                             st.error(process.message)
 
                 if process.result is True:
-                    with st.spinner("스크립트를 검색 중입니다..."):
+                    with st.spinner("자동 스크립트를 검색 중입니다..."):
                         process: ExecuteResult = app.second_auto_script_parse(youtube_link)
                         if process.result is True:
-                            st.success("스크립트 수집을 완료했습니다.")
+                            st.success("자동 스크립트 수집을 완료했습니다.")
                         else:
                             st.error(process.message)
 
 
                 if process.result is True:
-                    with st.spinner("STT 중입니다..."):
+                    with st.spinner("Whisper STT 중입니다..."):
                         process: ExecuteResult = app.fourth_audio_stt(youtube_link)
                         if process.result is True:
-                            st.success("STT를 완료했습니다.")
+                            st.success("Whisper STT를 완료했습니다.")
                         else:
                             st.error(process.message)
 
