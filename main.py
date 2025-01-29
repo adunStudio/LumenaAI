@@ -174,7 +174,8 @@ def main_page_render():
                         header(f'{i+1}. {section.title}')
                         st.markdown(f"⏱ **타임스탬프:** {section.sec:.0f}초")
 
-                        st.video(selected_content.url.url, start_time=section.sec)
+                        with st.expander("🎬 영상", expanded=True):
+                            st.video(selected_content.url.url, start_time=section.sec)
 
                         for text in section.texts:
                             st.write(f"-  {text}")
@@ -290,6 +291,13 @@ def add_page_render():
                         else:
                             st.error(process.message)
 
+                if process.result is True:
+                    with st.spinner("타임라인 요약을 생성중입니다..."):
+                        process: ExecuteResult = app.six_generate_timeline_summary(youtube_link)
+                        if process.result is True:
+                            st.success("생성했습니다.")
+                        else:
+                            st.error(process.message)
 
                 if process.result is True:
                     st.balloons()

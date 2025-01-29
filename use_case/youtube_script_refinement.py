@@ -61,7 +61,7 @@ class YouTubeScriptRefinement(YoutubeUseCase):
         }
 
 
-        # 5. 체인 호출 (2회 시도)
+        # 6. 체인 호출 (2회 시도)
         chain_success = False
         for i in range(0, 2):
             try:
@@ -76,7 +76,7 @@ class YouTubeScriptRefinement(YoutubeUseCase):
             return ExecuteResult(False, ExecuteResultType.SCRIPT_REFINE_FAIL)
 
 
-        # 6. 스크립트 생성
+        # 7. 스크립트 생성
         chunks = [
             YouTubeScriptChunk(
                 timestamp=chunk.timestamp,
@@ -88,7 +88,7 @@ class YouTubeScriptRefinement(YoutubeUseCase):
         refine_script = YouTubeScript(all_text, chunks)
 
 
-        # 7. 저장소에 저장
+        # 8. 저장소에 저장
         content.set_script(refine_script)
         self._repository.save(content)
         success = self._repository.save(content)

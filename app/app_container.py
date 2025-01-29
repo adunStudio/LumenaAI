@@ -8,7 +8,8 @@ from use_case import \
     YouTubeAutoScriptParse, \
     YouTubeAudioDownload, \
     YouTubeAudioSTT, \
-    YouTubeScriptRefinement
+    YouTubeScriptRefinement, \
+    YouTubeGenerateTimelineSummary
 
 from langchain_openai import ChatOpenAI
 
@@ -108,6 +109,13 @@ class AppContainer(containers.DeclarativeContainer):
     # 5. YoutubeScriptRefinement
     youtube_script_refinement = providers.Singleton(
         YouTubeScriptRefinement,
+        repository=youtube_repository,
+        llm=llm_openai
+    )
+
+    # 6. YouTubeGenerateTimelineSummary
+    youtube_generate_timeline_summary = providers.Singleton(
+        YouTubeGenerateTimelineSummary,
         repository=youtube_repository,
         llm=llm_openai
     )
