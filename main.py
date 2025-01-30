@@ -215,7 +215,15 @@ def main_page_render():
                     with st.chat_message(message.role):
                         st.markdown(message.content)
 
-                prompt = st.chat_input("📝 메시지를 입력해보세요! 😊")
+                if prompt := st.chat_input("📝 메시지를 입력해보세요! 😊"):
+
+                    with st.chat_message("user"):
+                        st.markdown(prompt)
+
+                        # 🔹 8. 메시지 요청 & 답변
+                    with st.chat_message("assistant"):
+                        st.write(app.question(prompt)
+)
 
 
 

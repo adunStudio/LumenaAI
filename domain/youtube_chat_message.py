@@ -6,7 +6,7 @@ from typing import Dict, Any
 class AdvancedAIMessage(AIMessage):
     _enc: tiktoken.Encoding = None
 
-    def __init__(self, content: str, tokens: int = 0, check_tokens: bool = True):
+    def __init__(self, content: str, tokens: int = 0, check_tokens: bool = False):
         super().__init__(content=content)
         self._tokens = tokens
 
@@ -36,7 +36,7 @@ class AdvancedAIMessage(AIMessage):
 class AdvancedHumanMessage(HumanMessage):
     _enc: tiktoken.Encoding = None
 
-    def __init__(self, content: str, tokens: int = 0, check_tokens: bool = True):
+    def __init__(self, content: str, tokens: int = 0, check_tokens: bool = False):
         super().__init__(content=content)
         self._tokens = tokens
 

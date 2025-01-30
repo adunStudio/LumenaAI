@@ -2,6 +2,7 @@ from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository import YoutubeContentRepository, YoutubeScriptCollectionRepository, YoutubeChatRepository
 from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeChatService
 from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, OpenAIWhisperStrategy
+from langchain_openai import OpenAIEmbeddings
 
 from use_case import \
     YouTubeParseAndStore, \
@@ -32,7 +33,25 @@ class AppContainer(containers.DeclarativeContainer):
     config.openai_api_key.override(os.getenv("OPENAI_API_KEY"))
     config.whisper_model_name.override("openai/whisper-large-v3-turbo")
 
-    # MongoDB 클라이언트
+    ###############################################
+    # LLM
+    ###############################################
+
+    llm_openai = providers.Singleton(
+        ChatOpenAI,
+        model="gpt-4o-mini",
+        api_key=config.openai_api_key
+    )
+
+    embedding_openai = providers.Singleton(
+        OpenAIEmbeddings,
+        api_key=config.openai_api_key
+    )
+
+
+    ###############################################
+    # DB
+    ###############################################
     mongo_client = providers.Singleton(
         lambda uri, database_name: MongoDBClient(uri, database_name).connect(),
         uri=config.mongo_uri,
@@ -81,7 +100,8 @@ class AppContainer(containers.DeclarativeContainer):
 
     youtube_chat_service = providers.Singleton(
         YoutubeChatService,
-        vector_db=None,
+        embedding=embedding_openai,
+        llm=llm_openai,
         repository=youtube_chat_repository,
     )
 
@@ -99,16 +119,6 @@ class AppContainer(containers.DeclarativeContainer):
     # )
     stt_strategy = providers.Singleton(
         OpenAIWhisperStrategy,
-        api_key=config.openai_api_key
-    )
-
-    ###############################################
-    # LLM
-    ###############################################
-
-    llm_openai = providers.Singleton(
-        ChatOpenAI,
-        model="gpt-4o-mini",
         api_key=config.openai_api_key
     )
 
