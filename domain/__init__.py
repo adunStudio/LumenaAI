@@ -5,3 +5,5 @@ from .youtube_script import YouTubeScript
 from .youtube_script_chunk import YouTubeScriptChunk
 from .youtube_timeline_summary import YoutubeTimelineSummary
 from .youtube_timeline_section import YoutubeTimelineSection
+from .youtube_chat_message import AdvancedAIMessage, AdvancedHumanMessage
+from .youtube_chat_session import YoutubeChatSession, AdvancedMessageType

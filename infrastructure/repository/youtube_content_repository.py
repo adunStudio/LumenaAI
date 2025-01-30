@@ -19,8 +19,8 @@ class YouTubeContentRepository:
         )
         return result.modified_count > 0 or result.upserted_id is not None
 
-    def find_by_url(self, url: YouTubeVideoLink) -> YouTubeContent:
-        document = self._collection.find_one({"url": url.url})
+    def find_by_url(self, url: str) -> YouTubeContent:
+        document = self._collection.find_one({"url": url})
         return YouTubeContent.from_dict(document) if document else None
 
     def find_all(self) -> [YouTubeContent]:
@@ -39,6 +39,6 @@ class YouTubeContentRepository:
         )
         return [YouTubeContent.from_dict(doc) for doc in documents]
 
-    def delete_by_url(self, url: YouTubeVideoLink) -> bool:
-        result: DeleteResult = self._collection.delete_one({"url": url.url})
+    def delete_by_url(self, url: str) -> bool:
+        result: DeleteResult = self._collection.delete_one({"url": url})
         return result.deleted_count > 0
