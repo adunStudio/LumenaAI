@@ -114,25 +114,25 @@ class YouTubeScriptRefinement(YoutubeUseCase):
             partial_variables={'output_format': refine_output_parser.get_format_instructions()},
             input_variables=["description", "script_auto", "script_whisper"],
             template="""
-다음은 유튜브 영상의 설명과 자막입니다.
-[유튜브 영상 설명]:
-{description}
-
-[자동 생성 자막]: 
-{script_auto}
-
-[Whisper 자막]: 
-{script_whisper}
-
-위 정보를 참고하여 더 정확하고 매끄러운 자막 청크를 생성해주세요.
-각 청크는 타임스탬프와 텍스트로 구성되어야 합니다.
-
-- 오타가 났거나 애매한 용어는 [유튜브 영상 설명]을 참고해주세요.
-- 타임스탬프를 엄격하게 지켜주세요.
-
-반드시 아래 JSON 형식에 맞춰 반환하세요. 다른 텍스트는 포함하지 마세요.
-{output_format}
-"""
+            다음은 유튜브 영상의 설명과 자막입니다.
+            [유튜브 영상 설명]:
+            {description}
+            
+            [자동 생성 자막]: 
+            {script_auto}
+            
+            [Whisper 자막]: 
+            {script_whisper}
+            
+            위 정보를 참고하여 더 정확하고 매끄러운 자막 청크를 생성해주세요.
+            각 청크는 타임스탬프와 텍스트로 구성되어야 합니다.
+            
+            - 오타가 났거나 애매한 용어는 [유튜브 영상 설명]을 참고해주세요.
+            - 타임스탬프를 엄격하게 지켜주세요.
+            
+            반드시 아래 JSON 형식에 맞춰 반환하세요. 다른 텍스트는 포함하지 마세요.
+            {output_format}
+            """
         )
 
         # 3. Chain
