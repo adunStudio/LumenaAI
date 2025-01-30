@@ -1,7 +1,7 @@
 from domain import YouTubeVideoLink
 from domain import YouTubeContent, ExecuteResult, ExecuteResultType
 from domain import YoutubeTimelineSummary, YoutubeTimelineSection
-from infrastructure.repository import YouTubeContentRepository
+from infrastructure.repository import YoutubeContentRepository
 from strategy import STTStrategyFactory, STTStrategyType
 from use_case import YoutubeUseCase
 
@@ -14,7 +14,7 @@ from langchain.prompts import PromptTemplate
 
 # 2. 유튜브 링크로부터 DB에서 데이터를 가져와 타임라인 요약을 생성한다.
 class YouTubeGenerateTimelineSummary(YoutubeUseCase):
-    def __init__(self, repository: YouTubeContentRepository, llm: BaseLLM):
+    def __init__(self, repository: YoutubeContentRepository, llm: BaseLLM):
         self._repository = repository
         self._llm = llm
         self._chain = None

@@ -1,6 +1,6 @@
 from domain import YouTubeVideoLink
 from domain import YouTubeContent, ExecuteResult, ExecuteResultType
-from infrastructure.repository import YouTubeContentRepository
+from infrastructure.repository import YoutubeContentRepository
 from strategy import STTStrategy
 from use_case import YoutubeUseCase
 
@@ -11,7 +11,7 @@ import os
 class YouTubeAudioSTT(YoutubeUseCase):
     PATH = 'downloads/'
 
-    def __init__(self, repository: YouTubeContentRepository, stt_strategy: STTStrategy):
+    def __init__(self, repository: YoutubeContentRepository, stt_strategy: STTStrategy):
         self._repository = repository
         self._stt_strategy = stt_strategy
 

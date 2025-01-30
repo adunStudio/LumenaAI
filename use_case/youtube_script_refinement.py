@@ -7,7 +7,7 @@ from domain import \
     YouTubeContent, \
     ExecuteResult, \
     ExecuteResultType
-from infrastructure.repository import YouTubeContentRepository
+from infrastructure.repository import YoutubeContentRepository
 
 from langchain.prompts import PromptTemplate
 from pydantic import BaseModel, Field
@@ -18,7 +18,7 @@ from langchain.llms.base import BaseLLM
 
 # 5. 유튜브 스크립트를 자연스럽게 정제
 class YouTubeScriptRefinement(YoutubeUseCase):
-    def __init__(self, repository: YouTubeContentRepository, llm: BaseLLM):
+    def __init__(self, repository: YoutubeContentRepository, llm: BaseLLM):
         self._repository = repository
         self._llm = llm
         self._chain = None

@@ -1,6 +1,6 @@
 from infrastructure.database.mongo_client import MongoDBClient
-from infrastructure.repository.youtube_content_repository import YouTubeContentRepository
-from service.youtube_content_service import YouTubeContentService
+from infrastructure.repository import YoutubeContentRepository, YoutubeChatRepository
+from service import YoutubeContentService, YoutubeChatService
 from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, OpenAIWhisperStrategy
 
 from use_case import \
@@ -26,7 +26,8 @@ class AppContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
     config.mongo_uri.override(os.getenv("MONGO_CONNECTION_STRING"))
     config.database_name.override(os.getenv("MONGO_DATABASE_NAME", "LumenaAI"))
-    config.collection_name.override("youtube_content")
+    config.youtube_content_collection_name.override("youtube_content")
+    config.youtube_chat_collection_name.override("youtube_chat")
     config.openai_api_key.override(os.getenv("OPENAI_API_KEY"))
     config.whisper_model_name.override("openai/whisper-large-v3-turbo")
 
@@ -37,18 +38,36 @@ class AppContainer(containers.DeclarativeContainer):
         database_name=config.database_name,
     )
 
-    # YouTubeContentRepository
-    youtube_repository = providers.Singleton(
-        YouTubeContentRepository,
+
+    ###############################################
+    # YoutubeContent
+    ###############################################
+    youtube_content_repository = providers.Singleton(
+        YoutubeContentRepository,
         client=mongo_client,
-        collection_name=config.collection_name,
+        collection_name=config.youtube_content_collection_name,
     )
 
-    # YouTubeContentService
-    youtube_service = providers.Singleton(
-        YouTubeContentService,
-        repository=youtube_repository,
+    youtube_content_service = providers.Singleton(
+        YoutubeContentService,
+        repository=youtube_content_repository,
     )
+
+
+    ###############################################
+    # YoutubeChat
+    ###############################################
+    youtube_chat_repository = providers.Singleton(
+        YoutubeChatRepository,
+        client=mongo_client,
+        collection_name=config.youtube_chat_collection_name,
+    )
+
+    youtube_chat_service = providers.Singleton(
+        YoutubeContentService,
+        repository=youtube_chat_repository,
+    )
+
 
     ###############################################
     # STT
@@ -84,38 +103,38 @@ class AppContainer(containers.DeclarativeContainer):
     # 1. YoutubeContentsParseAndStore
     youtube_parse_and_store = providers.Singleton(
         YouTubeParseAndStore,
-        repository=youtube_repository
+        repository=youtube_content_repository
     )
 
     # 2. YouTubeContentAutoScriptParse
     youtube_auto_script_parse = providers.Singleton(
         YouTubeAutoScriptParse,
-        repository=youtube_repository
+        repository=youtube_content_repository
     )
 
     # 3. YoutubeAudioDownload
     youtube_audio_download = providers.Singleton(
         YouTubeAudioDownload,
-        repository=youtube_repository
+        repository=youtube_content_repository
     )
 
     # 4. YoutubeAudioSTT
     youtube_audio_stt = providers.Singleton(
         YouTubeAudioSTT,
-        repository=youtube_repository,
+        repository=youtube_content_repository,
         stt_strategy=stt_strategy
     )
 
     # 5. YoutubeScriptRefinement
     youtube_script_refinement = providers.Singleton(
         YouTubeScriptRefinement,
-        repository=youtube_repository,
+        repository=youtube_content_repository,
         llm=llm_openai
     )
 
     # 6. YouTubeGenerateTimelineSummary
     youtube_generate_timeline_summary = providers.Singleton(
         YouTubeGenerateTimelineSummary,
-        repository=youtube_repository,
+        repository=youtube_content_repository,
         llm=llm_openai
     )

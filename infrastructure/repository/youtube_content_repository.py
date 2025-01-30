@@ -5,7 +5,7 @@ from domain.youtube_content import YouTubeContent
 from domain.youtube_video_link import YouTubeVideoLink
 
 
-class YouTubeContentRepository:
+class YoutubeContentRepository:
     def __init__(self, client: MongoDBClient, collection_name: str = "youtube_content"):
         self._client = client
         self._db = self._client.get_database()

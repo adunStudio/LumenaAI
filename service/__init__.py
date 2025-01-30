@@ -1,1 +1,2 @@
-from .youtube_content_service import YouTubeContentService
+from .youtube_content_service import YoutubeContentService
+from .youtube_chat_service import YoutubeChatService

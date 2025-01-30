@@ -1,2 +1,2 @@
-from .youtube_content_repository import YouTubeContentRepository
+from .youtube_content_repository import YoutubeContentRepository
 from .youtube_chat_repository import YoutubeChatRepository

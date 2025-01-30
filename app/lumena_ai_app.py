@@ -1,5 +1,5 @@
 from app import AppContainer
-from service import YouTubeContentService
+from service import YoutubeContentService, YoutubeChatService
 from use_case import YouTubeParseAndStore
 from use_case import YouTubeAutoScriptParse
 from use_case import YouTubeAudioDownload
@@ -13,8 +13,11 @@ class LumenaAIApp:
 
         self._container = AppContainer()
 
+        # 서비스
+        self._youtube_content_service: YoutubeContentService = self._container.youtube_content_service()
+        self._youtube_chat_service: YoutubeChatService = self._container.youtube_chat_service()
+
         # 새로운 지식 유즈-케이스
-        self._youtube_service: YouTubeContentService = self._container.youtube_service()
         self._youtube_parse_and_store: YouTubeParseAndStore = self._container.youtube_parse_and_store()
         self._youtube_auto_script_parse: YouTubeAutoScriptParse = None # self._container.youtube_auto_script_parse()
         self._youtube_audio_download: YouTubeAudioDownload = None #self._container.youtube_audio_download()
@@ -27,6 +30,8 @@ class LumenaAIApp:
 
         # 프로퍼티
         self._selected_youtube_content = None
+        self._selected_youtube_chat = None
+
         self._view_mode = 'large'
         self._search_query = ''
         self._page = 'main' # or add
@@ -39,7 +44,7 @@ class LumenaAIApp:
         if self._cached_youtube_contents is not None:
             return self._cached_youtube_contents
 
-        self._cached_youtube_contents = self._youtube_service.list_all_content()
+        self._cached_youtube_contents = self._youtube_content_service.list_all_content()
         return self._cached_youtube_contents
 
     def get_search_youtube_contents(self):
@@ -69,10 +74,15 @@ class LumenaAIApp:
         self._search_query = search_query
 
     def select_youtube_content(self, youtube_content):
+        if self._selected_youtube_content == youtube_content:
+            return
+
         self._selected_youtube_content = youtube_content
+        self._selected_youtube_chat = self._youtube_chat_service.get_session(youtube_content.url.url)
+
 
     def select_youtube_content_by_url(self, url):
-        content = self._youtube_service.get_content_by_url(url)
+        content = self._youtube_content_service.get_content_by_url(url)
         self.select_youtube_content(content)
 
     @property

@@ -2,13 +2,13 @@ import yt_dlp
 
 from domain.youtube_video_link import YouTubeVideoLink
 from domain import YouTubeContent, ExecuteResult, ExecuteResultType
-from infrastructure.repository import YouTubeContentRepository
+from infrastructure.repository import YoutubeContentRepository
 from use_case import YoutubeUseCase
 
 
 # 1. 유튜브 링크로부터 데이터를 가져와 엔티티를 생성, 저장소에 저장한다.
 class YouTubeParseAndStore(YoutubeUseCase):
-    def __init__(self, repository: YouTubeContentRepository):
+    def __init__(self, repository: YoutubeContentRepository):
         self._repository = repository
 
     def execute(self, youtube_url: str, **kwargs) -> ExecuteResult:

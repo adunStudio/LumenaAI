@@ -1,11 +1,11 @@
 from typing import List, Optional
 from domain.youtube_content import YouTubeContent
 from domain.youtube_video_link import YouTubeVideoLink
-from infrastructure.repository import YouTubeContentRepository
+from infrastructure.repository import YoutubeContentRepository
 
 
-class YouTubeContentService:
-    def __init__(self, repository: YouTubeContentRepository):
+class YoutubeContentService:
+    def __init__(self, repository: YoutubeContentRepository):
         self._repository = repository
 
     def get_content_by_url(self, url: str) -> Optional[YouTubeContent]:

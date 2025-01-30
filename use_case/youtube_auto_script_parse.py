@@ -1,13 +1,13 @@
 from domain import YouTubeVideoLink
 from domain import YouTubeContent, ExecuteResult, ExecuteResultType
-from infrastructure.repository import YouTubeContentRepository
+from infrastructure.repository import YoutubeContentRepository
 from strategy import STTStrategyFactory, STTStrategyType
 from use_case import YoutubeUseCase
 
 
 # 2. 유튜브 링크로부터 DB에서 데이터를 가져와 유튜브 자동 생성된 스크립트로 최신화한다.
 class YouTubeAutoScriptParse(YoutubeUseCase):
-    def __init__(self, repository: YouTubeContentRepository):
+    def __init__(self, repository: YoutubeContentRepository):
         self._repository = repository
 
     def execute(self, youtube_url: str, **kwargs) -> ExecuteResult:

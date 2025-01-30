@@ -1,6 +1,6 @@
 from domain.youtube_video_link import YouTubeVideoLink
 from domain import YouTubeContent, ExecuteResult, ExecuteResultType
-from infrastructure.repository import YouTubeContentRepository
+from infrastructure.repository import YoutubeContentRepository
 from use_case import YoutubeUseCase
 
 import os
@@ -11,7 +11,7 @@ import yt_dlp
 class YouTubeAudioDownload(YoutubeUseCase):
     PATH = 'downloads/'
 
-    def __init__(self, repository: YouTubeContentRepository):
+    def __init__(self, repository: YoutubeContentRepository):
         self._repository = repository
 
     def execute(self, youtube_url: str, **kwargs) -> ExecuteResult:
