@@ -19,8 +19,8 @@ class YoutubeContentRepository:
         )
         return result.modified_count > 0 or result.upserted_id is not None
 
-    def find_by_url(self, url: str) -> YouTubeContent:
-        document = self._collection.find_one({"url": url})
+    def find_by_url(self, url: YouTubeVideoLink) -> YouTubeContent:
+        document = self._collection.find_one({"url": url.url})
         return YouTubeContent.from_dict(document) if document else None
 
     def find_all(self) -> [YouTubeContent]:

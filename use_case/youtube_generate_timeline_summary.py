@@ -1,7 +1,7 @@
-from domain import YouTubeVideoLink
+from domain import YouTubeVideoLink, YoutubeScriptCollection
 from domain import YouTubeContent, ExecuteResult, ExecuteResultType
 from domain import YoutubeTimelineSummary, YoutubeTimelineSection
-from infrastructure.repository import YoutubeContentRepository
+from infrastructure.repository import YoutubeContentRepository, YoutubeScriptCollectionRepository
 from strategy import STTStrategyFactory, STTStrategyType
 from use_case import YoutubeUseCase
 
@@ -14,8 +14,12 @@ from langchain.prompts import PromptTemplate
 
 # 2. 유튜브 링크로부터 DB에서 데이터를 가져와 타임라인 요약을 생성한다.
 class YouTubeGenerateTimelineSummary(YoutubeUseCase):
-    def __init__(self, repository: YoutubeContentRepository, llm: BaseLLM):
-        self._repository = repository
+    def __init__(self,
+                 content_repository: YoutubeContentRepository,
+                 script_repository: YoutubeScriptCollectionRepository,
+                 llm: BaseLLM):
+        self._content_repository = content_repository
+        self._script_repository = script_repository
         self._llm = llm
         self._chain = None
 
@@ -29,13 +33,14 @@ class YouTubeGenerateTimelineSummary(YoutubeUseCase):
 
 
         # 2. DB 데이터 검사
-        content: YouTubeContent = self._repository.find_by_url(youtube_video_link)
+        content: YouTubeContent = self._content_repository.find_by_url(youtube_video_link)
         if content is None:
             return ExecuteResult(False, ExecuteResultType.DATA_NOT_FOUND)
 
 
         # 3. 스크립트 검사
-        if content.script is None:
+        script_collection: YoutubeScriptCollection = self._script_repository.get(youtube_video_link.url)
+        if script_collection is None or script_collection.refined_script is None:
             return ExecuteResult(False, ExecuteResultType.SCRIPT_NOT_FOUND)
 
 
@@ -50,7 +55,7 @@ class YouTubeGenerateTimelineSummary(YoutubeUseCase):
             "description": content.description,
             "script": "\n".join(
                 [f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text}" for chunk in
-                 content.script.chunks]
+                 script_collection.refined_script .chunks]
             )
         }
 
@@ -84,8 +89,8 @@ class YouTubeGenerateTimelineSummary(YoutubeUseCase):
 
         # 8. 저장소에 저장
         content.set_timeline_summary(timeline_summary)
-        self._repository.save(content)
-        success = self._repository.save(content)
+        self._content_repository.save(content)
+        success = self._content_repository.save(content)
         if success:
             return ExecuteResult(True, ExecuteResultType.SCRIPT_TIMELINE_SUMMARY_SUCCESS)
         else:

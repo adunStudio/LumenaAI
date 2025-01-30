@@ -9,7 +9,7 @@ class YoutubeScriptCollection:
         auto_script: Optional[YouTubeScript] = None,
         whisper_script: Optional[YouTubeScript] = None,
         refined_script: Optional[YouTubeScript] = None
-    ):
+    ) -> object:
         self._youtube_url = youtube_url
         self._auto_script = auto_script
         self._whisper_script = whisper_script

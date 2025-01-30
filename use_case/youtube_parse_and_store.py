@@ -21,7 +21,7 @@ class YouTubeParseAndStore(YoutubeUseCase):
 
         # 2. 중복 검사
         if self._repository.find_by_url(youtube_video_link) is not None:
-            return ExecuteResult(False, ExecuteResultType.DUPLICATE_CONTENT)
+            return ExecuteResult(True, ExecuteResultType.DUPLICATE_CONTENT)
 
 
         # 3. 메타 데이터 가져오기

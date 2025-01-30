@@ -126,7 +126,8 @@ class AppContainer(containers.DeclarativeContainer):
     # 2. YouTubeContentAutoScriptParse
     youtube_auto_script_parse = providers.Singleton(
         YouTubeAutoScriptParse,
-        repository=youtube_content_repository
+        content_repository=youtube_content_repository,
+        script_repository=youtube_script_collection_repository
     )
 
     # 3. YoutubeAudioDownload
@@ -138,20 +139,23 @@ class AppContainer(containers.DeclarativeContainer):
     # 4. YoutubeAudioSTT
     youtube_audio_stt = providers.Singleton(
         YouTubeAudioSTT,
-        repository=youtube_content_repository,
+        content_repository=youtube_content_repository,
+        script_repository=youtube_script_collection_repository,
         stt_strategy=stt_strategy
     )
 
     # 5. YoutubeScriptRefinement
     youtube_script_refinement = providers.Singleton(
         YouTubeScriptRefinement,
-        repository=youtube_content_repository,
+        content_repository=youtube_content_repository,
+        script_repository=youtube_script_collection_repository,
         llm=llm_openai
     )
 
     # 6. YouTubeGenerateTimelineSummary
     youtube_generate_timeline_summary = providers.Singleton(
         YouTubeGenerateTimelineSummary,
-        repository=youtube_content_repository,
+        content_repository=youtube_content_repository,
+        script_repository=youtube_script_collection_repository,
         llm=llm_openai
     )

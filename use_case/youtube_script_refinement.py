@@ -6,20 +6,25 @@ from domain import \
     YouTubeScriptChunk, \
     YouTubeContent, \
     ExecuteResult, \
-    ExecuteResultType
-from infrastructure.repository import YoutubeContentRepository
+    ExecuteResultType, \
+    YoutubeScriptCollection
+from infrastructure.repository import YoutubeContentRepository, YoutubeScriptCollectionRepository
 
 from langchain.prompts import PromptTemplate
 from pydantic import BaseModel, Field
 from typing import List, Tuple
-from langchain.output_parsers import PydanticOutputParser, RetryOutputParser
+from langchain.output_parsers import PydanticOutputParser
 from langchain.llms.base import BaseLLM
 
 
 # 5. 유튜브 스크립트를 자연스럽게 정제
 class YouTubeScriptRefinement(YoutubeUseCase):
-    def __init__(self, repository: YoutubeContentRepository, llm: BaseLLM):
-        self._repository = repository
+    def __init__(self,
+                 content_repository: YoutubeContentRepository,
+                 script_repository: YoutubeScriptCollectionRepository,
+                 llm: BaseLLM):
+        self._content_repository = content_repository
+        self._script_repository = script_repository
         self._llm = llm
         self._chain = None
 
@@ -32,14 +37,18 @@ class YouTubeScriptRefinement(YoutubeUseCase):
 
 
         # 2. DB 데이터 검사
-        content: YouTubeContent = self._repository.find_by_url(youtube_video_link)
+        content: YouTubeContent = self._content_repository.find_by_url(youtube_video_link)
         if content is None:
             return ExecuteResult(False, ExecuteResultType.DATA_NOT_FOUND)
 
 
         # 3. 기존 스크립트 검사(유튜브 자동, 위스퍼)
-        if (content.script_auto is None) and (content.script is None):
+        script_collection: YoutubeScriptCollection = self._script_repository.get(youtube_video_link.url)
+        if script_collection is None or (script_collection.whisper_script is None and script_collection.auto_script is None):
             return ExecuteResult(False, ExecuteResultType.SCRIPT_NOT_FOUND)
+
+        if script_collection.refined_script is not None:
+            return ExecuteResult(True, ExecuteResultType.SCRIPT_REFINE_SUCCESS)
 
 
         # 4. LLM 체인 생성
@@ -52,12 +61,12 @@ class YouTubeScriptRefinement(YoutubeUseCase):
             "description": content.description,
             "script_auto": "\n".join(
                 [f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text}" for chunk in
-                 content.script_auto.chunks if chunk.start_time is not None and chunk.end_time is not None]
+                 script_collection.auto_script.chunks if chunk.start_time is not None and chunk.end_time is not None]
             ),
             "script_whisper": "\n".join(
                 [f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text}" for chunk in
-                 content.script_whisper.chunks if chunk.start_time is not None and chunk.end_time is not None]
-            ) if content.script_whisper is not None else 'None',
+                 script_collection.whisper_script.chunks if chunk.start_time is not None and chunk.end_time is not None]
+            ) if script_collection.whisper_script.chunks is not None else 'None',
         }
 
 
@@ -89,9 +98,8 @@ class YouTubeScriptRefinement(YoutubeUseCase):
 
 
         # 8. 저장소에 저장
-        content.set_script(refine_script)
-        self._repository.save(content)
-        success = self._repository.save(content)
+        script_collection.set_refined_script(refine_script)
+        success = self._script_repository.save(script_collection)
         if success:
             return ExecuteResult(True, ExecuteResultType.SCRIPT_REFINE_SUCCESS)
         else:
