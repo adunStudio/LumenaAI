@@ -49,7 +49,7 @@ class LumenaAIApp:
 
     def get_search_youtube_contents(self):
         all_list = self.get_all_youtube_contents()
-
+        print('get_search_youtube_contents')
         if self._search_query == '':
             return all_list
 
@@ -80,6 +80,9 @@ class LumenaAIApp:
         self._selected_youtube_content = youtube_content
         self._selected_youtube_chat = self._youtube_chat_service.get_session(youtube_content.url.url)
 
+    @property
+    def chat(self):
+        return self._selected_youtube_chat
 
     def select_youtube_content_by_url(self, url):
         content = self._youtube_content_service.get_content_by_url(url)

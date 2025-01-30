@@ -64,7 +64,8 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     youtube_chat_service = providers.Singleton(
-        YoutubeContentService,
+        YoutubeChatService,
+        vector_db=None,
         repository=youtube_chat_repository,
     )
 

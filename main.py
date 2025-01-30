@@ -5,6 +5,7 @@ import streamlit as st
 from domain.youtube_video_link import YouTubeVideoLink
 from domain.youtube_timeline_summary import YoutubeTimelineSummary
 from domain.youtube_timeline_section import YoutubeTimelineSection
+from domain.youtube_chat_session import YoutubeChatSession
 from domain.youtube_content import YouTubeContent
 from domain.execute_result import ExecuteResult, ExecuteResultType
 from itertools import groupby
@@ -143,9 +144,9 @@ def main_page_render():
 
             st.header(selected_content.title)
 
-            tab1, tab2, tab3, tab4, tab5 = st.tabs(["유튜브 정보", "타임라인 요약", "핵심 정보", "스크립트", "채팅"])
+            content_tab, timeline_tab, core_tab, script_tab, chat_tab = st.tabs(["유튜브 정보", "타임라인 요약", "핵심 정보", "스크립트", "채팅"])
 
-            with tab1:
+            with content_tab:
                 st.markdown("##### 🌐 **URL 정보**")
                 st.markdown(f"🏠 **채널 이름:** {selected_content.channel}")
                 st.markdown(f"[{selected_content.url.url}]({selected_content.url.url})", unsafe_allow_html=True)
@@ -163,7 +164,7 @@ def main_page_render():
                     unsafe_allow_html=True)
 
 
-            with tab2:
+            with timeline_tab:
                 if selected_content.timeline_summary is not None:
                     summary: YoutubeTimelineSummary = selected_content.timeline_summary
 
@@ -183,7 +184,7 @@ def main_page_render():
                         st.success(section.tip)
                         st.divider()
 
-            with tab4:
+            with script_tab:
                 cols = st.columns(3)
                 with cols[0]:
                     if selected_content.script is not None:
@@ -199,6 +200,25 @@ def main_page_render():
                     if selected_content.script_auto is not None:
                         st.write("📜 Youtube Auto")
                         st.html(f"<div class='styled-box'> {selected_content.formatted_script_auto} </div>")
+
+            with chat_tab:
+                chat_session =  app.chat
+                print(3)
+                print(chat_session)
+
+                # 🔹 시작 메시지
+                with st.chat_message('ai'):
+                    st.markdown('💡 **안녕하세요!** 이미지를 보면서 이야기를 나눠봐요. 궁금한 점을 물어보세요! 😊')
+
+
+                # 🔹 채팅 메시지 히스토리
+                for message in chat_session.messages:
+                    with st.chat_message(message.role):
+                        st.markdown(message.content)
+
+                prompt = st.chat_input("📝 메시지를 입력해보세요! 😊")
+
+
 
         else:
             st.header("콘텐츠를 선택하세요")
