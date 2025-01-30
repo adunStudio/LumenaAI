@@ -36,7 +36,7 @@ class YoutubeChatService:
         return session
 
     def question(self, content: YouTubeContent, script: YouTubeScript,  user_msg: str):
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
         texts = text_splitter.split_text(script.script)
 
         persist_dir = "./chroma_data"

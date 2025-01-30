@@ -216,14 +216,13 @@ def main_page_render():
                         st.markdown(message.content)
 
                 if prompt := st.chat_input("📝 메시지를 입력해보세요! 😊"):
-
                     with st.chat_message("user"):
                         st.markdown(prompt)
 
                         # 🔹 8. 메시지 요청 & 답변
-                    with st.chat_message("assistant"):
-                        st.write(app.question(prompt)
-)
+                    with st.spinner("답변 생성중..."):
+                        with st.chat_message("assistant"):
+                            st.write(app.question(prompt))
 
 
 
@@ -351,6 +350,7 @@ sidebar_setting_render()
 
 if app.page == 'main':
     main_page_render()
+
 elif app.page == 'add':
     add_page_render()
 
