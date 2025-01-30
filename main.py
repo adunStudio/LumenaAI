@@ -106,6 +106,7 @@ def main_page_render():
     col1, col2 = st.columns([2 if app.view_mode == 'small' else 3, 2])
 
     selected_content: YouTubeContent = app.selected_youtube_content
+    script_collection = app.script_collection
 
     if selected_content is not None:
         # 중단: 스크립트 (열고 닫기 가능)
@@ -187,24 +188,22 @@ def main_page_render():
             with script_tab:
                 cols = st.columns(3)
                 with cols[0]:
-                    if selected_content.script is not None:
+                    if script_collection.refined_script is not None:
                         st.write("📜 Refined by LLM")
-                        st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
+                        st.html(f"<div class='styled-box'> {script_collection.formatted_refined_script} </div>")
 
                 with cols[1]:
-                    if selected_content.script_whisper is not None:
+                    if script_collection.whisper_script is not None:
                         st.write("📜 Whisper V3")
-                        st.html(f"<div class='styled-box'> {selected_content.formatted_script_whisper} </div>")
+                        st.html(f"<div class='styled-box'> {script_collection.formatted_whisper_script} </div>")
 
                 with cols[2]:
-                    if selected_content.script_auto is not None:
+                    if script_collection.auto_script is not None:
                         st.write("📜 Youtube Auto")
-                        st.html(f"<div class='styled-box'> {selected_content.formatted_script_auto} </div>")
+                        st.html(f"<div class='styled-box'> {script_collection.formatted_auto_script} </div>")
 
             with chat_tab:
-                chat_session =  app.chat
-                print(3)
-                print(chat_session)
+                chat_session = app.chat
 
                 # 🔹 시작 메시지
                 with st.chat_message('ai'):
@@ -232,19 +231,19 @@ def main_page_render():
                 st.video(selected_content.url.url)
 
             # 개선된 대본 표시
-            if selected_content.script is not None:
+            if script_collection.refined_script is not None:
                 with st.expander("📜 스크립트(Refined by LLM)", expanded=True):
-                    st.html(f"<div class='styled-box'> {selected_content.formatted_script} </div>")
+                    st.html(f"<div class='styled-box'> {script_collection.formatted_refined_script} </div>")
 
             # 위스퍼 대본 표시
-            if selected_content.script_whisper is not None:
+            if script_collection.whisper_script is not None:
                 with st.expander("📜 스크립트(Whisper V3)", expanded=True):
-                    st.html(f"<div class='styled-box'> {selected_content.formatted_script_whisper} </div>")
+                    st.html(f"<div class='styled-box'> {script_collection.formatted_whisper_script} </div>")
 
             # 자동 생성된 대본 표시
-            if selected_content.script_auto is not None:
+            if script_collection.auto_script is not None:
                 with st.expander("📜 스크립트(Youtube Auto)", expanded=True):
-                    st.html(f"<div class='styled-box'> {selected_content.formatted_script_auto} </div>")
+                    st.html(f"<div class='styled-box'> {script_collection.formatted_auto_script} </div>")
 
 
 

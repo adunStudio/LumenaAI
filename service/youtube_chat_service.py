@@ -18,6 +18,8 @@ class YoutubeChatService:
         if session is None:
             session = YoutubeChatSession(url)
 
+        self._cached_session[url] = session
+
         return session
 
     # def add_message_to_session(self, session_id: str, sender: str, message: str):

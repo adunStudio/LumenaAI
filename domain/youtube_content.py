@@ -3,14 +3,10 @@ from .youtube_video_link import YouTubeVideoLink
 from .youtube_timeline_summary import YoutubeTimelineSummary
 from typing import List, Dict, Optional
 import re
-from html import escape
 
 
 class YouTubeContent:
     def __init__(self, title: str, channel: str, thumbnail: str, url: YouTubeVideoLink, description: str, tags: List[str], category: str = ''
-                 , script: Optional[YouTubeScript] = None
-                 , script_whisper: Optional[YouTubeScript] = None
-                 , script_auto: Optional[YouTubeScript] = None
                  , timeline_summary: Optional[YoutubeTimelineSummary] = None):
 
         self._title = title
@@ -20,14 +16,7 @@ class YouTubeContent:
         self._description = description
         self._tags = tags
         self._category = category
-        self._script = script
-        self._script_whisper = script_whisper
-        self._script_auto = script_auto
         self._timeline_summary = timeline_summary
-
-        self._cached_formatted_script = None
-        self._cached_formatted_script_whisper = None
-        self._cached_formatted_script_auto = None
 
     @property
     def title(self) -> str:
@@ -66,66 +55,6 @@ class YouTubeContent:
         return self._category
 
     @property
-    def script(self) -> Optional[YouTubeScript]:
-        return self._script
-
-    @property
-    def formatted_script(self) -> str:
-        if self._cached_formatted_script is not None:
-            return self._cached_formatted_script
-
-        # 대본 내용을 HTML로 변환
-        self._cached_formatted_script = "\n".join(
-            f'<div>'
-            f'<span class="timestamp">{chunk.formatted_start_time}</span>'
-            f' <span class="text">{escape(chunk.text)}</span>'
-            f'</div>'
-            for chunk in self.script.chunks
-        )
-
-        return self._cached_formatted_script
-
-    @property
-    def formatted_script_whisper(self) -> str:
-        if self._cached_formatted_script_whisper is not None:
-            return self._cached_formatted_script_whisper
-
-        # 대본 내용을 HTML로 변환
-        self._cached_formatted_script_whisper = "\n".join(
-            f'<div>'
-            f'<span class="timestamp">{chunk.formatted_start_time}</span>'
-            f' <span class="text">{escape(chunk.text)}</span>'
-            f'</div>'
-            for chunk in self.script_whisper.chunks
-        )
-
-        return self._cached_formatted_script_whisper
-
-    @property
-    def script_whisper(self) -> Optional[YouTubeScript]:
-        return self._script_whisper
-
-    @property
-    def script_auto(self) -> Optional[YouTubeScript]:
-        return self._script_auto
-
-    @property
-    def formatted_script_auto(self) -> str:
-        if self._cached_formatted_script_auto is not None:
-            return self._cached_formatted_script_auto
-
-        # 대본 내용을 HTML로 변환
-        self._cached_formatted_script_auto = "\n".join(
-            f'<div>'
-            f'<span class="timestamp">{chunk.formatted_start_time}</span>'
-            f' <span class="text">{escape(chunk.text)}</span>'
-            f'</div>'
-            for chunk in self.script_auto.chunks
-        )
-
-        return self._cached_formatted_script_auto
-
-    @property
     def timeline_summary(self) -> Optional[YoutubeTimelineSummary]:
         return self._timeline_summary
 
@@ -134,15 +63,6 @@ class YouTubeContent:
 
     def set_category(self, category: str):
         self._category = category
-
-    def set_script(self, script: YouTubeScript):
-        self._script = script
-
-    def set_script_whisper(self, script: YouTubeScript):
-        self._script_whisper = script
-
-    def set_script_auto(self, script: YouTubeScript):
-        self._script_auto = script
 
     def to_dict(self) -> Dict:
         return {
@@ -153,9 +73,6 @@ class YouTubeContent:
             "description": self.description,
             "tags": self.tags,
             "category": self.category,
-            "script": self.script.to_dict() if self.script else None,  # YouTubeScript를 dict로 변환
-            "script_whisper": self.script_whisper.to_dict() if self.script_whisper else None,  # YouTubeScript를 dict로 변환
-            "script_auto": self.script_auto.to_dict() if self.script_auto else None,  # YouTubeScript를 dict로 변환
             "timeline_summary": self.timeline_summary.to_dict() if self._timeline_summary else None,
         }
 
@@ -169,9 +86,6 @@ class YouTubeContent:
             description=data["description"],
             tags=data["tags"],
             category=data.get("category", ""),
-            script=YouTubeScript.from_dict(data["script"]) if data.get("script") else None,
-            script_whisper=YouTubeScript.from_dict(data["script_whisper"]) if data.get("script_whisper") else None,
-            script_auto=YouTubeScript.from_dict(data["script_auto"]) if data.get("script_auto") else None,
             timeline_summary=YoutubeTimelineSummary.from_dict(data["timeline_summary"]) if data.get('timeline_summary') else None,
         )
 

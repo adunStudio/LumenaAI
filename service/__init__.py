@@ -1,2 +1,3 @@
 from .youtube_content_service import YoutubeContentService
 from .youtube_chat_service import YoutubeChatService
+from .youtube_script_collection_service import YoutubeScriptCollectionService
