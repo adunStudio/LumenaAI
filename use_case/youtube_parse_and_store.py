@@ -8,7 +8,7 @@ from use_case import YoutubeUseCase
 
 # 1. 유튜브 링크로부터 데이터를 가져와 엔티티를 생성, 저장소에 저장한다.
 class YouTubeParseAndStore(YoutubeUseCase):
-    COOKIES_PATH: str = 'www.youtube.com_cookies.txt'
+    COOKIES_PATH: str = 'cookie.txt'
 
     def __init__(self, repository: YoutubeContentRepository):
         self._repository = repository
@@ -56,8 +56,7 @@ class YouTubeParseAndStore(YoutubeUseCase):
     @staticmethod
     def _fetch_metadata(video_link: YouTubeVideoLink):
         ydl_opts = {
-            'quiet': False,
-            'verbose': True,
+            'quiet': True,
             'cookiefile': YouTubeParseAndStore.COOKIES_PATH,
             'cookies': YouTubeParseAndStore.COOKIES_PATH,
             'http_headers': {
