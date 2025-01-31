@@ -1,35 +1,16 @@
 # LemenaAI: 유튜브 요약/분석 서비스
 
-[LilysAI](https://lilys.ai/home) 유튜브 요약 서비스 따라 만들기 프로젝트
+### [LilysAI](https://lilys.ai/home) 유튜브 요약 서비스 따라 만들기 프로젝트
 
 ### 1. Demo Video
-
 https://www.youtube.com/watch?v=oxmqXq-U5nE
-
-[항해 6주차 심화과제](https://youtu.be/oxmqXq-U5nE)
-
+[![d](./asset/youtube2.png)](https://www.youtube.com/watch?v=oxmqXq-U5nE)
 ---
 
 ## 2. Preview
-### 1. 링크 입력 → 분석/요약
-![링크 입력 → 분석/요약](./asset/preview_1.png)
-
-### 2. 유튜브(영상) 정보
-![유튜브(영상) 정보](./asset/preview_2.png)
-
-### 3. 타임라인 요약
-![타임라인 요약](./asset/preview_3.png)
-
-### 4. 핵심 정보(개발 예정)
-![핵심 정보(개발 예정)](./asset/preview_4.png)
-
-### 5. 스크립트(자동 생성 + 위스퍼 → Refined)
-![스크립트(자동 생성 + 위스퍼 → Refined)](./asset/preview_5.png)
-
-### 6. RAG 채팅
-![RAG 채팅](./asset/preview_6.png)
-
-
+![링크 입력 → 분석/요약](./asset/p1.png)
+![유튜브(영상) 정보](./asset/p2.png)
+![타임라인 요약](./asset/p3.png)
 ---
 
 ## 3. Development
@@ -52,9 +33,9 @@ LumenaAI
 ├── infrastructure    # 외부 인프라, 데이터베이스 및 저장소 설정
 │   ├── database      # 데이터베이스 관련 코드
 │   └── repository    # 저장소 패턴 구현 코드
-├── service           # 애플리케이션 서비스 레이어
+├── service           # 서비스 레이어
 ├── strategy          # 다양한 전략 패턴 관련 코드 (유연한 기능 확장을 위한 모듈, STT, LLM 등)
-├── test_execute      # 테스트 실행 관련 코드 및 스크립트
+├── test_execute      # 테스트 실행 관련 코드 및 스크립트(주피터 환경)
 ├── use_case          # 주요 유스케이스 및 응용 서비스 코드
 ├── .env              # 환경 변수 설정 파일
 ├── .gitignore        # Git 무시 파일 설정
@@ -64,13 +45,13 @@ LumenaAI
 
 **어플리케이션 레벨 의존성 주입:**
 
-- 코드 링크: https://github.com/adunStudio/LumenaAI/blob/main/app/app_container.py
+- 코드 링크: [AppContainer](https://github.com/adunStudio/LumenaAI/blob/main/app/app_container.py)
 
 ### `STT & LLM Strategy Pattern`
 
 또한, **전략 패턴(Strategy Pattern)**을 적용하여 **Whisper**, **LLM** 등의 모델을 다양한 환경에 맞게 실행 중 손쉽게 교체할 수 있습니다. 예를 들어, 현재는 **OpenAI Whisper** 및 **GPT** 모델을 사용하고 있지만, 로컬 환경의**Whisper 모델** 이나 다른 L**LM** 으로도 간단한 설정 변경만으로 교체할 수 있습니다.
 
-- 코드 링크: https://github.com/adunStudio/LumenaAI/tree/main/strategy
+- 코드 링크:  [Strategy](https://github.com/adunStudio/LumenaAI/tree/main/strategy)
 - 사용 목적:
     1. 다양한 모델의 비교/분석 용이 
     2. 향후 무료or유료 사용자 간의 차별화된 모델 사용
