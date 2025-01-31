@@ -21,27 +21,28 @@
     - 프롬프트 엔지니어링을 통해 요약 품질을 극대화하고 효율적인 응답 생성 전략 개발.
 ---
 
-## 목차
-1. [Demo Video](#1-demo-video)  
-2. [Preview](#2-preview)  
-   - [링크 입력 → 분석/요약](#21-링크-입력--분석요약)  
-   - [유튜브(영상) 정보](#22-유튜브영상-정보)  
-   - [타임라인 요약](#23-타임라인-요약)  
-   - [핵심 정보(개발 예정)](#24-핵심-정보개발-예정)  
-   - [스크립트(자동 생성 + 위스퍼 → Refined)](#25-스크립트자동-생성--위스퍼--refined)  
-   - [RAG 채팅](#26-rag-채팅)  
-3. [Development](#3-development)  
-   - [DDD & Dependency Injection](#31-ddd--dependency-injection)  
-   - [STT & LLM Strategy Pattern](#32-stt--llm-strategy-pattern)  
-4. [Use-Case](#4-use-case)  
-   - [YouTubeParseAndStore](#41-youtubeparseandstore)  
-   - [YouTubeAutoScriptParse](#42-youtubeautoscriptparse)  
-   - [YouTubeAudioDownload](#43-youtubeaudiodownload)  
-   - [Whisper: AudioSTT](#44-whisper-audiostt)  
-   - [LLM: Refine Script](#45-llm-refine-script)  
-   - [LLM: Generate TimelineSummary](#46-llm-generate-timelinesummary)  
-   - [LLM: Generate KeyPoint](#47-llm-generate-keypoint)  
-   - [LLM: RAG Chat](#48-llm-rag-chat)   
+### 목차
+
+1. [Demo Video](#1-demo-video)
+2. [Preview](#2-preview)
+   - [링크 입력 → 분석/요약](#1-링크-입력--분석요약)
+   - [유튜브(영상) 정보](#2-유튜브영상-정보)
+   - [타임라인 요약](#3-타임라인-요약)
+   - [핵심 정보(개발 예정)](#4-핵심-정보개발-예정)
+   - [스크립트(자동 생성 + 위스퍼 → Refined)](#5-스크립트자동-생성--위스퍼--refined)
+   - [RAG 채팅](#6-rag-채팅)
+3. [Development](#3-development)
+   - DDD & Dependency Injection
+   - STT & LLM Strategy Pattern
+4. [Use-Case](#4-use-case)
+   - [YouTubeParseAndStore](#1-youtubeparseandstore)
+   - [YouTubeAutoScriptParse](#2-youtubeautoscriptparse)
+   - [YouTubeAudioDownload](#3-youtubeaudiodownload)
+   - [Whisper: AudioSTT](#4-whisper-audiostt)
+   - [LLM: Refine Script](#5-llm-refine-script)
+   - [LLM: Generate TimelineSummary](#6-llm-generate-timelinesummary)
+   - [LLM: Generate KeyPoint](#7-llm-generate-keypoint)
+   - [LLM: RAG Chat](#8-llm-rag-chat)
 ---
 
 ## 1. Demo Video
