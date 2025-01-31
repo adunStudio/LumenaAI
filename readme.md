@@ -5,17 +5,25 @@
 ### 1. Demo Video
 https://www.youtube.com/watch?v=oxmqXq-U5nE
 [![d](./asset/youtube2.png)](https://www.youtube.com/watch?v=oxmqXq-U5nE)
----
+
 
 ## 2. Preview
-![링크 입력 → 분석/요약](./asset/p1.png)
-![유튜브(영상) 정보](./asset/p2.png)
-![타임라인 요약](./asset/p3.png)
----
+### 1. 링크 입력 → 분석/요약
+![링크 입력 → 분석/요약](./asset/preview_1.png)
+### 2. 유튜브(영상) 정보
+![유튜브(영상) 정보](./asset/preview_2.png)
+### 3. 타임라인 요약
+![타임라인 요약](./asset/preview_3.png)
+### 4. 핵심 정보(개발 예정)
+![핵심 정보(개발 예정)](./asset/preview_4.png)
+### 5. 스크립트(자동 생성 + 위스퍼 → Refined)
+![스크립트(자동 생성 + 위스퍼 → Refined)](./asset/preview_5.png)
+### 6. RAG 채팅
+![RAG 채팅](./asset/preview_6.png)
+
 
 ## 3. Development
-
-### `DDD & Dependency Injection`
+### - DDD & Dependency Injection
 
 이 프로젝트는 **DDD(Domain-Driven Design)** 및 **의존성 주입(Dependency Injection)** 원칙에 따라 설계되었습니다. 각 모듈은 책임에 따라 명확히 구분되어 있으며, 의존성은 컨테이너를 통해 관리되어 유지보수성과 확장성이 높아집니다. 또한 계층이 명확히 분리되어 있어 **Streamlit** 외에도 **FastAPI**, **Django**와 같은 다양한 파이썬 프레임워크로 쉽게 확장할 수 있습니다. 
 
@@ -44,12 +52,11 @@ LumenaAI
 ```
 
 **어플리케이션 레벨 의존성 주입:**
-
 - 코드 링크: [AppContainer](https://github.com/adunStudio/LumenaAI/blob/main/app/app_container.py)
 
-### `STT & LLM Strategy Pattern`
+### - STT & LLM Strategy Pattern
 
-또한, **전략 패턴(Strategy Pattern)**을 적용하여 **Whisper**, **LLM** 등의 모델을 다양한 환경에 맞게 실행 중 손쉽게 교체할 수 있습니다. 예를 들어, 현재는 **OpenAI Whisper** 및 **GPT** 모델을 사용하고 있지만, 로컬 환경의**Whisper 모델** 이나 다른 L**LM** 으로도 간단한 설정 변경만으로 교체할 수 있습니다.
+또한, **전략 패턴(Strategy Pattern)**을 적용하여 Whisper, LLM 등의 모델을 런타임 시 다양한 조건에 맞게 손쉽게 교체할 수 있습니다. 예를 들어, 현재는 OpenAI Whisper 및 GPT 모델을 사용하고 있지만, 로컬 환경의 Whisper 모델 이나 다른 LLM 으로도 간단한 설정 변경만으로 교체할 수 있습니다.
 
 - 코드 링크:  [Strategy](https://github.com/adunStudio/LumenaAI/tree/main/strategy)
 - 사용 목적:
