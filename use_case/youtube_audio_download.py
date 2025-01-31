@@ -10,6 +10,7 @@ import yt_dlp
 # 3. 유튜브 링크로부터 오디오를 다운로드한다..
 class YouTubeAudioDownload(YoutubeUseCase):
     PATH = 'downloads/'
+    COOKIES_PATH: str = 'www.youtube.com_cookies.txt'
 
     def __init__(self, repository: YoutubeContentRepository):
         self._repository = repository
@@ -45,6 +46,7 @@ class YouTubeAudioDownload(YoutubeUseCase):
         ydl_opts = {
             'format': 'bestaudio/best',  # 최적의 오디오 품질 선택
             'outtmpl': os.path.join(download_folder, f"{file_name}.%(ext)s"),  # 파일 저장 경로
+            'cookies': YouTubeAudioDownload.COOKIES_PATH,
             'postprocessors': [
                 {
                     'key': 'FFmpegExtractAudio',  # 오디오 추출
