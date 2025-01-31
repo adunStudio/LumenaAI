@@ -56,7 +56,8 @@ class YouTubeParseAndStore(YoutubeUseCase):
     @staticmethod
     def _fetch_metadata(video_link: YouTubeVideoLink):
         ydl_opts = {
-            'quiet': True,
+            'quiet': False,
+            'verbose': True,
             'cookiefile': YouTubeParseAndStore.COOKIES_PATH,
             'cookies': YouTubeParseAndStore.COOKIES_PATH,
             'http_headers': {
