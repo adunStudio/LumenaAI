@@ -1,4 +1,4 @@
-import yt_dlp
+import yt_dlp, os
 
 from domain.youtube_video_link import YouTubeVideoLink
 from domain import YouTubeContent, ExecuteResult, ExecuteResultType
@@ -14,6 +14,8 @@ class YouTubeParseAndStore(YoutubeUseCase):
         self._repository = repository
 
     def execute(self, youtube_url: str, **kwargs) -> ExecuteResult:
+        print(os.path.abspath(YouTubeParseAndStore.COOKIES_PATH))
+
         # 1. 유튜브 링크 검증
         try:
             youtube_video_link = YouTubeVideoLink(youtube_url)
