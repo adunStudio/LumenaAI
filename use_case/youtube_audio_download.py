@@ -10,7 +10,7 @@ import yt_dlp
 # 3. 유튜브 링크로부터 오디오를 다운로드한다..
 class YouTubeAudioDownload(YoutubeUseCase):
     PATH = 'downloads/'
-    COOKIES_PATH: str = '~/www.youtube.com_cookies.txt'
+    COOKIES_PATH: str = 'www.youtube.com_cookies.txt'
 
     def __init__(self, repository: YoutubeContentRepository):
         self._repository = repository
