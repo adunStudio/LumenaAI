@@ -46,7 +46,7 @@ class YouTubeAudioDownload(YoutubeUseCase):
         ydl_opts = {
             'format': 'bestaudio/best',  # 최적의 오디오 품질 선택
             'outtmpl': os.path.join(download_folder, f"{file_name}.%(ext)s"),  # 파일 저장 경로
-            'cookies': YouTubeAudioDownload.COOKIES_PATH,
+            'cookiefile': YouTubeAudioDownload.COOKIES_PATH,
             'postprocessors': [
                 {
                     'key': 'FFmpegExtractAudio',  # 오디오 추출

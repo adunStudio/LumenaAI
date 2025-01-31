@@ -57,7 +57,7 @@ class YouTubeParseAndStore(YoutubeUseCase):
     def _fetch_metadata(video_link: YouTubeVideoLink):
         ydl_opts = {
             'quiet': True,
-            'cookies': YouTubeParseAndStore.COOKIES_PATH,
+            'cookiefile': YouTubeParseAndStore.COOKIES_PATH,
             'http_headers': {
                 'Accept-Language': 'ko',  # HTTP 요청에 한국어 언어 설정
             },
