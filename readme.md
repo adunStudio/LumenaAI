@@ -2,6 +2,34 @@
 
 ### [LilysAI](https://lilys.ai/home) 유튜브 요약 서비스 따라 만들기 프로젝트
 
+### 목차
+
+1. [Demo Video](#demo-video)
+2. [Preview](#preview)
+   - [링크 입력 → 분석/요약](#링크-입력--분석요약)
+   - [유튜브(영상) 정보](#유튜브영상-정보)
+   - [타임라인 요약](#타임라인-요약)
+   - [핵심 정보(개발 예정)](#핵심-정보개발-예정)
+   - [스크립트(자동 생성 + 위스퍼 → Refined)](#스크립트자동-생성--위스퍼--refined)
+   - [RAG 채팅](#rag-채팅)
+3. [Development](#development)
+   - [DDD & Dependency Injection](#ddd--dependency-injection)
+   - [STT & LLM Strategy Pattern](#stt--llm-strategy-pattern)
+4. [Use-Case](#use-case)
+   - [YouTubeParseAndStore](#youtubeparseandstore)
+   - [YouTubeAutoScriptParse](#youtubeautoscriptparse)
+   - [YouTubeAudioDownload](#youtubeaudiodownload)
+   - [Whisper: AudioSTT](#whisper-audiostt)
+   - [LLM: Refine Script](#llm-refine-script)
+   - [LLM: Generate TimelineSummary](#llm-generate-timelinesummary)
+   - [LLM: Generate KeyPoint](#llm-generate-keypoint)
+   - [LLM: RAG Chat](#llm-rag-chat)
+5. [심화 프로젝트 계획](#심화-프로젝트-계획)  
+   - [핵심 키포인트 생성 기능 개발](#핵심-키포인트-생성-기능-개발)
+   - [다양한 로컬 모델 활용 및 매트릭스 분석](#다양한-로컬-모델-활용-및-매트릭스-분석)
+   - [프롬프트 최적화를 통한 최고의 요약 생성](#프롬프트-최적화를-통한-최고의-요약-생성)  
+---
+
 ### 1. Demo Video
 https://www.youtube.com/watch?v=oxmqXq-U5nE
 [![d](./asset/youtube2.png)](https://www.youtube.com/watch?v=oxmqXq-U5nE)
@@ -110,8 +138,13 @@ LumenaAI
 
 ---
 
-# 5. 앞으로의 계획
+# 5. 심화 프로젝트 계획
+### 5주차
+코드 리뷰 서비스...
+### 6주차
+가시적인 결과물을 빠르게 구현하고, 이후 이를 점진적으로 고도화해 나가는 과정에서 큰 즐거움을 느낍니다. 이러한 성향 덕분에 지금까지는 주요 지표에 대한 심층적인 분석보다는 OpenAI API를 활용하여 신속하게 프로토타입 개발에 집중해왔습니다. 앞으로는 AI 기술에 더욱 깊이 몰두하며, 다양한 고도화와 최적화를 통해 성능과 품질을 더욱 끌어올릴 계획입니다.
 
+### 7주차
 - [ ]  **핵심 키포인트 생성 기능 개발**
     - LLM이 아닌 통계 기반 접근을 통한 핵심 키포인트 추출 기능 개발.
 - [ ]  **다양한 로컬 모델 활용 및 매트릭스 분석**
