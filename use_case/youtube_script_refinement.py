@@ -62,12 +62,12 @@ class YouTubeScriptRefinement(YoutubeUseCase):
             "script_auto": "\n".join(
                 [f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text}" for chunk in
                  script_collection.auto_script.chunks if chunk.start_time is not None and chunk.end_time is not None]
-                if script_collection.auto_script.chunks is not None else 'None'
+                if script_collection.auto_script is not None else 'None'
             ),
             "script_whisper": "\n".join(
                 [f"({int(chunk.start_time)}-{int(chunk.end_time)}): {chunk.text}" for chunk in
                  script_collection.whisper_script.chunks if chunk.start_time is not None and chunk.end_time is not None]
-            ) if script_collection.whisper_script.chunks is not None else 'None',
+            ) if script_collection.whisper_script is not None else 'None',
         }
 
 
