@@ -145,7 +145,7 @@ def main_page_render():
 
             st.header(selected_content.title)
 
-            content_tab, timeline_tab, core_tab, script_tab, chat_tab = st.tabs(["유튜브 정보", "타임라인 요약", "핵심 정보", "스크립트", "채팅"])
+            content_tab, timeline_tab, key_tab, script_tab, chat_tab = st.tabs(["유튜브 정보", "타임라인 요약", "핵심 용어", "스크립트", "채팅"])
 
             with content_tab:
                 st.markdown("##### 🌐 **URL 정보**")
@@ -201,6 +201,9 @@ def main_page_render():
                     if script_collection.auto_script is not None:
                         st.write("📜 Youtube Auto")
                         st.html(f"<div class='styled-box'> {script_collection.formatted_auto_script} </div>")
+
+            with key_tab:
+                pass
 
             with chat_tab:
                 chat_session = app.chat
