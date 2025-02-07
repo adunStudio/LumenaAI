@@ -19,6 +19,9 @@ class ExecuteResultType(Enum):
     SCRIPT_REFINE_FAIL = "스크립트를 매끄럽게 만들기에 실패했습니다.."
     SCRIPT_TIMELINE_SUMMARY_FAIL = "타임라인 요약 생성에 실패했습니다."
     SCRIPT_TIMELINE_SUMMARY_SUCCESS = "타임라인 요약 생성을 완료했습니다."
+    TIMELINE_SUMMARY_NOT_FOUND = "타임라인을 찾지 못했습니다."
+    KEY_POINT_FAIL = "핵심 용어 생성에 실패했습니다."
+    KEY_POINT_SUCCESS = "핵심 용어 생성에 성공했습니다."
 
 
 class ExecuteResult:
