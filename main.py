@@ -322,14 +322,21 @@ def add_page_render():
                 with st.spinner("스크립트를 매끄럽게 다듬는 중입니다..."):
                     process: ExecuteResult = app.fifth_script_refinement(youtube_link)
                     if process.result is True:
-                        st.success("다듬었습니다.")
+                        st.success("스크립트를 매끄럽게 다듬었습니다.")
                     else:
                         st.error(process.message)
 
                 with st.spinner("타임라인 요약을 생성중입니다..."):
                     process: ExecuteResult = app.six_generate_timeline_summary(youtube_link)
                     if process.result is True:
-                        st.success("생성했습니다.")
+                        st.success("타임라인 요약을 생성했습니다.")
+                    else:
+                        st.error(process.message)
+
+                with st.spinner("핵심 용어 모읍집을 생성중입니다..."):
+                    process: ExecuteResult = app.seven_generate_key_point(youtube_link)
+                    if process.result is True:
+                        st.success("핵심 용어 모음집을 생성했습니다.")
                     else:
                         st.error(process.message)
 
