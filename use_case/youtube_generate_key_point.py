@@ -13,7 +13,7 @@ from langchain.prompts import PromptTemplate
 
 
 # 2. 유튜브 링크로부터 DB에서 데이터를 가져와 타임라인 요약을 생성한다.
-class YouTubeGenerateTimelineSummary(YoutubeUseCase):
+class YouTubeGenerateKeyPoint(YoutubeUseCase):
     def __init__(self, content_repository: YoutubeContentRepository, key_point_collection_repository: YoutubeKeyPointCollectionRepository, llm: BaseLLM):
         self._content_repository = content_repository
         self._key_point_collection_repository = key_point_collection_repository
