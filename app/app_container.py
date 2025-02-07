@@ -1,6 +1,6 @@
 from infrastructure.database.mongo_client import MongoDBClient
-from infrastructure.repository import YoutubeContentRepository, YoutubeScriptCollectionRepository, YoutubeChatRepository
-from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeChatService
+from infrastructure.repository import YoutubeContentRepository, YoutubeScriptCollectionRepository, YoutubeChatRepository, YoutubeKeyPointCollectionRepository
+from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeChatService, YoutubeKeyPointCollectionService
 from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, OpenAIWhisperStrategy
 from langchain_openai import OpenAIEmbeddings
 
@@ -29,6 +29,7 @@ class AppContainer(containers.DeclarativeContainer):
     config.database_name.override(os.getenv("MONGO_DATABASE_NAME", "LumenaAI"))
     config.youtube_content_collection_name.override("youtube_content")
     config.youtube_chat_collection_name.override("youtube_chat")
+    config.youtube_key_point_collection_name.override("youtube_keypoint_collection")
     config.youtube_script_collection_name.override("youtube_script_collection")
     config.openai_api_key.override(os.getenv("OPENAI_API_KEY"))
     config.whisper_model_name.override("openai/whisper-large-v3-turbo")
@@ -86,6 +87,21 @@ class AppContainer(containers.DeclarativeContainer):
     youtube_script_collection_service = providers.Singleton(
         YoutubeScriptCollectionService,
         repository=youtube_script_collection_repository,
+    )
+
+
+    ###############################################
+    # YoutubeKeyPointCollection
+    ###############################################
+    youtube_key_point_collection_repository = providers.Singleton(
+        YoutubeKeyPointCollectionRepository,
+        client=mongo_client,
+        collection_name=config.youtube_key_point_collection_name,
+    )
+
+    youtube_key_point_service = providers.Singleton(
+        YoutubeKeyPointCollectionService,
+        repository=youtube_key_point_collection_repository,
     )
 
 

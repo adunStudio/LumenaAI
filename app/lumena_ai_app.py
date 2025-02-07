@@ -1,5 +1,5 @@
 from app import AppContainer
-from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeChatService
+from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeKeyPointCollectionService, YoutubeChatService
 from use_case import YouTubeParseAndStore
 from use_case import YouTubeAutoScriptParse
 from use_case import YouTubeAudioDownload
@@ -16,6 +16,7 @@ class LumenaAIApp:
         # 서비스
         self._youtube_content_service: YoutubeContentService = self._container.youtube_content_service()
         self._youtube_script_service: YoutubeScriptCollectionService = self._container.youtube_script_collection_service()
+        self._youtube_key_point_service: YoutubeKeyPointCollectionService = self._container.youtube_key_point_service()
         self._youtube_chat_service: YoutubeChatService = self._container.youtube_chat_service()
 
         # 새로운 지식 유즈-케이스
@@ -32,6 +33,7 @@ class LumenaAIApp:
         # 프로퍼티
         self._selected_youtube_content = None
         self._selected_youtube_chat = None
+        self._selected_youtube_key_point_collection = None
         self._selected_youtube_script_collection = None
 
         self._view_mode = 'large'
@@ -88,11 +90,16 @@ class LumenaAIApp:
 
         url: str = youtube_content.url.url
         self._selected_youtube_chat = self._youtube_chat_service.get_session(url)
+        self._selected_youtube_key_point_collection = self._youtube_key_point_service.get_collection(url)
         self._selected_youtube_script_collection = self._youtube_script_service.get_script_collection(url)
 
     @property
     def script_collection(self):
         return self._selected_youtube_script_collection
+
+    @property
+    def key_point_collection(self):
+        return self._selected_youtube_key_point_collection
 
     @property
     def chat(self):

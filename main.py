@@ -6,6 +6,7 @@ from domain.youtube_video_link import YouTubeVideoLink
 from domain.youtube_timeline_summary import YoutubeTimelineSummary
 from domain.youtube_timeline_section import YoutubeTimelineSection
 from domain.youtube_chat_session import YoutubeChatSession
+from domain.youtube_key_point_collection import YoutubeKeyPointCollection
 from domain.youtube_content import YouTubeContent
 from domain.execute_result import ExecuteResult, ExecuteResultType
 from itertools import groupby
@@ -106,7 +107,9 @@ def main_page_render():
     col1, col2 = st.columns([2 if app.view_mode == 'small' else 3, 2])
 
     selected_content: YouTubeContent = app.selected_youtube_content
+    key_point_collection: YoutubeKeyPointCollection = app.key_point_collection
     script_collection = app.script_collection
+
 
     if selected_content is not None:
         # 중단: 스크립트 (열고 닫기 가능)
@@ -185,6 +188,15 @@ def main_page_render():
                         st.success(section.tip)
                         st.divider()
 
+            with key_tab:
+                cols = st.columns(2)
+
+                for index, key_point in enumerate(key_point_collection.key_points):
+                    # 각 열에 순서대로 배치
+                    with cols[index % len(cols)]:
+                        with st.expander(f"📌 {key_point.term}"):
+                            st.write(key_point.description)
+
             with script_tab:
                 cols = st.columns(3)
                 with cols[0]:
@@ -202,8 +214,6 @@ def main_page_render():
                         st.write("📜 Youtube Auto")
                         st.html(f"<div class='styled-box'> {script_collection.formatted_auto_script} </div>")
 
-            with key_tab:
-                pass
 
             with chat_tab:
                 chat_session = app.chat
