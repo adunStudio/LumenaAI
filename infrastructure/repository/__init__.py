@@ -1,3 +1,4 @@
 from .youtube_content_repository import YoutubeContentRepository
 from .youtube_chat_repository import YoutubeChatRepository
 from .youtube_script_collection_repository import YoutubeScriptCollectionRepository
+from .youtube_key_point_collection_repository import YoutubeKeyPointCollectionRepository

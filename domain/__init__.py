@@ -8,3 +8,5 @@ from .youtube_timeline_summary import YoutubeTimelineSummary
 from .youtube_timeline_section import YoutubeTimelineSection
 from .youtube_chat_message import AdvancedAIMessage, AdvancedHumanMessage
 from .youtube_chat_session import YoutubeChatSession, AdvancedMessageType
+from .youtube_key_point_collection import YoutubeKeyPointCollection
+from .youtube_key_point import YoutubeKeyPoint

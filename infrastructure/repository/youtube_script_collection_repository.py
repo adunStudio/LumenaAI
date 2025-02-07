@@ -5,6 +5,7 @@ from pymongo.results import UpdateResult, DeleteResult
 from infrastructure.database.mongo_client import MongoDBClient
 from domain import YoutubeScriptCollection
 
+
 class YoutubeScriptCollectionRepository:
     def __init__(self, client: MongoDBClient, collection_name: str = "youtube_script_collection"):
         self._client = client
@@ -26,5 +27,5 @@ class YoutubeScriptCollectionRepository:
         return None
 
     def delete(self, script: YoutubeScriptCollection) -> bool:
-        result = self._collection.delete_one({"youtube_url": script.youtube_url})
+        result: DeleteResult = self._collection.delete_one({"youtube_url": script.youtube_url})
         return result.deleted_count > 0
