@@ -13,12 +13,19 @@
     - 주요 지표에 대한 심층적인 분석보다는 OpenAI API를 활용하여 신속하게 프로토타입 개발에 집중
 
 ### 7주차
-- [ ]  **핵심 키포인트 생성 기능 개발**
-    - LLM이 아닌 통계 기반 접근을 통한 핵심 키포인트 추출 기능 개발.
-- [ ]  **다양한 로컬 모델 활용 및 매트릭스 분석**
-    - Ollama 기반의 로컬 모델을 적용하여 다양한 환경에서 성능 분석 및 비교.
+- [x]  **핵심 용어 모음집 생성 기능 개발**
+    - OpenAI API 기반 
+- [x] **통게, 로컬 LLM을 활용 핵심 용어 추출 테스트**
+    -  키워드 추출: 통계 기반(빈도), 알고리즘(TextRank)
+    -  키워드 설명: [인스트럭션 튜닝(facebook/opt-350m)](https://github.com/adunStudio/hanghae99_plusAI_2/blob/main/7%EC%A3%BC%EC%B0%A8_%EC%8B%AC%ED%99%94/train.py)
+
+### 8주차
 - [ ]  **프롬프트 최적화를 통한 최고의 요약 생성**
     - 프롬프트 엔지니어링을 통해 요약 품질을 극대화하고 효율적인 응답 생성 전략 개발.
+
+- [x]  **핵심 용어 모음집 생성 기능 로컬 LLM 적용**
+    - 한 푼이라도 아끼자!
+
 ---
 
 ### 목차
@@ -144,7 +151,8 @@ LumenaAI
 
 ### 7. `LLM: Generate KeyPoint`
 
-- **개발 예정**: 영상의 핵심 키포인트를 생성하는 기능.
+- **LLM**을 활용하여 유튜브 영상의 핵심 용어 모음집을 생성합니다
+- **코드 링크**: [YouTubeGenerateKeyPoint](https://github.com/adunStudio/LumenaAI/blob/main/use_case/youtube_generate_key_point.py)
 
 ### 8. `LLM: RAG Chat`
 
