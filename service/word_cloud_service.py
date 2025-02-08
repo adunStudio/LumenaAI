@@ -5,6 +5,7 @@ from collections import Counter
 from wordcloud import WordCloud
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
+from summa import keywords
 
 class WordCloudService:
     FONT_PATH = 'asset/NanumGothic-Regular.ttf'
@@ -52,3 +53,25 @@ class WordCloudService:
 
         # 워드 클라우드 생성
         return WordCloud(width=800, height=400, font_path=WordCloudService.FONT_PATH, background_color='white').generate_from_frequencies(word_scores)
+
+    def _filter_stopwords(self, text):
+        """ 텍스트에서 불용어를 제거하는 함수 """
+        words = text.split()
+        return ' '.join(
+            [word for word in words if word not in self._english_stop_words and word not in self._korean_stop_words])
+
+    def generate_textrank_wordcloud(self, text):
+        """ TextRank 방식으로 워드 클라우드를 생성하는 함수 """
+        # 불용어 제거
+        filtered_text = self._filter_stopwords(text)
+
+        # TextRank 알고리즘으로 키워드 추출
+        ranked_keywords = keywords.keywords(filtered_text, words=10, split=True)
+
+        # 단어와 중요도를 워드 클라우드에 전달할 형식으로 변환
+        word_scores = {word: 1 for word in ranked_keywords}
+
+        # 워드 클라우드 생성
+        return WordCloud(width=800, height=400, font_path=WordCloudService.FONT_PATH, background_color='white').generate_from_frequencies(word_scores)
+
+

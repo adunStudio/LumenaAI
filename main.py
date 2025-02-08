@@ -203,6 +203,19 @@ def main_page_render():
                     wordcloud = app.generate_tfidf_wordcloud()
                     st.image(wordcloud.to_array())
 
+            with key_tab:
+                cols = st.columns(2)
+                with cols[0]:
+                    st.markdown("**TextRank 방식 워드 클라우드**")
+                    wordcloud = app.generate_textrank_wordcloud()
+                    st.image(wordcloud.to_array())
+
+                with cols[1]:
+                    pass
+                    #st.markdown("**TF-IDF 기반 워드 클라우드**")
+                    #wordcloud = app.generate_tfidf_wordcloud()
+                    #st.image(wordcloud.to_array())
+
                 #plt.imshow(wordcloud, interpolation='bilinear')
                 #plt.axis('off')
                 #plt.show()
