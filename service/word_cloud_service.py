@@ -3,7 +3,8 @@ from nltk.corpus import stopwords
 from konlpy.tag import Okt
 from collections import Counter
 from wordcloud import WordCloud
-import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import TfidfVectorizer
+import numpy as np
 
 class WordCloudService:
     FONT_PATH = 'asset/NanumGothic-Regular.ttf'
@@ -33,6 +34,21 @@ class WordCloudService:
         word_freq = Counter(filtered_words)
 
         # 워드 클라우드 생성
-        wordcloud = WordCloud(width=800, height=400, font_path=WordCloudService.FONT_PATH, background_color='white').generate_from_frequencies(word_freq)
+        return WordCloud(width=800, height=400, font_path=WordCloudService.FONT_PATH, background_color='white').generate_from_frequencies(word_freq)
 
-        return wordcloud
+    def generate_tfidf_wordcloud(self, text):
+        """ TF-IDF 방식으로 워드 클라우드를 생성하는 함수 """
+        # 불용어 처리
+        stop_words_combined = list(self._english_stop_words.union(self._korean_stop_words))
+        tfidf_vectorizer = TfidfVectorizer(stop_words=stop_words_combined)
+        X = tfidf_vectorizer.fit_transform([text])
+
+        # 단어와 그에 대한 TF-IDF 값을 가져오기
+        tfidf_scores = np.array(X.sum(axis=0)).flatten()
+        words = tfidf_vectorizer.get_feature_names_out()
+
+        # 단어와 TF-IDF 점수를 딕셔너리로 저장
+        word_scores = {words[i]: tfidf_scores[i] for i in range(len(words))}
+
+        # 워드 클라우드 생성
+        return WordCloud(width=800, height=400, font_path=WordCloudService.FONT_PATH, background_color='white').generate_from_frequencies(word_scores)

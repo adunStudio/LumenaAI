@@ -198,6 +198,11 @@ def main_page_render():
                     wordcloud = app.generate_frequency_wordcloud()
                     st.image(wordcloud.to_array())
 
+                with cols[1]:
+                    st.markdown("**TF-IDF 기반 워드 클라우드**")
+                    wordcloud = app.generate_tfidf_wordcloud()
+                    st.image(wordcloud.to_array())
+
                 #plt.imshow(wordcloud, interpolation='bilinear')
                 #plt.axis('off')
                 #plt.show()
