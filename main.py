@@ -11,6 +11,9 @@ from domain.youtube_content import YouTubeContent
 from domain.execute_result import ExecuteResult, ExecuteResultType
 from itertools import groupby
 
+import matplotlib.pyplot as plt
+
+
 # 앱 초기화
 if "app" not in st.session_state:
     st.session_state["app"] = LumenaAIApp()
@@ -189,6 +192,18 @@ def main_page_render():
                         st.divider()
 
             with key_tab:
+                cols = st.columns(2)
+                with cols[0]:
+                    st.markdown("**빈도수 기반 워드 클라우드**")
+                    wordcloud = app.generate_frequency_wordcloud()
+                    st.image(wordcloud.to_array())
+
+                #plt.imshow(wordcloud, interpolation='bilinear')
+                #plt.axis('off')
+                #plt.show()
+                #st.pyplot()
+                #st.pyplot()
+
                 cols = st.columns(2)
 
                 for index, key_point in enumerate(key_point_collection.key_points):

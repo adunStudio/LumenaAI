@@ -1,5 +1,6 @@
 from app import AppContainer
-from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeKeyPointCollectionService, YoutubeChatService
+from domain import YouTubeContent
+from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeKeyPointCollectionService, YoutubeChatService, WordCloudService
 from use_case import YouTubeParseAndStore
 from use_case import YouTubeAutoScriptParse
 from use_case import YouTubeAudioDownload
@@ -19,6 +20,8 @@ class LumenaAIApp:
         self._youtube_script_service: YoutubeScriptCollectionService = self._container.youtube_script_collection_service()
         self._youtube_key_point_service: YoutubeKeyPointCollectionService = self._container.youtube_key_point_service()
         self._youtube_chat_service: YoutubeChatService = self._container.youtube_chat_service()
+        self._word_cloud_service: WordCloudService = self._container.word_cloud_service()
+
 
         # 새로운 지식 유즈-케이스
         self._youtube_parse_and_store: YouTubeParseAndStore = self._container.youtube_parse_and_store()
@@ -34,7 +37,7 @@ class LumenaAIApp:
         self._cached_youtube_contents = None
 
         # 프로퍼티
-        self._selected_youtube_content = None
+        self._selected_youtube_content: YouTubeContent = None
         self._selected_youtube_chat = None
         self._selected_youtube_key_point_collection = None
         self._selected_youtube_script_collection = None
@@ -130,6 +133,8 @@ class LumenaAIApp:
     def view_mode(self):
         return self._view_mode
 
+    def generate_frequency_wordcloud(self):
+        return self._word_cloud_service.generate_frequency_wordcloud(self._selected_youtube_content.timeline_summary.text)
 
     ### 유튜브 분석 & 요약 유즈케이스
     def first_parse_and_store(self, url: str):

@@ -1,6 +1,6 @@
 from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository import YoutubeContentRepository, YoutubeScriptCollectionRepository, YoutubeChatRepository, YoutubeKeyPointCollectionRepository
-from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeChatService, YoutubeKeyPointCollectionService
+from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeChatService, YoutubeKeyPointCollectionService, WordCloudService
 from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, OpenAIWhisperStrategy
 from langchain_openai import OpenAIEmbeddings
 
@@ -120,6 +120,14 @@ class AppContainer(containers.DeclarativeContainer):
         embedding=embedding_openai,
         llm=llm_openai,
         repository=youtube_chat_repository,
+    )
+
+
+    ###############################################
+    # WordCloud
+    ###############################################
+    word_cloud_service = providers.Singleton(
+        WordCloudService
     )
 
 

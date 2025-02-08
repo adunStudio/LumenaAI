@@ -2,3 +2,4 @@ from .youtube_content_service import YoutubeContentService
 from .youtube_chat_service import YoutubeChatService
 from .youtube_script_collection_service import YoutubeScriptCollectionService
 from .youtbe_key_point_collection_service import YoutubeKeyPointCollectionService
+from .word_cloud_service import WordCloudService
