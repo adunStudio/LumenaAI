@@ -1,11 +1,12 @@
 from nltk.corpus import stopwords
-
+import nltk
 from konlpy.tag import Okt
 from collections import Counter
 from wordcloud import WordCloud
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 from summa import keywords
+from rake_nltk import Rake
 
 class WordCloudService:
     FONT_PATH = 'asset/NanumGothic-Regular.ttf'
@@ -70,6 +71,22 @@ class WordCloudService:
 
         # 단어와 중요도를 워드 클라우드에 전달할 형식으로 변환
         word_scores = {word: 1 for word in ranked_keywords}
+
+        # 워드 클라우드 생성
+        return WordCloud(width=800, height=400, font_path=WordCloudService.FONT_PATH, background_color='white').generate_from_frequencies(word_scores)
+
+    def generate_rake_wordcloud(self, text):
+        """ RAKE 방식으로 워드 클라우드를 생성하는 함수 """
+        # 불용어 제거
+        filtered_text = self._filter_stopwords(text)
+
+        # RAKE 알고리즘으로 키워드 추출
+        rake = Rake()
+        rake.extract_keywords_from_text(filtered_text)
+        keyword_scores = rake.get_ranked_phrases_with_scores()
+
+        # 키워드 점수와 함께 워드 클라우드에 전달할 형식으로 변환
+        word_scores = {item[1]: item[0] for item in keyword_scores}
 
         # 워드 클라우드 생성
         return WordCloud(width=800, height=400, font_path=WordCloudService.FONT_PATH, background_color='white').generate_from_frequencies(word_scores)

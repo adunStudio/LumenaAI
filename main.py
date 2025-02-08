@@ -212,9 +212,9 @@ def main_page_render():
 
                 with cols[1]:
                     pass
-                    #st.markdown("**TF-IDF 기반 워드 클라우드**")
-                    #wordcloud = app.generate_tfidf_wordcloud()
-                    #st.image(wordcloud.to_array())
+                    st.markdown("**RAKE 방식 워드 클라우드**")
+                    wordcloud = app.generate_rake_wordcloud()
+                    st.image(wordcloud.to_array())
 
                 #plt.imshow(wordcloud, interpolation='bilinear')
                 #plt.axis('off')

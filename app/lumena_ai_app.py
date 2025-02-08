@@ -142,6 +142,10 @@ class LumenaAIApp:
     def generate_textrank_wordcloud(self):
         return self._word_cloud_service.generate_textrank_wordcloud(self._selected_youtube_content.timeline_summary.text)
 
+    def generate_rake_wordcloud(self):
+        return self._word_cloud_service.generate_rake_wordcloud(self._selected_youtube_content.timeline_summary.text)
+
+
     ### 유튜브 분석 & 요약 유즈케이스
     def first_parse_and_store(self, url: str):
         return self._youtube_parse_and_store.execute(url)
