@@ -216,11 +216,7 @@ def main_page_render():
                     wordcloud = app.generate_rake_wordcloud()
                     st.image(wordcloud.to_array())
 
-                #plt.imshow(wordcloud, interpolation='bilinear')
-                #plt.axis('off')
-                #plt.show()
-                #st.pyplot()
-                #st.pyplot()
+                st.divider()
 
                 cols = st.columns(2)
 
