@@ -192,32 +192,33 @@ def main_page_render():
                         st.divider()
 
             with key_tab:
-                cols = st.columns(2)
-                with cols[0]:
-                    st.markdown("**빈도수 기반 워드 클라우드**")
-                    wordcloud = app.generate_frequency_wordcloud()
-                    st.image(wordcloud.to_array())
+                with st.expander(f"🌥️  **워드 클라우드**", expanded=True):
 
-                with cols[1]:
-                    st.markdown("**TF-IDF 기반 워드 클라우드**")
-                    wordcloud = app.generate_tfidf_wordcloud()
-                    st.image(wordcloud.to_array())
+                    cols = st.columns(2)
+                    with cols[0]:
+                        st.markdown("Frequency")
+                        wordcloud = app.generate_frequency_wordcloud()
+                        st.image(wordcloud.to_array())
+
+                    with cols[1]:
+                        st.markdown("TF-IDF")
+                        wordcloud = app.generate_tfidf_wordcloud()
+                        st.image(wordcloud.to_array())
+
+                    cols = st.columns(2)
+                    with cols[0]:
+                        st.markdown("TextRank")
+                        wordcloud = app.generate_textrank_wordcloud()
+                        st.image(wordcloud.to_array())
+
+                    with cols[1]:
+                        pass
+                        st.markdown("RAKE")
+                        wordcloud = app.generate_rake_wordcloud()
+                        st.image(wordcloud.to_array())
 
             with key_tab:
-                cols = st.columns(2)
-                with cols[0]:
-                    st.markdown("**TextRank 방식 워드 클라우드**")
-                    wordcloud = app.generate_textrank_wordcloud()
-                    st.image(wordcloud.to_array())
-
-                with cols[1]:
-                    pass
-                    st.markdown("**RAKE 방식 워드 클라우드**")
-                    wordcloud = app.generate_rake_wordcloud()
-                    st.image(wordcloud.to_array())
-
-                st.divider()
-
+                st.markdown("**GPT 4o-mini**")
                 cols = st.columns(2)
 
                 for index, key_point in enumerate(key_point_collection.key_points):
@@ -225,6 +226,22 @@ def main_page_render():
                     with cols[index % len(cols)]:
                         with st.expander(f"📌 {key_point.term}"):
                             st.write(key_point.description)
+
+            with key_tab:
+                st.markdown("**LLaMA 3.2**")
+
+                if len(key_point_collection.key_points_local1) == 0:
+                    if st.button("🌟✨ 생성하기 ✨🌟", use_container_width=True, type='primary'):
+                        st.success("🚀 LLaMA 3.2로 나만의 핵심 용어집 생성 중... 조금만 기다려줘! 💡📚")
+                        st.warning("⚠️ 페이지를 벗어나면 작업이 사라질 수도 있어요! 😭💨")
+                else:
+                    cols = st.columns(2)
+
+                    for index, key_point in enumerate(key_point_collection.key_points_local1):
+                        # 각 열에 순서대로 배치
+                        with cols[index % len(cols)]:
+                            with st.expander(f"📌 {key_point.term}"):
+                                st.write(key_point.description)
 
             with script_tab:
                 cols = st.columns(3)
