@@ -1,5 +1,4 @@
 from nltk.corpus import stopwords
-import nltk
 from konlpy.tag import Okt
 from collections import Counter
 from wordcloud import WordCloud
@@ -7,6 +6,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 from summa import keywords
 from rake_nltk import Rake
+import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('punkt_tab')
 
 class WordCloudService:
     FONT_PATH = 'asset/NanumGothic-Regular.ttf'

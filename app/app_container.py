@@ -2,7 +2,9 @@ from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository import YoutubeContentRepository, YoutubeScriptCollectionRepository, YoutubeChatRepository, YoutubeKeyPointCollectionRepository
 from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeChatService, YoutubeKeyPointCollectionService, WordCloudService
 from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, OpenAIWhisperStrategy
+from strategy import LocalHuggingFaceLLM
 from langchain_openai import OpenAIEmbeddings
+
 
 from use_case import \
     YouTubeParseAndStore, \
@@ -48,6 +50,11 @@ class AppContainer(containers.DeclarativeContainer):
     embedding_openai = providers.Singleton(
         OpenAIEmbeddings,
         api_key=config.openai_api_key
+    )
+
+    llm_local_llama = providers.Singleton(
+        LocalHuggingFaceLLM,
+        model_name="Bllossom/llama-3.2-Korean-Bllossom-3B"
     )
 
 
