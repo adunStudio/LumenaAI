@@ -228,7 +228,7 @@ def main_page_render():
                             st.write(key_point.description)
 
             with key_tab:
-                st.markdown("**LLaMA 3.2**")
+                st.markdown("**LLaMA 3.2(5B)**")
 
                 if len(key_point_collection.key_points_local1) == 0:
                     if st.button("🌟✨ 생성하기 ✨🌟", use_container_width=True, type='primary'):
