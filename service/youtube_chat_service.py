@@ -77,7 +77,8 @@ class YoutubeChatService:
             llm=self._llm,
             retriever=retriever,
             chain_type="stuff",  # 검색된 문서를 한 번에 사용
-            chain_type_kwargs={"prompt": qa_prompt}
+            chain_type_kwargs={"prompt": qa_prompt},
+            input_key="question"
         )
 
         # 질문 수행
