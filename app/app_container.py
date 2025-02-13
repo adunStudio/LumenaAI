@@ -72,10 +72,11 @@ class AppContainer(containers.DeclarativeContainer):
         tokenizer=tokenizer,
         device_map="auto",
         model_kwargs=model_kwargs,
-        max_new_tokens=256,
+        max_new_tokens=128,
         temperature=0.6,
         top_p=0.9,
-        return_full_text=False
+        return_full_text=False,
+        eos_token_id=tokenizer().eos_token_id
     )
 
     llm_local_llama = providers.Singleton(
