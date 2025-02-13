@@ -2,7 +2,6 @@ from infrastructure.repository import YoutubeChatRepository
 from domain import YouTubeVideoLink, YoutubeChatSession, YouTubeScript, YouTubeContent
 from domain import AdvancedAIMessage, AdvancedHumanMessage
 
-from langchain.chains import LLMChain
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain.llms.base import BaseLLM
 from langchain.prompts import PromptTemplate
@@ -76,10 +75,7 @@ class YoutubeChatService:
             input_variables=["title", "description", "context", "query"]
         )
 
-        test_chain = LLMChain(
-            prompt=qa_prompt,
-            llm=self._llms[index]  # LLM 객체를 명확히 전달
-        )
+        test_chain = qa_prompt | self._llms[index]
 
         # 🔥 리트리버에서 검색된 문서 가져오기
         retrieved_docs = retriever.get_relevant_documents(user_msg)

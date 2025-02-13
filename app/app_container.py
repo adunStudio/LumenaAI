@@ -57,9 +57,9 @@ class AppContainer(containers.DeclarativeContainer):
         api_key=config.openai_api_key
     )
 
-    tokenizer = providers.Factory(AutoTokenizer.from_pretrained, config.local_model_id, trust_remote_code=True)
-    model_kwargs = providers.Factory(dict, torch_dtype=torch.float16)  # ✅ 16비트(FP16) 적용
-    hf_pipeline = providers.Factory(
+    tokenizer = providers.Singleton(AutoTokenizer.from_pretrained, config.local_model_id, trust_remote_code=True)
+    model_kwargs = providers.Singleton(dict, torch_dtype=torch.float16)  # ✅ 16비트(FP16) 적용
+    hf_pipeline = providers.Singleton(
         pipeline,
         "text-generation",
         model=config.local_model_id,
@@ -73,13 +73,13 @@ class AppContainer(containers.DeclarativeContainer):
         eos_token_id=tokenizer().eos_token_id
     )
 
-    llm_local_llama = providers.Factory(
+    llm_local_llama = providers.Singleton(
         HuggingFacePipeline,
         pipeline=hf_pipeline
     )
 
 
-    embedding_huggingface = providers.Factory(
+    embedding_huggingface = providers.Singleton(
         HuggingFaceEmbeddings,
         model_name='jhgan/ko-sroberta-nli',
     )
@@ -160,7 +160,7 @@ class AppContainer(containers.DeclarativeContainer):
     ###############################################
     # WordCloud
     ###############################################
-    word_cloud_service = providers.Factory(
+    word_cloud_service = providers.Singleton(
         WordCloudService
     )
 
@@ -176,7 +176,7 @@ class AppContainer(containers.DeclarativeContainer):
     #     batch_size=32,
     #     clean=True
     # )
-    stt_strategy = providers.Factory(
+    stt_strategy = providers.Singleton(
         OpenAIWhisperStrategy,
         api_key=config.openai_api_key
     )
@@ -187,26 +187,26 @@ class AppContainer(containers.DeclarativeContainer):
     ###############################################
 
     # 1. YoutubeContentsParseAndStore
-    youtube_parse_and_store = providers.Factory(
+    youtube_parse_and_store = providers.Singleton(
         YouTubeParseAndStore,
         repository=youtube_content_repository
     )
 
     # 2. YouTubeContentAutoScriptParse
-    youtube_auto_script_parse = providers.Factory(
+    youtube_auto_script_parse = providers.Singleton(
         YouTubeAutoScriptParse,
         content_repository=youtube_content_repository,
         script_repository=youtube_script_collection_repository
     )
 
     # 3. YoutubeAudioDownload
-    youtube_audio_download = providers.Factory(
+    youtube_audio_download = providers.Singleton(
         YouTubeAudioDownload,
         repository=youtube_content_repository
     )
 
     # 4. YoutubeAudioSTT
-    youtube_audio_stt = providers.Factory(
+    youtube_audio_stt = providers.Singleton(
         YouTubeAudioSTT,
         content_repository=youtube_content_repository,
         script_repository=youtube_script_collection_repository,
@@ -214,7 +214,7 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     # 5. YoutubeScriptRefinement
-    youtube_script_refinement = providers.Factory(
+    youtube_script_refinement = providers.Singleton(
         YouTubeScriptRefinement,
         content_repository=youtube_content_repository,
         script_repository=youtube_script_collection_repository,
@@ -222,7 +222,7 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     # 6. YouTubeGenerateTimelineSummary
-    youtube_generate_timeline_summary = providers.Factory(
+    youtube_generate_timeline_summary = providers.Singleton(
         YouTubeGenerateTimelineSummary,
         content_repository=youtube_content_repository,
         script_repository=youtube_script_collection_repository,
@@ -230,7 +230,7 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     # 7. YoutubeGenerateKeyPoint
-    youtube_generate_key_point = providers.Factory(
+    youtube_generate_key_point = providers.Singleton(
         YouTubeGenerateKeyPoint,
         content_repository=youtube_content_repository,
         key_point_collection_repository=youtube_key_point_collection_repository,
@@ -238,7 +238,7 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     # 8. YoutubeGenerateKeyPointLocal
-    youtube_generate_key_point_local = providers.Factory(
+    youtube_generate_key_point_local = providers.Singleton(
         YouTubeGenerateKeyPointLocal,
         content_repository=youtube_content_repository,
         key_point_collection_repository=youtube_key_point_collection_repository,
