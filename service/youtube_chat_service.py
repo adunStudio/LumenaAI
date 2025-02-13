@@ -9,6 +9,8 @@ from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_core.output_parsers import StrOutputParser
+from langchain.chains import RetrievalQA
 
 import shutil
 import os
@@ -57,29 +59,15 @@ class YoutubeChatService:
 
         retriever = vectorstore.as_retriever()
 
-        system_prompt = ("""
-                    주어진 유튜브 영상의 설명과 스크립트 맥락을 사용하여 질문에 답하세요.
-                    답을 모르면 모른다고 하세요.
-
-                    [유튜브 영상 설명]:
-                    {description}
-
-                    [스크립트 맥락]:
-                    {context_c}
-                    """.format(description=content.description, context_c="{context}"))
-
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                ("system", system_prompt),
-                ("human", "{input}"),
-            ]
+        qa_chain = RetrievalQA.from_chain_type(
+            llm=self._llm,  # 언어 모델
+            chain_type="stuff",  # 검색된 모든 문서를 합쳐 전달 ("stuff" 방식)
+            retriever=retriever,  # 벡터 스토어 리트리버
+            return_source_documents=True  # 답변에 사용된 문서 출처 반환
         )
 
-        question_answer_chain = create_stuff_documents_chain(self._llm, prompt)
-        chain = create_retrieval_chain(retriever, question_answer_chain)
-
-        response = chain.invoke({"input": user_msg})
-        answer = response.get("answer", response.get("result", "응답을 생성하지 못했습니다."))  # ✅ 안전한 접근
+        response = qa_chain.invoke({"query": user_msg})
+        answer = response.get("result", "응답을 생성하지 못했습니다.")
 
         chat_session = self.get_session(content.url.url)
         if chat_session is None:
