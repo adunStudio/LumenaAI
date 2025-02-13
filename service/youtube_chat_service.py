@@ -10,7 +10,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import RetrievalQA
-from langchain.chains import RetrievalQAWithSources
 
 import shutil
 import os
