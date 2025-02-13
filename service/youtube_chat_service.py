@@ -61,32 +61,33 @@ class YoutubeChatService:
         # 📝 Q&A 형식의 프롬프트로 변경
         qa_prompt = PromptTemplate(
             template="""당신은 유튜브 영상의 내용을 분석하는 AI입니다.
-                아래의 정보를 기반으로 질문에 답하세요.
+                아래의 정보를 기반으로 질문에 답변을 하나만 해주세요.
 
                 [유튜브 영상 제목]: {title}
                 [유튜브 영상 설명]: {description}
+                [참고 문맥] : {context}
 
                 질문: {query}
                 답변:""",
-            input_variables=["title", "description", "query"]
+            input_variables=["title", "description", "query", "context"]
         )
 
-        # 🔥 RetrievalQA 체인 생성 (묻고 답하기 방식)
-        # question_answer_chain = RetrievalQA.from_chain_type(
-        #     llm=self._llm,
-        #     retriever=retriever,
-        #     chain_type="stuff",  # 검색된 문서를 한 번에 사용
-        #     #chain_type_kwargs={"prompt": qa_prompt},
-        #     combine_docs_chain_kwargs={"prompt": qa_prompt}
-        # )
 
         test_chain = qa_prompt | self._llm
+
+        # 🔥 리트리버에서 검색된 문서 가져오기
+        retrieved_docs = retriever.get_relevant_documents(user_msg)
+
+        # 🔥 검색된 문서들을 문자열로 변환
+        context = "\n\n".join([doc.page_content for doc in retrieved_docs])
+
 
         # 질문 수행
         response = test_chain.invoke({
             "query": user_msg,
             "title": content.title,
-            "description": content.description
+            "description": content.description,
+            "context": context
         })
 
         answer = response#['answer']
