@@ -227,40 +227,40 @@ def main_page_render():
                         with st.expander(f"📌 {key_point.term}"):
                             st.write(key_point.description)
 
-            # with key_tab:
-            #     st.markdown("**LLaMA 3.2(5B)**")
-            #
-            #     if len(key_point_collection.key_points_local1) == 0:
-            #         if st.button("🌟✨ 생성하기 ✨🌟", use_container_width=True, type='primary'):
-            #             st.success("🚀 LLaMA 3.2로 나만의 핵심 용어집 생성 중... 조금만 기다려줘! 💡📚")
-            #             st.warning("⚠️ 페이지를 벗어나면 작업이 사라질 수도 있어요! 😭💨")
-            #
-            #             youtube_link = selected_content.url.url
-            #
-            #             with st.spinner("핵심 용어 모읍집을 생성중입니다..."):
-            #                 process: ExecuteResult = app.eight_generate_key_point_local(youtube_link)
-            #                 if process.result is True:
-            #                     st.success("핵심 용어 모음집을 생성했습니다.")
-            #                 else:
-            #                     st.error(process.message)
-            #
-            #             if process.result is True:
-            #                 st.balloons()
-            #                 with st.spinner("곧 페이지 이동이 시작됩니다. 잠시만 기다려주세요!"):
-            #                     import time
-            #                     time.sleep(1)
-            #                     app.cache_clear()
-            #                     app.select_youtube_content_by_url(youtube_link)
-            #                     app.set_page('main')
-            #                     st.rerun()
-            #     else:
-            #         cols = st.columns(2)
-            #
-            #         for index, key_point in enumerate(key_point_collection.key_points_local1):
-            #             # 각 열에 순서대로 배치
-            #             with cols[index % len(cols)]:
-            #                 with st.expander(f"📌 {key_point.term}"):
-            #                     st.write(key_point.description)
+            with key_tab:
+                st.markdown("**LLaMA 3.2(5B)**")
+
+                if len(key_point_collection.key_points_local1) == 0:
+                    if st.button("🌟✨ 생성하기 ✨🌟", use_container_width=True, type='primary'):
+                        st.success("🚀 LLaMA 3.2로 나만의 핵심 용어집 생성 중... 조금만 기다려줘! 💡📚")
+                        st.warning("⚠️ 페이지를 벗어나면 작업이 사라질 수도 있어요! 😭💨")
+
+                        youtube_link = selected_content.url.url
+
+                        with st.spinner("핵심 용어 모읍집을 생성중입니다..."):
+                            process: ExecuteResult = app.eight_generate_key_point_local(youtube_link)
+                            if process.result is True:
+                                st.success("핵심 용어 모음집을 생성했습니다.")
+                            else:
+                                st.error(process.message)
+
+                        if process.result is True:
+                            st.balloons()
+                            with st.spinner("곧 페이지 이동이 시작됩니다. 잠시만 기다려주세요!"):
+                                import time
+                                time.sleep(1)
+                                app.cache_clear()
+                                app.select_youtube_content_by_url(youtube_link)
+                                app.set_page('main')
+                                st.rerun()
+                else:
+                    cols = st.columns(2)
+
+                    for index, key_point in enumerate(key_point_collection.key_points_local1):
+                        # 각 열에 순서대로 배치
+                        with cols[index % len(cols)]:
+                            with st.expander(f"📌 {key_point.term}"):
+                                st.write(key_point.description)
 
             with script_tab:
                 cols = st.columns(3)

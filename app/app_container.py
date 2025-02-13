@@ -5,7 +5,9 @@ from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, 
 from strategy import HuggingFaceLLM
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.embeddings import HuggingFaceEmbeddings
-
+from langchain.llms import HuggingFacePipeline
+from transformers import pipeline, AutoTokenizer
+import torch
 
 from use_case import \
     YouTubeParseAndStore, \
@@ -38,6 +40,7 @@ class AppContainer(containers.DeclarativeContainer):
     config.youtube_script_collection_name.override("youtube_script_collection")
     config.openai_api_key.override(os.getenv("OPENAI_API_KEY"))
     config.whisper_model_name.override("openai/whisper-large-v3-turbo")
+    config.local_model_id.override("Bllossom/llama-3.2-Korean-Bllossom-AICA-5B")
 
     ###############################################
     # LLM
@@ -54,11 +57,32 @@ class AppContainer(containers.DeclarativeContainer):
         api_key=config.openai_api_key
     )
 
-    llm_local_llama = providers.Singleton(
-        HuggingFaceLLM,
-        model_id="Bllossom/llama-3.2-Korean-Bllossom-AICA-5B",
-        quantization="16bit"
+    # llm_local_llama = providers.Singleton(
+    #     HuggingFaceLLM,
+    #     model_id="Bllossom/llama-3.2-Korean-Bllossom-AICA-5B",
+    #     quantization="16bit"
+    # )
+
+
+    tokenizer = providers.Singleton(AutoTokenizer.from_pretrained, config.local_model_id, trust_remote_code=True)
+    model_kwargs = providers.Singleton(dict, torch_dtype=torch.float16)  # ✅ 16비트(FP16) 적용
+    hf_pipeline = providers.Singleton(
+        pipeline,
+        "text-generation",
+        model=config.local_model_id,
+        tokenizer=tokenizer,
+        device_map="auto",
+        model_kwargs=model_kwargs,
+        max_new_tokens=256,
+        temperature=0.3,
+        top_k=40
     )
+
+    llm_local_llama = providers.Singleton(
+        HuggingFacePipeline,
+        pipeline=hf_pipeline
+    )
+
 
     embedding_huggingface = providers.Singleton(
         HuggingFaceEmbeddings,
