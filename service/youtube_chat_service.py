@@ -59,14 +59,30 @@ class YoutubeChatService:
 
         retriever = vectorstore.as_retriever()
 
-        qa_chain = RetrievalQA.from_chain_type(
-            llm=self._llm,  # 언어 모델
-            chain_type="stuff",  # 검색된 모든 문서를 합쳐 전달 ("stuff" 방식)
-            retriever=retriever,  # 벡터 스토어 리트리버
-            return_source_documents=True  # 답변에 사용된 문서 출처 반환
+        # ✅ LLM 프롬프트 수정 (검색된 문서 강제 활용)
+        custom_prompt = PromptTemplate(
+            input_variables=["context", "question"],
+            template="""
+        다음 정보를 활용하여 질문에 답하세요. 
+        정보가 부족하면 "모르겠습니다"라고 답하세요.
+
+        [참고 정보]:
+        {context}
+
+        질문: {question}
+
+        답변:
+        """.strip()
         )
 
-        response = qa_chain.invoke({"query": user_msg})
+        qa_chain = RetrievalQA.from_chain_type(
+            llm=self._llm,
+            retriever=retriever,
+            chain_type="stuff",
+            chain_type_kwargs={"prompt": custom_prompt}
+        )
+
+        response = qa_chain.invoke({"question": user_msg})
         answer = response.get("result", "응답을 생성하지 못했습니다.")
 
         chat_session = self.get_session(content.url.url)

@@ -73,8 +73,8 @@ class AppContainer(containers.DeclarativeContainer):
         device_map="auto",
         model_kwargs=model_kwargs,
         max_new_tokens=512,
-        temperature=0.3,
-        top_k=40
+        temperature=0.6,
+        top_p=0.9,
     )
 
     llm_local_llama = providers.Singleton(
