@@ -10,6 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import RetrievalQA
+from langchain.chains import RetrievalQAWithSources
 
 import shutil
 import os
@@ -67,9 +68,9 @@ class YoutubeChatService:
                 [유튜브 영상 설명]: {description}
                 [스크립트 맥락]: {context}
 
-                질문: {question}
+                질문: {query}
                 답변:""",
-            input_variables=["title", "description", "context", "question"]
+            input_variables=["title", "description", "query", "context"]
         )
 
         # 🔥 RetrievalQA 체인 생성 (묻고 답하기 방식)
@@ -78,12 +79,11 @@ class YoutubeChatService:
             retriever=retriever,
             chain_type="stuff",  # 검색된 문서를 한 번에 사용
             chain_type_kwargs={"prompt": qa_prompt},
-            input_key="question"
         )
 
         # 질문 수행
         response = question_answer_chain.invoke({
-            "question": user_msg,
+            "query": user_msg,
             "title": content.title,
             "description": content.description
         })
