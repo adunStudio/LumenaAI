@@ -156,7 +156,8 @@ class AppContainer(containers.DeclarativeContainer):
     youtube_chat_service = providers.Singleton(
         YoutubeChatService,
         embedding=embedding_huggingface,
-        llm=llm_local_llama,
+        #llm=llm_local_llama,
+        llm=llm_openai,
         repository=youtube_chat_repository,
     )
 
