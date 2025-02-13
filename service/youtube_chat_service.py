@@ -89,7 +89,7 @@ class YoutubeChatService:
             "description": content.description
         })
 
-        answer = response['answer']
+        answer = response#['answer']
 
         chat_session = self.get_session(content.url.url)
         if chat_session is None:
