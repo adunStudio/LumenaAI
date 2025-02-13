@@ -2,6 +2,7 @@ from infrastructure.repository import YoutubeChatRepository
 from domain import YouTubeVideoLink, YoutubeChatSession, YouTubeScript, YouTubeContent
 from domain import AdvancedAIMessage, AdvancedHumanMessage
 
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain.llms.base import BaseLLM
 from langchain.prompts import PromptTemplate
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -15,9 +16,9 @@ import shutil
 import os
 
 class YoutubeChatService:
-    def __init__(self, embedding, llm: BaseLLM, repository: YoutubeChatRepository):
+    def __init__(self, embedding, llms: [BaseLLM], repository: YoutubeChatRepository):
         self._embedding = embedding
-        self._llm = llm
+        self._llms = llms
         self._repository = repository
         self._cached_session = {}
 
@@ -36,7 +37,7 @@ class YoutubeChatService:
 
         return session
 
-    def question(self, content: YouTubeContent, script: YouTubeScript,  user_msg: str):
+    def question(self, content: YouTubeContent, script: YouTubeScript,  user_msg: str, index: int):
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=3000, chunk_overlap=300)
         texts = text_splitter.split_text(script.script)
 
@@ -74,7 +75,7 @@ class YoutubeChatService:
             input_variables=["title", "description", "context", "query"]
         )
 
-        test_chain = qa_prompt | self._llm
+        test_chain = qa_prompt | self._llms[index]
 
         # 🔥 리트리버에서 검색된 문서 가져오기
         retrieved_docs = retriever.get_relevant_documents(user_msg)
@@ -91,7 +92,10 @@ class YoutubeChatService:
             "context": context
         })
 
-        answer = response#['answer']
+        if isinstance(response, AIMessage):
+            answer = response.content
+        else:
+            answer = response
 
         chat_session = self.get_session(content.url.url)
         if chat_session is None:

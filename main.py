@@ -283,6 +283,8 @@ def main_page_render():
             with chat_tab:
                 chat_session = app.chat
 
+                model_labels = ["ChatGPT-4o-mini", "LLAMA 3.2 8B 16b Q"]
+
                 # 🔹 시작 메시지
                 with st.chat_message('ai'):
                     st.markdown('💡 **안녕하세요!** 유튜브 내용으로 이야기를 나눠봐요. 궁금한 점을 물어보세요! 😊')
@@ -293,14 +295,21 @@ def main_page_render():
                     with st.chat_message(message.role):
                         st.markdown(message.content)
 
-                if prompt := st.chat_input("📝 메시지를 입력해보세요! 😊"):
-                    with st.chat_message("user"):
-                        st.markdown(prompt)
+                cols = st.columns([1,2])
+                with cols[0]:
+                    selected_label = st.selectbox("", model_labels, index=0, label_visibility="collapsed")  # 기본값: ChatGPT-4o-mini
+                    selected_index = model_labels.index(selected_label)  # 🔥 선택한 값의 인덱스를 찾기
 
-                        # 🔹 8. 메시지 요청 & 답변
-                    with st.spinner("답변 생성중..."):
-                        with st.chat_message("assistant"):
-                            st.write(app.question(prompt))
+                with cols[1]:
+                    if prompt := st.chat_input("📝 메시지를 입력해보세요! 😊"):
+                        with st.chat_message("user"):
+                            st.markdown(prompt)
+
+                            # 🔹 8. 메시지 요청 & 답변
+                        with st.spinner("답변 생성중..."):
+                            with st.chat_message("assistant"):
+                                st.write(app.question(prompt, selected_index))
+                                #response = app.question(prompt, model=selected_model)
 
 
 

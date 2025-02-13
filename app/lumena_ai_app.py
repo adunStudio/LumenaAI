@@ -79,11 +79,12 @@ class LumenaAIApp:
         return all_youtube_contents
 
 
-    def question(self, user_msg):
+    def question(self, user_msg, index):
         return self._youtube_chat_service.question(
             self._selected_youtube_content,
             self._selected_youtube_script_collection.refined_script,
-            user_msg
+            user_msg,
+            index
         )
 
     @property

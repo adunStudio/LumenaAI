@@ -57,15 +57,9 @@ class AppContainer(containers.DeclarativeContainer):
         api_key=config.openai_api_key
     )
 
-    # llm_local_llama = providers.Singleton(
-    #     HuggingFaceLLM,
-    #     model_id="Bllossom/llama-3.2-Korean-Bllossom-AICA-5B",
-    #     quantization="16bit"
-    # )
-
-    tokenizer = providers.Singleton(AutoTokenizer.from_pretrained, config.local_model_id, trust_remote_code=True)
-    model_kwargs = providers.Singleton(dict, torch_dtype=torch.float16)  # ✅ 16비트(FP16) 적용
-    hf_pipeline = providers.Singleton(
+    tokenizer = providers.Factory(AutoTokenizer.from_pretrained, config.local_model_id, trust_remote_code=True)
+    model_kwargs = providers.Factory(dict, torch_dtype=torch.float16)  # ✅ 16비트(FP16) 적용
+    hf_pipeline = providers.Factory(
         pipeline,
         "text-generation",
         model=config.local_model_id,
@@ -79,13 +73,13 @@ class AppContainer(containers.DeclarativeContainer):
         eos_token_id=tokenizer().eos_token_id
     )
 
-    llm_local_llama = providers.Singleton(
+    llm_local_llama = providers.Factory(
         HuggingFacePipeline,
         pipeline=hf_pipeline
     )
 
 
-    embedding_huggingface = providers.Singleton(
+    embedding_huggingface = providers.Factory(
         HuggingFaceEmbeddings,
         model_name='jhgan/ko-sroberta-nli',
     )
@@ -158,8 +152,7 @@ class AppContainer(containers.DeclarativeContainer):
     youtube_chat_service = providers.Singleton(
         YoutubeChatService,
         embedding=embedding_huggingface,
-        llm=llm_local_llama,
-        #llm=llm_openai,
+        llms=[llm_openai, llm_local_llama],
         repository=youtube_chat_repository,
     )
 
@@ -167,7 +160,7 @@ class AppContainer(containers.DeclarativeContainer):
     ###############################################
     # WordCloud
     ###############################################
-    word_cloud_service = providers.Singleton(
+    word_cloud_service = providers.Factory(
         WordCloudService
     )
 
@@ -183,7 +176,7 @@ class AppContainer(containers.DeclarativeContainer):
     #     batch_size=32,
     #     clean=True
     # )
-    stt_strategy = providers.Singleton(
+    stt_strategy = providers.Factory(
         OpenAIWhisperStrategy,
         api_key=config.openai_api_key
     )
@@ -194,26 +187,26 @@ class AppContainer(containers.DeclarativeContainer):
     ###############################################
 
     # 1. YoutubeContentsParseAndStore
-    youtube_parse_and_store = providers.Singleton(
+    youtube_parse_and_store = providers.Factory(
         YouTubeParseAndStore,
         repository=youtube_content_repository
     )
 
     # 2. YouTubeContentAutoScriptParse
-    youtube_auto_script_parse = providers.Singleton(
+    youtube_auto_script_parse = providers.Factory(
         YouTubeAutoScriptParse,
         content_repository=youtube_content_repository,
         script_repository=youtube_script_collection_repository
     )
 
     # 3. YoutubeAudioDownload
-    youtube_audio_download = providers.Singleton(
+    youtube_audio_download = providers.Factory(
         YouTubeAudioDownload,
         repository=youtube_content_repository
     )
 
     # 4. YoutubeAudioSTT
-    youtube_audio_stt = providers.Singleton(
+    youtube_audio_stt = providers.Factory(
         YouTubeAudioSTT,
         content_repository=youtube_content_repository,
         script_repository=youtube_script_collection_repository,
@@ -221,7 +214,7 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     # 5. YoutubeScriptRefinement
-    youtube_script_refinement = providers.Singleton(
+    youtube_script_refinement = providers.Factory(
         YouTubeScriptRefinement,
         content_repository=youtube_content_repository,
         script_repository=youtube_script_collection_repository,
@@ -229,7 +222,7 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     # 6. YouTubeGenerateTimelineSummary
-    youtube_generate_timeline_summary = providers.Singleton(
+    youtube_generate_timeline_summary = providers.Factory(
         YouTubeGenerateTimelineSummary,
         content_repository=youtube_content_repository,
         script_repository=youtube_script_collection_repository,
@@ -237,7 +230,7 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     # 7. YoutubeGenerateKeyPoint
-    youtube_generate_key_point = providers.Singleton(
+    youtube_generate_key_point = providers.Factory(
         YouTubeGenerateKeyPoint,
         content_repository=youtube_content_repository,
         key_point_collection_repository=youtube_key_point_collection_repository,
@@ -245,7 +238,7 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     # 8. YoutubeGenerateKeyPointLocal
-    youtube_generate_key_point_local = providers.Singleton(
+    youtube_generate_key_point_local = providers.Factory(
         YouTubeGenerateKeyPointLocal,
         content_repository=youtube_content_repository,
         key_point_collection_repository=youtube_key_point_collection_repository,
