@@ -76,6 +76,7 @@ class YoutubeChatService:
             input_variables=["title", "description", "context", "query"]
         )
 
+        print(index)
         if index == 0:
             test_chain = qa_prompt | self._llm0
         else:
