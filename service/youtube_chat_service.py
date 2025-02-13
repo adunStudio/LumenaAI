@@ -65,11 +65,10 @@ class YoutubeChatService:
 
                 [유튜브 영상 제목]: {title}
                 [유튜브 영상 설명]: {description}
-                [스크립트 맥락]: {context}
 
                 질문: {query}
                 답변:""",
-            input_variables=["title", "description", "query", "context"]
+            input_variables=["title", "description", "query"]
         )
 
         # 🔥 RetrievalQA 체인 생성 (묻고 답하기 방식)
@@ -81,8 +80,10 @@ class YoutubeChatService:
             combine_docs_chain_kwargs={"prompt": qa_prompt}
         )
 
+        test_chain = qa_prompt | self._llm
+
         # 질문 수행
-        response = question_answer_chain.invoke({
+        response = test_chain.invoke({
             "query": user_msg,
             "title": content.title,
             "description": content.description
