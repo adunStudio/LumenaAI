@@ -4,6 +4,7 @@ from service import YoutubeContentService, YoutubeScriptCollectionService, Youtu
 from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, OpenAIWhisperStrategy
 from strategy import HuggingFaceLLM
 from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 
 from use_case import \
@@ -57,6 +58,11 @@ class AppContainer(containers.DeclarativeContainer):
         HuggingFaceLLM,
         model_id="Bllossom/llama-3.2-Korean-Bllossom-AICA-5B",
         quantization="16bit"
+    )
+
+    embedding_huggingface = providers.Singleton(
+        HuggingFaceEmbeddings,
+        model_name='jhgan/ko-sroberta-nli',
     )
 
 
@@ -126,8 +132,8 @@ class AppContainer(containers.DeclarativeContainer):
 
     youtube_chat_service = providers.Singleton(
         YoutubeChatService,
-        embedding=embedding_openai,
-        llm=llm_openai,
+        embedding=embedding_huggingface,
+        llm=llm_local_llama,
         repository=youtube_chat_repository,
     )
 
