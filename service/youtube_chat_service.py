@@ -61,18 +61,18 @@ class YoutubeChatService:
         # 📝 Q&A 형식의 프롬프트로 변경
         qa_prompt = PromptTemplate(
             template="""당신은 유튜브 영상의 내용을 분석하는 AI입니다.
-                아래의 정보를 기반으로 질문에 답변을 하나만 해주세요.
-                답변은 오직 하나의 문장으로 작성하세요.
+            아래의 정보를 기반으로 질문에 답변하세요.
 
-                [유튜브 영상 제목]: {title}
-                [유튜브 영상 설명]: {description}
-                [참고 문맥] : {context}
+            [유튜브 영상 제목]: {title}
+            [유튜브 영상 설명]: {description}
+            [참고 문맥]: {context}
 
-                질문: {query}
-                답변:\n\n""",
-            input_variables=["title", "description", "query", "context"]
+            답변은 한 문장으로 작성하세요. 질문을 반복하거나 추가 정보를 제공하지 마세요.
+
+            질문: {query}
+            답변:\n\n""",
+            input_variables=["title", "description", "context", "query"]
         )
-
 
         test_chain = qa_prompt | self._llm
 
