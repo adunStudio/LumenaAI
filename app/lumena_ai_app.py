@@ -1,19 +1,21 @@
 from app import AppContainer
 from domain import YouTubeContent
 from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeKeyPointCollectionService, YoutubeChatService, WordCloudService
-from use_case import YouTubeParseAndStore
+from use_case import YouTubeParseAndStore, YouTubeGenerateKeyPointLocal
 from use_case import YouTubeAutoScriptParse
 from use_case import YouTubeAudioDownload
 from use_case import YouTubeAudioSTT
 from use_case import YouTubeScriptRefinement
 from use_case import YouTubeGenerateTimelineSummary
 from use_case import YouTubeGenerateKeyPoint
+from use_case import YouTubeGenerateKeyPointLocal
 
 class LumenaAIApp:
     def __init__(self):
         print("LumenaAIApp")
 
         self._container = AppContainer()
+
 
         # 서비스
         self._youtube_content_service: YoutubeContentService = self._container.youtube_content_service()
@@ -31,16 +33,19 @@ class LumenaAIApp:
         self._youtube_script_refinement: YouTubeScriptRefinement = self._container.youtube_script_refinement()
         self._youtube_generate_timeline_summary: YouTubeGenerateTimelineSummary = self._container.youtube_generate_timeline_summary()
         self._youtube_generate_key_point: YouTubeGenerateKeyPoint = self._container.youtube_generate_key_point()
+        self._youtube_generate_key_point_local: YouTubeGenerateKeyPointLocal = None
 
 
         # 캐싱
         self._cached_youtube_contents = None
+
 
         # 프로퍼티
         self._selected_youtube_content: YouTubeContent = None
         self._selected_youtube_chat = None
         self._selected_youtube_key_point_collection = None
         self._selected_youtube_script_collection = None
+
 
         self._view_mode = 'large'
         self._search_query = ''
@@ -176,3 +181,8 @@ class LumenaAIApp:
 
     def seven_generate_key_point(self, url: str):
         return self._youtube_generate_key_point.execute(url)
+
+    def eight_generate_key_point_local(self, url: str):
+        if self._youtube_generate_key_point_local is None:
+            self._youtube_generate_key_point_local = self._container.youtube_generate_key_point_local()
+        return self._youtube_generate_key_point_local.execute(url)

@@ -13,7 +13,8 @@ from use_case import \
     YouTubeAudioSTT, \
     YouTubeScriptRefinement, \
     YouTubeGenerateTimelineSummary, \
-    YouTubeGenerateKeyPoint
+    YouTubeGenerateKeyPoint, \
+    YouTubeGenerateKeyPointLocal
 
 from langchain_openai import ChatOpenAI
 
@@ -208,4 +209,12 @@ class AppContainer(containers.DeclarativeContainer):
         content_repository=youtube_content_repository,
         key_point_collection_repository=youtube_key_point_collection_repository,
         llm=llm_openai
+    )
+
+    # 8. YoutubeGenerateKeyPointLocal
+    youtube_generate_key_point_local = providers.Singleton(
+        YouTubeGenerateKeyPointLocal,
+        content_repository=youtube_content_repository,
+        key_point_collection_repository=youtube_key_point_collection_repository,
+        llm=llm_local_llama
     )

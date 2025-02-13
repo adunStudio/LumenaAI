@@ -22,6 +22,7 @@ class ExecuteResultType(Enum):
     TIMELINE_SUMMARY_NOT_FOUND = "타임라인을 찾지 못했습니다."
     KEY_POINT_FAIL = "핵심 용어 생성에 실패했습니다."
     KEY_POINT_SUCCESS = "핵심 용어 생성에 성공했습니다."
+    KEY_POINT_NOT_FOUND = "핵심 용어집을 찾지 못했습니다."
 
 
 class ExecuteResult:
