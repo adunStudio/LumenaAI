@@ -72,13 +72,13 @@ class YoutubeChatService:
         )
 
         # 🔥 RetrievalQA 체인 생성 (묻고 답하기 방식)
-        question_answer_chain = RetrievalQA.from_chain_type(
-            llm=self._llm,
-            retriever=retriever,
-            chain_type="stuff",  # 검색된 문서를 한 번에 사용
-            #chain_type_kwargs={"prompt": qa_prompt},
-            combine_docs_chain_kwargs={"prompt": qa_prompt}
-        )
+        # question_answer_chain = RetrievalQA.from_chain_type(
+        #     llm=self._llm,
+        #     retriever=retriever,
+        #     chain_type="stuff",  # 검색된 문서를 한 번에 사용
+        #     #chain_type_kwargs={"prompt": qa_prompt},
+        #     combine_docs_chain_kwargs={"prompt": qa_prompt}
+        # )
 
         test_chain = qa_prompt | self._llm
 
