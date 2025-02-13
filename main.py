@@ -283,7 +283,7 @@ def main_page_render():
             with chat_tab:
                 chat_session = app.chat
 
-                model_labels = ["ChatGPT-4o-mini", "LLAMA 3.2 8B 16b Q"]
+                model_labels = ["ChatGPT-4o-mini", "LLAMA 3.2 5B 16b Q"]
 
                 # 🔹 시작 메시지
                 with st.chat_message('ai'):
