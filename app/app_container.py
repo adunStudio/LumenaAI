@@ -63,7 +63,6 @@ class AppContainer(containers.DeclarativeContainer):
     #     quantization="16bit"
     # )
 
-
     tokenizer = providers.Singleton(AutoTokenizer.from_pretrained, config.local_model_id, trust_remote_code=True)
     model_kwargs = providers.Singleton(dict, torch_dtype=torch.float16)  # ✅ 16비트(FP16) 적용
     hf_pipeline = providers.Singleton(
@@ -73,7 +72,7 @@ class AppContainer(containers.DeclarativeContainer):
         tokenizer=tokenizer,
         device_map="auto",
         model_kwargs=model_kwargs,
-        max_new_tokens=256,
+        max_new_tokens=512,
         temperature=0.3,
         top_k=40
     )

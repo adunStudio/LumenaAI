@@ -65,21 +65,21 @@ class YoutubeChatService:
                     {description}
 
                     [스크립트 맥락]:
-                    {context}
-                    """.format(description=content.description, context="{context}"))
+                    {context_c}
+                    """.format(description=content.description, context_c="{context}"))
 
         prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", system_prompt),
-                ("human", "{question}"),
+                ("human", "{input}"),
             ]
         )
 
         question_answer_chain = create_stuff_documents_chain(self._llm, prompt)
         chain = create_retrieval_chain(retriever, question_answer_chain)
 
-        response = chain.invoke({"question": user_msg})
-        answer = response['answer']
+        response = chain.invoke({"input": user_msg})
+        answer = response.get("answer", response.get("result", "응답을 생성하지 못했습니다."))  # ✅ 안전한 접근
 
         chat_session = self.get_session(content.url.url)
         if chat_session is None:
