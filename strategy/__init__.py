@@ -5,4 +5,4 @@ from .stt.openai_whisper_strategy import OpenAIWhisperStrategy
 from .stt.auto_youtube_strategy import AutoYoutubeStrategy
 from .stt.stt_strategy_factory import STTStrategyType, STTStrategyFactory
 
-from .lmm.local_huggingface_llm import LocalHuggingFaceLLM
+from .llm.huggingface_llm import HuggingFaceLLM

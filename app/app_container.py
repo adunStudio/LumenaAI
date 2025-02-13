@@ -2,7 +2,7 @@ from infrastructure.database.mongo_client import MongoDBClient
 from infrastructure.repository import YoutubeContentRepository, YoutubeScriptCollectionRepository, YoutubeChatRepository, YoutubeKeyPointCollectionRepository
 from service import YoutubeContentService, YoutubeScriptCollectionService, YoutubeChatService, YoutubeKeyPointCollectionService, WordCloudService
 from strategy import LocalWhisperStrategy, STTStrategyFactory, STTStrategyType, OpenAIWhisperStrategy
-from strategy import LocalHuggingFaceLLM
+from strategy import HuggingFaceLLM
 from langchain_openai import OpenAIEmbeddings
 
 
@@ -54,8 +54,9 @@ class AppContainer(containers.DeclarativeContainer):
     )
 
     llm_local_llama = providers.Singleton(
-        LocalHuggingFaceLLM,
-        model_name="Bllossom/llama-3.2-Korean-Bllossom-3B"
+        HuggingFaceLLM,
+        model_id="Bllossom/llama-3.2-Korean-Bllossom-AICA-5B",
+        quantization="16bit"
     )
 
 

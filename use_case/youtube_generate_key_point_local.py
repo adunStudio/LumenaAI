@@ -1,107 +1,133 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-from typing import Optional, List, Dict, Any
-from langchain.llms.base import LLM
-import torch
+from domain import YouTubeVideoLink, YouTubeContent
+from domain import ExecuteResult, ExecuteResultType
+from domain import YoutubeTimelineSummary, YoutubeTimelineSection
+from domain import YoutubeKeyPointCollection, YoutubeKeyPoint
+from infrastructure.repository import YoutubeContentRepository, YoutubeKeyPointCollectionRepository
+from use_case import YoutubeUseCase
 
-class LocalHuggingFaceLLM(LLM):
-    """LangChain LLM 클래스를 상속하여 Hugging Face 모델을 래핑하는 클래스"""
+from typing import List
+from pydantic import BaseModel, Field
+from langchain_core.output_parsers import PydanticOutputParser
+from langchain.llms.base import BaseLLM
+from langchain.prompts import PromptTemplate
 
-    model_name: str  # LangChain LLM이 요구하는 속성
-    device: str = "auto"
-    max_new_tokens: int = 2048
-    temperature: float = 0.6
-    top_p: float = 0.9
 
-    def __init__(
-        self,
-        model_name: str,
-        device: Optional[str] = "auto",
-        max_new_tokens: int = 2048,
-        temperature: float = 0.6,
-        top_p: float = 0.9
-    ):
-        """Hugging Face 모델을 로드하고 LangChain LLM으로 변환하는 초기화 메서드"""
-        super().__init__()
+# 2. 유튜브 링크로부터 DB에서 데이터를 가져와 타임라인 요약을 생성한다.
+class YouTubeGenerateKeyPointLocal(YoutubeUseCase):
+    def __init__(self, content_repository: YoutubeContentRepository, key_point_collection_repository: YoutubeKeyPointCollectionRepository, llm: BaseLLM):
+        self._content_repository = content_repository
+        self._key_point_collection_repository = key_point_collection_repository
+        self._llm = llm
+        self._chain = None
 
-        # ✅ 내부 속성으로 저장 (Pydantic 필드 문제 방지)
-        self._model_name = model_name
-        self._device = device
-        self._max_new_tokens = max_new_tokens
-        self._temperature = temperature
-        self._top_p = top_p
+    def execute(self, youtube_url: str, **kwargs) -> ExecuteResult:
 
-        # ✅ 모델 및 토크나이저 로드
-        self._tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self._model = AutoModelForCausalLM.from_pretrained(
-            model_name,
-            torch_dtype=torch.bfloat16,
-            device_map=self._device
+        # 1. 유튜브 링크 검증
+        try:
+            youtube_video_link: YouTubeVideoLink = YouTubeVideoLink(youtube_url)
+        except:
+            return ExecuteResult(False, ExecuteResultType.INVALID_YOUTUBE_URL)
+
+
+        # 2. DB 데이터 검사
+        content: YouTubeContent = self._content_repository.find_by_url(youtube_video_link)
+        if content is None:
+            return ExecuteResult(False, ExecuteResultType.DATA_NOT_FOUND)
+
+        url = youtube_video_link.url
+
+        key_point_collection: YoutubeKeyPointCollection = self._key_point_collection_repository.get(url)
+
+        if key_point_collection is None:
+            return ExecuteResult(False, ExecuteResultType.KEY_POINT_NOT_FOUND)
+
+
+
+        # 3. 타임라인 검사
+        if content.timeline_summary is None:
+            return ExecuteResult(False, ExecuteResultType.TIMELINE_SUMMARY_NOT_FOUND)
+
+
+        # 4. LLM 체인 생성
+        if self._chain is None:
+            self._make_chain()
+
+
+        # 5. 입력 데이터 생성
+        summary: YoutubeTimelineSummary = content.timeline_summary
+
+        summary_texts = f"{summary.text}\n"
+        for section in summary.sections:
+            summary_texts = summary_texts + '\n'
+            for text in section.texts:
+                summary_texts = summary_texts + f'- {text}\n'
+
+        input_data = {
+            "summary": summary_texts
+        }
+
+
+        # 6. 체인 호출 (2회 시도)
+        chain_success = False
+        for i in range(0, 2):
+            try:
+                response = self._chain.invoke(input_data)
+                chain_success = True
+                break
+            except Exception as e:
+                print(e)
+                print('[youtube_generate_key_point] 체인 호출')
+
+        if chain_success is False:
+            return ExecuteResult(False, ExecuteResultType.KEY_POINT_FAIL)
+
+
+        # 7. 핵심 용어 저장소에 저장
+        for kp in response.key_points:
+            key_point_collection.add_key_point_local1(kp)
+
+        success = self._key_point_collection_repository.save(key_point_collection)
+        if success:
+            return ExecuteResult(True, ExecuteResultType.KEY_POINT_SUCCESS)
+        else:
+            return ExecuteResult(False, ExecuteResultType.STORE_FAIL)
+
+    def _make_chain(self):
+        # 1. 출력 파서
+        key_point_parser = PydanticOutputParser(pydantic_object=YoutubeKeyPointCollectionModel)
+
+        # 2. 프롬프트 템플릿
+        key_point_prompt_template = PromptTemplate(
+            partial_variables={'output_format': key_point_parser.get_format_instructions()},
+            input_variables=["summary"],
+            template="""
+다음은 유튜브 타임라인 요약 문서입니다. 이 내용을 분석하여 10개의 핵심 용어(KeyPoint)와 설명을 생성하세요.
+설명을 생성할 때 영상 위주가 아닌 최대한 전문적이고 구체적으로 추가 설명해주세요. 저는 영상 내용 뿐 아니라 그 용어에 대한 내용을 알고 싶습니다.
+중요하지 않더라도 알면 좋을 추가 핵심 용어도 더해주세요.
+
+[타임라인 요약]:
+{summary}
+
+[가이드]:
+- 필드는 `term`과 `description`을 포함하며, 결과는  10개의 키포인트 리스트로 구성됩니다.
+- 반드시 JSON 형식에 맞춰 반환하세요.
+- 다른 텍스트는 포함하지 마세요.
+
+[반환 형식]:
+{output_format}
+        """
         )
 
-        # ✅ 종료 토큰 설정
-        self._eos_token_id = self._get_eos_token_id()
+        # 3. Chain
+        self._chain = key_point_prompt_template | self._llm | key_point_parser
 
-        # ✅ 텍스트 생성 파이프라인 생성
-        self._pipeline = pipeline(
-            "text-generation",
-            model=self._model,
-            tokenizer=self._tokenizer,
-            max_new_tokens=self._max_new_tokens,
-            temperature=self._temperature,
-            top_p=self._top_p,
-            eos_token_id=self._eos_token_id
-        )
 
-    def _get_eos_token_id(self) -> Optional[int]:
-        """모델의 종료 토큰 ID를 자동 감지하여 설정"""
-        eos_tokens = ["<|end_of_text|>", "<|eot_id|>"]
-        for token in eos_tokens:
-            token_id = self._tokenizer.convert_tokens_to_ids(token)
-            if token_id != self._tokenizer.unk_token_id:  # 존재하는 토큰인지 확인
-                return token_id
-        return None  # 종료 토큰이 없을 경우 None 반환
+# ✅ (핵심 키포인트 모델)
+class YoutubeKeyPointModel(BaseModel):
+    term: str = Field(..., description="핵심 용어")
+    description: str = Field(..., description="핵심 용어에 대한 설명")
 
-    def _call(self, prompt: str, stop: Optional[List[str]] = None, run_manager: Optional[Any] = None) -> str:
-        """프롬프트를 입력받아 LLM 출력을 생성"""
-        # ✅ `stop` 인자는 HF에서 기본적으로 지원하지 않으므로 무시
-        if stop is not None:
-            print(f"⚠️ Warning: stop 인자는 무시됩니다. (stop={stop})")
 
-        output = self._pipeline(prompt)
-        return output[0]["generated_text"]
-
-    def generate(
-        self,
-        prompts: List[str],
-        stop: Optional[List[str]] = None,
-        callbacks: Optional[Any] = None,
-        **kwargs
-    ) -> Any:
-        """
-        LangChain 내부에서 `generate()`를 호출할 때 `stop` 인자를 포함할 수 있기 때문에 무시하도록 수정.
-        """
-        if stop is not None:
-            print(f"⚠️ Warning: `stop` 인자는 무시됩니다. (stop={stop})")
-
-        outputs = [self._call(prompt) for prompt in prompts]
-        return outputs
-
-    @property
-    def _llm_type(self) -> str:
-        """LangChain 내부에서 LLM 타입을 구분하는 속성"""
-        return "HuggingFace_LLM"
-
-    @property
-    def model_name(self) -> str:
-        """LangChain에서 요구하는 model_name 속성 추가"""
-        return self._model_name  # 내부 속성 반환
-
-    @property
-    def device(self) -> str:
-        """LangChain에서 요구하는 device 속성 추가"""
-        return self._device  # 내부 속성 반환
-
-    @property
-    def tokenizer(self) -> AutoTokenizer:
-        """LangChain에서 요구하는 tokenizer 속성 추가"""
-        return self._tokenizer  # 내부 속성 반환
+# ✅ (핵심 키포인트 컬렉션 모델)
+class YoutubeKeyPointCollectionModel(BaseModel):
+    key_points: List[YoutubeKeyPointModel] = Field(..., description="영상에서 추출된 핵심 키포인트 리스트")
