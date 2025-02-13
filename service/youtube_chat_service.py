@@ -71,14 +71,14 @@ class YoutubeChatService:
         prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", system_prompt),
-                ("human", "{input}"),
+                ("human", "{question}"),
             ]
         )
 
         question_answer_chain = create_stuff_documents_chain(self._llm, prompt)
         chain = create_retrieval_chain(retriever, question_answer_chain)
 
-        response = chain.invoke({"input": user_msg})
+        response = chain.invoke({"question": user_msg})
         answer = response['answer']
 
         chat_session = self.get_session(content.url.url)
