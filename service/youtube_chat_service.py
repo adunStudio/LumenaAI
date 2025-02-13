@@ -9,6 +9,7 @@ from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains import RetrievalQA
 
 import shutil
 import os
@@ -57,31 +58,35 @@ class YoutubeChatService:
 
         retriever = vectorstore.as_retriever()
 
-        system_prompt = ("""
-                    주어진 유튜브 영상의 설명과 스크립트 맥락을 사용하여 질문에 답하세요.
-                    답을 모르면 모른다고 하세요.
-                
-                    [유튜브 영상 제목]:
-                    {title}
-                    
-                    [유튜브 영상 설명]:
-                    {description}
+        # 📝 Q&A 형식의 프롬프트로 변경
+        qa_prompt = PromptTemplate(
+            template="""당신은 유튜브 영상의 내용을 분석하는 AI입니다.
+                아래의 정보를 기반으로 질문에 답하세요.
 
-                    [스크립트 맥락]:
-                    {context}
-                    """.format(title=content.title, description=content.description, context="{context}"))
+                [유튜브 영상 제목]: {title}
+                [유튜브 영상 설명]: {description}
+                [스크립트 맥락]: {context}
 
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                ("system", system_prompt),
-                ("human", "{input}"),
-            ]
+                질문: {question}
+                답변:""",
+            input_variables=["title", "description", "context", "question"]
         )
 
-        question_answer_chain = create_stuff_documents_chain(self._llm, prompt)
-        chain = create_retrieval_chain(retriever, question_answer_chain)
+        # 🔥 RetrievalQA 체인 생성 (묻고 답하기 방식)
+        question_answer_chain = RetrievalQA.from_chain_type(
+            llm=self._llm,
+            retriever=retriever,
+            chain_type="stuff",  # 검색된 문서를 한 번에 사용
+            chain_type_kwargs={"prompt": qa_prompt}
+        )
 
-        response = chain.invoke({"input": user_msg})
+        # 질문 수행
+        response = question_answer_chain.invoke({
+            "question": user_msg,
+            "title": content.title,
+            "description": content.description
+        })
+
         answer = response['answer']
 
         chat_session = self.get_session(content.url.url)
