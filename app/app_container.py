@@ -75,6 +75,7 @@ class AppContainer(containers.DeclarativeContainer):
         max_new_tokens=512,
         temperature=0.6,
         top_p=0.9,
+        return_full_text=False
     )
 
     llm_local_llama = providers.Singleton(
@@ -156,8 +157,8 @@ class AppContainer(containers.DeclarativeContainer):
     youtube_chat_service = providers.Singleton(
         YoutubeChatService,
         embedding=embedding_huggingface,
-        #llm=llm_local_llama,
-        llm=llm_openai,
+        llm=llm_local_llama,
+        #llm=llm_openai,
         repository=youtube_chat_repository,
     )
 
