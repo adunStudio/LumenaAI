@@ -59,7 +59,7 @@ class AppContainer(containers.DeclarativeContainer):
 
     tokenizer = providers.Singleton(AutoTokenizer.from_pretrained, config.local_model_id, trust_remote_code=True)
     model_kwargs = providers.Singleton(dict, torch_dtype=torch.float16)  # ✅ 16비트(FP16) 적용
-    hf_pipeline = providers.Singleton(
+    hf_pipeline = providers.Factory(
         pipeline,
         "text-generation",
         model=config.local_model_id,
@@ -73,7 +73,7 @@ class AppContainer(containers.DeclarativeContainer):
         eos_token_id=tokenizer().eos_token_id
     )
 
-    llm_local_llama = providers.Singleton(
+    llm_local_llama = providers.Factory(
         HuggingFacePipeline,
         pipeline=hf_pipeline
     )
@@ -152,7 +152,8 @@ class AppContainer(containers.DeclarativeContainer):
     youtube_chat_service = providers.Singleton(
         YoutubeChatService,
         embedding=embedding_huggingface,
-        llms=[llm_openai, llm_local_llama],
+        llm0=llm_openai,
+        llm1=llm_local_llama,
         repository=youtube_chat_repository,
     )
 

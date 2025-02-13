@@ -16,9 +16,10 @@ import shutil
 import os
 
 class YoutubeChatService:
-    def __init__(self, embedding, llms: [BaseLLM], repository: YoutubeChatRepository):
+    def __init__(self, embedding, llm0: BaseLLM, llm1: BaseLLM,  repository: YoutubeChatRepository):
         self._embedding = embedding
-        self._llms = llms
+        self._llm0 = llm0
+        self._llm1 = llm1
         self._repository = repository
         self._cached_session = {}
 
@@ -75,7 +76,10 @@ class YoutubeChatService:
             input_variables=["title", "description", "context", "query"]
         )
 
-        test_chain = qa_prompt | self._llms[index]
+        if index == 0:
+            test_chain = qa_prompt | self._llm0
+        else:
+            test_chain = qa_prompt | self._llm1
 
         # 🔥 리트리버에서 검색된 문서 가져오기
         retrieved_docs = retriever.get_relevant_documents(user_msg)
