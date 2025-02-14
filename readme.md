@@ -2,9 +2,10 @@
 
 ### [LilysAI](https://lilys.ai/home) 유튜브 요약 서비스 따라 만들기 프로젝트
 
-##  프로젝트 계획
+##  항해 99 프로젝트 계획
 ### 5주차
 - [x] 코드 리뷰 서비스 개발
+- 이후 주제 전환
 
 ### 6주차
 - [x]  **Whisper**
@@ -22,8 +23,12 @@
 ### 8주차
 - [x]  **채팅: 로컬 LLM 적용**
     - 한 푼이라도 아끼자!
-    - [Bllossom/llama-3.2-Korean-Bllossom-AICA-5B]https://huggingface.co/Bllossom/llama-3.2-Korean-Bllossom-AICA-5B)
+    - [Bllossom/llama-3.2-Korean-Bllossom-AICA-5B](https://huggingface.co/Bllossom/llama-3.2-Korean-Bllossom-AICA-5B)
     - 양자화: [LLaMA 양자화 비교](https://github.com/adunStudio/hanghae99_plusAI_2/tree/main/8_advanced)
+
+### 이후 계획
+- [ ]  **로컬 LLM API**
+    - 프로세스 분리 후 로컬 API 접근 방식으로 변경 예정
 - [ ]  **프롬프트 최적화를 통한 최고의 요약 생성**
     - 프롬프트 엔지니어링을 통해 요약 품질을 극대화하고 효율적인 응답 생성 전략 개발.
 ---
@@ -64,11 +69,11 @@ https://www.youtube.com/watch?v=oxmqXq-U5nE
 ![유튜브(영상) 정보](./asset/preview_2.png)
 ### 3. 타임라인 요약
 ![타임라인 요약](./asset/preview_3.png)
-### 4. 핵심 정보(개발 예정)
-![핵심 정보(개발 예정)](./asset/preview_4.png)
+### 4. 핵심 용어
+![핵심 용어](./asset/preview_4.png)
 ### 5. 스크립트(자동 생성 + 위스퍼 → Refined)
 ![스크립트(자동 생성 + 위스퍼 → Refined)](./asset/preview_5.png)
-### 6. RAG 채팅
+### 6. RAG 채팅(OpenAI Gpt-4o-mini vs LLaMA 3B 16Quant)
 ![RAG 채팅](./asset/preview_6.png)
 
 
@@ -157,6 +162,7 @@ LumenaAI
 ### 8. `LLM: RAG Chat`
 
 - **Retrieval-Augmented Generation (RAG)**을 활용하여 유튜브 영상 기반 채팅 응답을 생성합니다.
+- 두 가지 LLM 모델(GPT-4o-mini, ALLama 3B)을 선택할 수 있습니다.
 - **코드 링크**: [YouTubeChatService](https://github.com/adunStudio/LumenaAI/blob/main/service/youtube_chat_service.py)
 
 ---
