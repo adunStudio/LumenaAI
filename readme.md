@@ -20,8 +20,10 @@
     -  키워드 설명: [인스트럭션 튜닝(facebook/opt-350m)](https://github.com/adunStudio/hanghae99_plusAI_2/blob/main/7%EC%A3%BC%EC%B0%A8_%EC%8B%AC%ED%99%94/train.py)
 
 ### 8주차
-- [ ]  **핵심 용어 모음집 생성 기능 통계 / 로컬 LLM 적용**
+- [x]  **채팅: 로컬 LLM 적용**
     - 한 푼이라도 아끼자!
+    - [Bllossom/llama-3.2-Korean-Bllossom-AICA-5B]https://huggingface.co/Bllossom/llama-3.2-Korean-Bllossom-AICA-5B)
+    - 양자화: [LLaMA 양자화 비교](https://github.com/adunStudio/hanghae99_plusAI_2/tree/main/8_advanced)
 - [ ]  **프롬프트 최적화를 통한 최고의 요약 생성**
     - 프롬프트 엔지니어링을 통해 요약 품질을 극대화하고 효율적인 응답 생성 전략 개발.
 ---
