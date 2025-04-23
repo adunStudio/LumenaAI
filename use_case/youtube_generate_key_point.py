@@ -12,7 +12,7 @@ from langchain.llms.base import BaseLLM
 from langchain.prompts import PromptTemplate
 
 
-# 2. 유튜브 링크로부터 DB에서 데이터를 가져와 타임라인 요약을 생성한다.
+# 7. 핵심 용어집을 생성한다.
 class YouTubeGenerateKeyPoint(YoutubeUseCase):
     def __init__(self, content_repository: YoutubeContentRepository, key_point_collection_repository: YoutubeKeyPointCollectionRepository, llm: BaseLLM):
         self._content_repository = content_repository
