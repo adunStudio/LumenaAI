@@ -161,3 +161,8 @@ cython_debug/
 
 .DS_Store
 cookie.txt
+
+*.mp3
+*.mp4
+*.mov
+
