@@ -4,8 +4,23 @@ from infrastructure.database.mongo_client import MongoDBClient
 from domain.youtube_content import YouTubeContent
 from domain.youtube_video_link import YouTubeVideoLink
 
+from abc import ABC, abstractmethod
 
-class YoutubeContentRepository:
+class YoutubeContentRepositoryBase(ABC):
+    @abstractmethod
+    def save(self, content: YouTubeContent) -> bool:
+        pass
+
+    @abstractmethod
+    def find_by_url(self, link: YouTubeVideoLink) -> YouTubeContent:
+        pass
+
+    @abstractmethod
+    def find_all(self) -> [YouTubeContent]:
+        pass
+
+
+class YoutubeContentRepository(YoutubeContentRepositoryBase):
     def __init__(self, client: MongoDBClient, collection_name: str = "youtube_content"):
         self._client = client
         self._db = self._client.get_database()
@@ -19,8 +34,8 @@ class YoutubeContentRepository:
         )
         return result.modified_count > 0 or result.upserted_id is not None
 
-    def find_by_url(self, url: YouTubeVideoLink) -> YouTubeContent:
-        document = self._collection.find_one({"url": url.url})
+    def find_by_url(self, link: YouTubeVideoLink) -> YouTubeContent:
+        document = self._collection.find_one({"url": link.url})
         return YouTubeContent.from_dict(document) if document else None
 
     def find_all(self) -> [YouTubeContent]:
